@@ -4,31 +4,39 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>冰點空調冷氣 - 2025愛心公益特賣</title>
-    <!-- 引入 Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
-    <!-- 引入 FontAwesome 圖標 -->
+    <title>冰點空調 - 2025 公益愛心特賣會 | 登錄送好禮</title>
+
+    <!-- Google Fonts -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700;900&family=Oswald:wght@500;700&display=swap"
+        rel="stylesheet">
+
+    <!-- FontAwesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
+
+    <!-- AOS Animation CSS -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
     <style>
         :root {
-            /* --- 冰點品牌色系 & 現代配色 --- */
-            --primary: #0068B7;       /* 冰點深藍 */
-            --primary-dark: #004080;
+            /* 品牌色系 */
+            --primary: #0068B7;
+            --primary-dark: #00467a;
             --primary-light: #e0f2fe;
-            --secondary: #00A0E9;     /* 冰點亮藍 */
-            --accent: #E11D48;        /* 強調色 (紅) */
-            --line-green: #06c755;    /* LINE 綠色 */
-            
+            --secondary: #00A0E9;
+            --accent: #E11D48;
+            /* 熱情紅 */
+            --success: #06c755;
+            /* LINE 綠 */
             --text-main: #1e293b;
             --text-light: #64748b;
-            --bg-body: #f8fafc;
-            --white: #ffffff;
 
-            --glass: rgba(255, 255, 255, 0.95);
-            --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
-            --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
-            --radius: 16px;
+            /* 背景與特效 */
+            --bg-body: #f0f7ff;
+            --glass: rgba(255, 255, 255, 0.9);
+            --glass-border: 1px solid rgba(255, 255, 255, 0.6);
+            --radius: 12px;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         * {
@@ -43,533 +51,1676 @@
             background-color: var(--bg-body);
             color: var(--text-main);
             line-height: 1.7;
-            padding-top: 80px; /* 預留 Navbar 高度 */
+            padding-top: 0;
             overflow-x: hidden;
         }
 
-        /* --- 1. 導覽列 (Glassmorphism) --- */
-        .navbar {
+        /* --- 1. 頂部懸浮導覽列 (Navbar) --- */
+        .navbar-container {
             position: fixed;
-            top: 0; left: 0; width: 100%; height: 80px;
+            top: 20px;
+            left: 0;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            z-index: 1000;
+            transition: var(--transition);
+        }
+
+        .navbar {
+            width: 90%;
+            max-width: 1200px;
+            height: 70px;
             background: rgba(255, 255, 255, 0.9);
             backdrop-filter: blur(12px);
-            box-shadow: 0 1px 15px rgba(0, 0, 0, 0.05);
+            -webkit-backdrop-filter: blur(12px);
+            border: var(--glass-border);
+            border-radius: 50px;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 0 5%;
-            z-index: 1000;
-            transition: all 0.3s ease;
+            padding: 0 2rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            transition: var(--transition);
         }
 
-        .navbar-logo { height: 45px; width: auto; }
+        /* 滾動後吸頂樣式 */
+        .navbar-container.scrolled {
+            top: 0;
+        }
 
-        .nav-menu { display: flex; gap: 2rem; align-items: center; }
+        .navbar-container.scrolled .navbar {
+            width: 100%;
+            max-width: 100%;
+            border-radius: 0;
+            height: 70px;
+            background: rgba(255, 255, 255, 0.95);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        }
+
+        .navbar-logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 900;
+            font-size: 1.5rem;
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
 
         .nav-link {
             text-decoration: none;
             color: var(--text-main);
             font-weight: 500;
-            font-size: 1.05rem;
+            position: relative;
             cursor: pointer;
-            transition: color 0.3s;
+            transition: 0.3s;
         }
-        .nav-link:hover { color: var(--primary); }
+
+        .nav-link:hover {
+            color: var(--primary);
+        }
+
+        .nav-link-red {
+            color: var(--accent) !important;
+            font-weight: 700 !important;
+        }
+
+        .nav-link-red:hover {
+            color: var(--accent) !important;
+        }
 
         .nav-btn-cta {
             background: linear-gradient(135deg, var(--secondary), var(--primary));
-            color: white;
-            padding: 0.6rem 1.5rem;
+            color: white !important;
+            padding: 0.6rem 1.8rem;
             border-radius: 50px;
             font-weight: 700;
             box-shadow: 0 4px 15px rgba(0, 160, 233, 0.3);
-            transition: 0.3s;
-            cursor: pointer;
+            transition: var(--transition);
             display: flex;
             align-items: center;
             gap: 8px;
         }
+
         .nav-btn-cta:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(0, 160, 233, 0.4);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0, 160, 233, 0.5);
+        }
+
+        /* Mobile Toggle */
+        .mobile-toggle {
+            display: none;
+            font-size: 1.5rem;
+            color: var(--text-main);
+            cursor: pointer;
+        }
+
+        /* --- 2. 右側懸浮導覽列 (Side Buttons) --- */
+        .side-nav-container {
+            position: fixed;
+            top: 50%;
+            right: 20px;
+            transform: translateY(-50%);
+            z-index: 2000;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .side-btn {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: white;
+            width: 85px;
+            padding: 15px 5px;
+            border-radius: 40px;
+            text-decoration: none;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
+            transition: var(--transition);
+            border: 2px solid white;
+            text-align: center;
+            cursor: pointer;
+        }
+
+        .side-btn:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25);
+        }
+
+        .side-icon-circle {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             color: white;
+            font-size: 1.4rem;
+            margin-bottom: 8px;
         }
 
-        /* --- 視圖切換 (SPA) --- */
-        .view-section { display: none; opacity: 0; animation: fadeIn 0.5s forwards; }
-        .view-section.active { display: block; }
-        @keyframes fadeIn { to { opacity: 1; } }
+        .side-btn-red .side-icon-circle {
+            background-color: #c91616;
+            box-shadow: 0 4px 10px rgba(201, 22, 22, 0.3);
+        }
 
-        /* --- 主頁：Hero Banner --- */
+        .side-btn-green .side-icon-circle {
+            background-color: #06c755;
+            box-shadow: 0 4px 10px rgba(6, 199, 85, 0.3);
+        }
+
+        .side-text-main {
+            font-size: 0.9rem;
+            font-weight: 700;
+            line-height: 1.3;
+            color: #333;
+        }
+
+        .side-text-sub {
+            font-size: 0.75rem;
+            color: #666;
+            margin-top: 4px;
+            line-height: 1.2;
+        }
+
+        /* --- Common & View --- */
+        .view-section {
+            display: none;
+            opacity: 0;
+            animation: fadeIn 0.6s forwards;
+        }
+
+        .view-section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+            }
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .section-py {
+            padding: 6rem 0;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 900;
+            color: var(--primary-dark);
+            display: inline-block;
+        }
+
+        .section-tag {
+            color: var(--accent);
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        /* --- Hero Banner --- */
         .hero-banner {
-            width: 100%; height: 85vh; min-height: 500px;
-            background-image: url('/Users/yangzhiyong/Library/Mobile Documents/com~apple~CloudDocs/冰點/特賣會/banner1.png');
-            background-size: cover; background-position: center;
-            position: relative; display: flex; align-items: center; justify-content: center;
+            width: 100%;
+            height: 100vh;
+            min-height: 650px;
+            background: linear-gradient(to right, rgba(0, 40, 80, 0.85), rgba(0, 40, 80, 0.6)), url('https://images.unsplash.com/photo-1615873968403-89e068629265?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            text-align: center;
+            color: white;
+            padding: 0 20px;
+            overflow: hidden;
         }
 
-        .hero-overlay {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(to bottom, rgba(0,0,0,0.1), rgba(0,0,0,0.5));
+        .hero-wave {
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 100%;
+            line-height: 0;
+            z-index: 1;
         }
 
         .hero-content {
-            position: relative; z-index: 10; text-align: center; color: white;
-            padding: 0 20px; max-width: 800px;
+            max-width: 900px;
+            z-index: 2;
+            position: relative;
+        }
+
+        .hero-badge {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(5px);
+            padding: 8px 20px;
+            border-radius: 50px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            font-weight: 700;
+            letter-spacing: 2px;
+            margin-bottom: 20px;
+            color: var(--secondary);
+            text-transform: uppercase;
         }
 
         .hero-title {
-            font-size: 3.5rem; font-weight: 900; margin-bottom: 1rem;
-            text-shadow: 0 2px 10px rgba(0,0,0,0.3);
-        }
-        .hero-subtitle { font-size: 1.5rem; margin-bottom: 2.5rem; opacity: 0.95; }
-
-        /* --- 通用容器 --- */
-        .container { max-width: 1200px; margin: 0 auto; padding: 0 2rem; }
-        .section-py { padding: 5rem 0; }
-
-        .section-header { text-align: center; margin-bottom: 3rem; }
-        .section-title {
-            font-size: 2.2rem; color: var(--primary-dark); font-weight: 800;
-            position: relative; display: inline-block;
-        }
-        .section-title::after {
-            content: ''; display: block; width: 80px; height: 5px;
-            background: var(--secondary); margin: 10px auto 0; border-radius: 10px;
+            font-size: 4rem;
+            font-weight: 900;
+            margin-bottom: 1rem;
+            line-height: 1.2;
+            text-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
         }
 
-        /* --- 加碼抽獎區塊樣式 (分開的卡片) --- */
-        .bonus-section {
-            background: linear-gradient(to bottom, #f8fafc 0%, #eef2f6 100%);
+        .countdown-wrap {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 3rem;
+        }
+
+        .time-box {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 10px 20px;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            min-width: 90px;
+        }
+
+        .time-val {
+            font-family: 'Oswald', sans-serif;
+            font-size: 2rem;
+            font-weight: 700;
+            line-height: 1;
+        }
+
+        .time-label {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            opacity: 0.8;
+            margin-top: 5px;
+        }
+
+        /* --- Features & Bonus & Process & Models (Same as before) --- */
+        .features-section {
+            margin-top: -60px;
+            position: relative;
+            z-index: 10;
+            padding-bottom: 4rem;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+        }
+
+        .feature-card {
+            background: white;
+            padding: 2.5rem 2rem;
+            border-radius: var(--radius);
+            text-align: center;
+            box-shadow: 0 15px 35px rgba(0, 64, 128, 0.08);
+            transition: var(--transition);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 64, 128, 0.15);
+        }
+
+        .feature-icon {
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, #e0f2fe, #f0f9ff);
+            color: var(--primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            margin: 0 auto 1.5rem;
+        }
+
+        .bonus-card-wrapper {
+            background: white;
+            border-radius: 30px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+        }
+
+        .bonus-top {
+            padding: 4rem 2rem;
+            background: radial-gradient(circle at top right, #fdf2f8, #fff);
+            text-align: center;
+        }
+
+        .bonus-amount {
+            font-size: 5rem;
+            font-weight: 900;
+            color: var(--accent);
+            line-height: 1;
+            margin: 10px 0;
+            text-shadow: 4px 4px 0px rgba(225, 29, 72, 0.08);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.05);
+            }
+        }
+
+        .btn-shine {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-shine::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+            transition: left 0.5s;
+        }
+
+        .btn-shine:hover::before {
+            left: 100%;
+        }
+
+        .cta-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 1rem 3rem;
+            border-radius: 50px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            text-decoration: none;
+            transition: var(--transition);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            color: white;
+        }
+
+        .cta-btn:hover {
+            transform: translateY(-3px);
+        }
+
+        .process-bg {
+            background: #f0f7ff;
+            position: relative;
+        }
+
+        .step-cards-row {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.5rem;
+            margin-bottom: 4rem;
+        }
+
+        .step-card {
+            background: white;
+            padding: 2rem 1rem;
+            border-radius: 16px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            border: 1px solid #eef2f6;
+            transition: var(--transition);
+        }
+
+        .step-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary-light);
+            box-shadow: 0 10px 25px rgba(0, 104, 183, 0.15);
+        }
+
+        .step-num {
+            width: 45px;
+            height: 45px;
+            background: var(--primary);
+            color: white;
+            font-weight: 700;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 15px;
+            font-size: 1.2rem;
+        }
+
+        /* Phone Mockup Specifics (Updated to match your screenshot) */
+        .phone-mockup {
+            width: 280px;
+            height: 540px;
+            background: #333;
+            border-radius: 45px;
+            padding: 10px;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.3);
+            margin: 0 auto;
+            border: 6px solid #333;
+            transition: transform 0.5s ease;
+        }
+
+        .phone-mockup:hover {
+            transform: scale(1.03) rotate(-3deg) translateY(-10px);
+            box-shadow: 0 50px 80px rgba(0, 0, 0, 0.4);
+        }
+
+        .phone-inner {
+            width: 100%;
+            height: 100%;
+            background: white;
+            border-radius: 35px;
+            overflow: hidden;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .phone-notch {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 120px;
+            height: 25px;
+            background: #333;
+            border-bottom-left-radius: 14px;
+            border-bottom-right-radius: 14px;
+            z-index: 10;
+        }
+
+        /* Updated Phone Screen Content CSS */
+        .phone-screen-header {
+            background: #0068B7;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 25px 15px 0;
+            color: white;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .phone-body {
+            padding: 20px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .mock-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+            width: 100%;
+            text-align: center;
+        }
+
+        .mock-field {
+            width: 100%;
+            margin-bottom: 15px;
+        }
+
+        .mock-label {
+            font-size: 0.8rem;
+            color: #555;
+            margin-bottom: 5px;
+            text-align: center;
+            display: block;
+        }
+
+        .mock-input {
+            height: 45px;
+            background: #e2e8f0;
+            border-radius: 8px;
             width: 100%;
         }
 
-        /* 卡片共用樣式 */
-        .bonus-block-card {
+        .mock-btn {
+            width: 100%;
+            height: 50px;
+            background: #E11D48;
+            border-radius: 8px;
+            margin-top: 10px;
+        }
+
+        .acc-item {
+            margin-bottom: 1rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 16px;
+            background: white;
+            transition: var(--transition);
+            overflow: hidden;
+        }
+
+        .acc-item.open {
+            border-color: var(--primary);
+            box-shadow: 0 10px 25px rgba(0, 104, 183, 0.1);
+        }
+
+        .acc-header {
+            padding: 1.5rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 1.15rem;
+            color: var(--text-main);
+            background: #fff;
+        }
+
+        .acc-body {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease;
+            background: #f8fafc;
+        }
+
+        .model-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0 8px;
+            padding: 1rem 2rem 2rem;
+        }
+
+        .model-table th {
+            text-align: left;
+            color: var(--text-light);
+            padding: 0 10px 10px;
+            font-size: 0.9rem;
+        }
+
+        .model-table td {
+            background: white;
+            padding: 18px 15px;
+            border-top: 1px solid #eee;
+            border-bottom: 1px solid #eee;
+        }
+
+        .model-table tr td:first-child {
+            border-left: 1px solid #eee;
+            border-radius: 10px 0 0 10px;
+        }
+
+        .model-table tr td:last-child {
+            border-right: 1px solid #eee;
+            border-radius: 0 10px 10px 0;
+        }
+
+        /* --- Updated Register Form Styling --- */
+        .form-card {
             background: white;
             border-radius: 24px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
-            overflow: hidden;
-            padding: 4rem 2rem;
+            padding: 3rem;
+            box-shadow: 0 15px 35px rgba(0, 64, 128, 0.08);
+            border: 1px solid #eee;
+        }
+
+        .register-header-wrap {
             text-align: center;
-            margin-bottom: 3rem; /* 區塊間距 */
-        }
-        .bonus-block-card.top-border {
-            border-top: 8px solid var(--primary); /* 只有詳細區塊有頂部藍條 */
+            margin-bottom: 2.5rem;
         }
 
-        /* 1. 上方行銷區塊 (Marketing Block) */
-        .bonus-header-simple { margin-bottom: 2rem; }
-        .bonus-title-large {
-            font-size: 2.4rem; font-weight: 900; color: var(--text-main);
-            margin-bottom: 1rem; letter-spacing: 1px;
-        }
-        .text-red { color: #E11D48; font-size: 1.1em; }
-        .title-underline-red {
-            width: 80px; height: 5px; background-color: #E11D48;
-            margin: 0 auto 20px; border-radius: 3px;
-        }
-        .bonus-subtitle-simple { font-size: 1.25rem; color: #64748b; line-height: 1.8; }
-
-        /* 左右按鈕區 */
-        .bonus-actions-simple {
-            display: flex; justify-content: center; align-items: center;
-            padding-top: 1rem;
-        }
-        .action-col-simple { flex: 1; padding: 0 2rem; display: flex; flex-direction: column; align-items: center; }
-        .vertical-divider-simple { width: 1px; height: 120px; background-color: #e2e8f0; }
-        .action-prompt {
-            font-size: 1.15rem; font-weight: 700; color: var(--text-main);
-            margin-bottom: 1.5rem; line-height: 2;
-        }
-        .tag-pink { background: #ffe4e6; color: #be123c; padding: 4px 12px; border-radius: 4px; font-size: 1rem; font-weight: 500; }
-        .tag-gray { background: #e2e8f0; color: #475569; padding: 4px 12px; border-radius: 4px; font-size: 1rem; font-weight: 500; }
-
-        .btn-pill {
-            display: inline-flex; align-items: center; justify-content: center; gap: 10px;
-            padding: 1rem 3.5rem; border-radius: 50px; font-size: 1.2rem; font-weight: 700;
-            text-decoration: none; transition: 0.3s; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-        }
-        .btn-red { background: #E11D48; color: white; }
-        .btn-red:hover { background: #be123c; transform: translateY(-3px); }
-        .btn-green { background: #06c755; color: white; }
-        .btn-green:hover { background: #05b14c; transform: translateY(-3px); }
-
-
-        /* 2. 下方詳細區塊 (Details Block) */
-        /* 活動說明列表 */
-        .rules-container {
-            text-align: left;
-            max-width: 900px;
-            margin: 0 auto 3rem;
-            padding: 0 1rem;
-        }
-        .rules-title {
-            font-size: 2.5rem;
-            color: var(--primary);
-            font-weight: 700;
-            border-left: 5px solid var(--secondary);
-            padding-left: 15px;
+        .form-section-title {
+            border-left: 4px solid var(--secondary);
+            padding-left: 10px;
             margin-bottom: 1.5rem;
+            color: var(--primary);
+            font-size: 1.1rem;
+            margin-top: 2rem;
+            font-weight: 700;
         }
-        .rules-list { list-style: none; }
-        .rules-list li {
-            margin-bottom: 1rem;
+
+        .form-section-title:first-child {
+            margin-top: 0;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin-bottom: 0;
+        }
+
+        .input-group {
+            position: relative;
+            margin-bottom: 1.5rem;
+            width: 100%;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 0.95rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: #333;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 1rem;
+            background: #fff;
+            transition: var(--transition);
+            height: 48px;
+            color: var(--text-main);
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+        }
+
+        .input-field:focus {
+            border-color: var(--primary);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(0, 104, 183, 0.1);
+        }
+
+        /* Select Arrow */
+        .select-wrapper {
+            position: relative;
+            width: 100%;
+        }
+
+        .select-arrow {
+            position: absolute;
+            right: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #666;
+            pointer-events: none;
+            font-size: 0.8rem;
+        }
+
+        /* File Upload */
+        .file-upload-area {
+            display: block;
+            width: 100%;
+            border: 2px dashed #cbd5e1;
+            padding: 2rem 1rem;
+            text-align: center;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: var(--transition);
+            background: #fafbfc;
+            box-sizing: border-box;
+        }
+
+        .file-upload-area:hover {
+            border-color: var(--primary);
+            background: #f0f9ff;
+        }
+
+        .upload-icon-wrap {
+            font-size: 2.5rem;
+            color: #94a3b8;
+            margin-bottom: 0.5rem;
+        }
+
+        .back-link {
+            color: var(--text-light);
+            cursor: pointer;
+            font-size: 1rem;
+            text-decoration: none;
+            transition: 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .back-link:hover {
+            color: var(--primary);
+            transform: translateX(-3px);
+        }
+
+        .loading {
+            pointer-events: none;
+            opacity: 0.8;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .loading i.fa-spinner {
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .success-msg {
+            display: none;
+            background: #dcfce7;
+            color: #166534;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+            align-items: center;
+            gap: 10px;
+            border: 1px solid #86efac;
+            animation: slideIn 0.5s ease;
+        }
+
+        .error-msg {
+            display: none;
+            background: #fee2e2;
+            color: #991b1b;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+            align-items: center;
+            gap: 10px;
+            border: 1px solid #fca5a5;
+            animation: slideIn 0.5s ease;
+        }
+
+        .input-field.error {
+            border-color: #ef4444;
+            box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+        }
+
+        .input-field.valid {
+            border-color: var(--success);
+            box-shadow: 0 0 0 3px rgba(6, 199, 85, 0.1);
+        }
+
+        .error-text {
+            color: #ef4444;
+            font-size: 0.85rem;
+            margin-top: 0.25rem;
+            display: none;
+        }
+
+        .input-group.error .error-text {
+            display: block;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* 回到顶部按钮 */
+        .scroll-to-top {
+            position: fixed;
+            bottom: 100px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            background: var(--primary);
+            color: white;
+            border-radius: 50%;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0, 104, 183, 0.3);
+            transition: var(--transition);
+            z-index: 1000;
             font-size: 1.2rem;
-            color: #444;
+        }
+
+        .scroll-to-top:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 104, 183, 0.5);
+            background: var(--primary-dark);
+        }
+
+        .scroll-to-top.show {
+            display: flex;
+        }
+
+        /* 文件预览 */
+        .file-preview {
+            margin-top: 1rem;
+            display: none;
+        }
+
+        .file-preview img {
+            max-width: 100%;
+            max-height: 200px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .file-preview.show {
+            display: block;
+        }
+
+        /* 统计数字区块 */
+        .stats-section {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 4rem 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stats-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg width="100" height="100" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="50" r="2" fill="rgba(255,255,255,0.1)"/></svg>');
+            opacity: 0.3;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .stat-card {
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .stat-number {
+            font-size: 3.5rem;
+            font-weight: 900;
+            font-family: 'Oswald', sans-serif;
+            line-height: 1;
+            margin-bottom: 0.5rem;
+            color: var(--accent);
+            text-shadow: 0 2px 10px rgba(225, 29, 72, 0.3);
+        }
+
+        .stat-label {
+            font-size: 1.1rem;
+            opacity: 0.95;
+            font-weight: 500;
+        }
+
+        /* 服务保障区块 */
+        .service-section {
+            background: white;
+            padding: 4rem 0;
+        }
+
+        .service-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+        }
+
+        .service-card {
+            background: linear-gradient(135deg, #f8fafc, white);
+            padding: 2.5rem;
+            border-radius: 20px;
+            text-align: center;
+            border: 2px solid #e2e8f0;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .service-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 104, 183, 0.1), transparent);
+            transition: left 0.5s;
+        }
+
+        .service-card:hover::before {
+            left: 100%;
+        }
+
+        .service-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--primary);
+            box-shadow: 0 15px 35px rgba(0, 104, 183, 0.15);
+        }
+
+        .service-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+            font-size: 2rem;
+            color: white;
+            box-shadow: 0 10px 25px rgba(0, 104, 183, 0.3);
+        }
+
+        /* FAQ 区块 */
+        .faq-section {
+            background: #f8fafc;
+            padding: 4rem 0;
+        }
+
+        .faq-item {
+            background: white;
+            border-radius: 16px;
+            margin-bottom: 1rem;
+            border: 1px solid #e2e8f0;
+            overflow: hidden;
+            transition: var(--transition);
+        }
+
+        .faq-item:hover {
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+        }
+
+        .faq-header {
+            padding: 1.5rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            font-weight: 700;
+            color: var(--text-main);
+        }
+
+        .faq-body {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease;
+            background: #f8fafc;
+        }
+
+        .faq-body-content {
+            padding: 0 2rem 1.5rem;
+            color: var(--text-light);
+            line-height: 1.8;
+        }
+
+        .faq-item.open .faq-body {
+            max-height: 500px;
+        }
+
+        .faq-item.open .faq-header .fa-chevron-down {
+            transform: rotate(180deg);
+        }
+
+        /* 活动规则区块 */
+        .rules-section {
+            background: #f8fafc;
+            padding: 4rem 0;
+            border-top: 1px solid #e2e8f0;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .rules-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+        }
+
+        .rule-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 16px;
+            border-left: 4px solid var(--accent);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .rule-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--accent);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .rule-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .rule-list li {
+            padding: 0.5rem 0;
             padding-left: 1.5rem;
             position: relative;
-        }
-        .rules-list li::before {
-            content: '●'; color: #E11D48;
-            position: absolute; left: 0; font-size: 0.8em; top: 5px;
-        }
-        .date-tag {
-            background: #e0f2fe; color: #004080;
-            padding: 2px 8px; border-radius: 4px; font-weight: 700;
-            margin: 0 5px;
-        }
-        .link-text {
-            color: var(--primary); font-weight: 700; text-decoration: underline; cursor: pointer;
+            color: var(--text-main);
         }
 
-        /* 4步驟流程圖 */
-        .process-steps {
-            display: flex; justify-content: space-between; align-items: flex-start;
-            margin: 3rem auto 4rem; position: relative; max-width: 900px;
-        }
-        .step-item { text-align: center; z-index: 2; flex: 1; display: flex; flex-direction: column; align-items: center; }
-        .step-circle {
-            width: 80px; height: 80px; background: var(--primary); color: white;
-            border-radius: 50%; display: flex; align-items: center; justify-content: center;
-            font-size: 2.5rem; font-weight: 900; margin-bottom: 15px;
-            box-shadow: 0 4px 10px rgba(0, 104, 183, 0.3); border: 4px solid white;
-        }
-        .step-text { font-size: 1.1rem; font-weight: 700; color: var(--text-main); }
-        .step-line {
-            flex-grow: 1; height: 4px; background: #e2e8f0; margin-top: 56px;
-            position: absolute; left: 0; width: 100%; z-index: 1;
+        .rule-list li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: var(--success);
+            font-weight: 700;
         }
 
-        /* 詳細步驟圖解 (手機區塊) */
-        .step-detail-row {
-            display: flex; align-items: center; justify-content: center;
-            gap: 4rem; max-width: 1000px; margin: 0 auto 3rem;
-            padding-top: 2rem; border-top: 1px solid #f1f5f9;
-        }
-        .step-detail-left {
-            text-align: left;
-            flex: 1;
-        }
-        .step-pill-red {
-            border: 2px solid #E11D48; color: #E11D48;
-            padding: 6px 20px; border-radius: 50px; font-weight: 700;
-            display: inline-block; margin-bottom: 1rem; letter-spacing: 1px;
-        }
-        .detail-title-big {
-            font-size: 2.2rem; font-weight: 900; color: #333; margin-bottom: 1.5rem;
-        }
-        .detail-list li {
-            font-size: 1.2rem; margin-bottom: 1rem; color: #555;
-        }
-        /* CSS Phone Mockup */
-        .phone-mockup {
-            width: 260px; height: 480px; background: white;
-            border: 10px solid #333; border-radius: 35px;
-            position: relative; box-shadow: 0 20px 50px rgba(0,0,0,0.15);
-            overflow: hidden; margin: 0 auto;
-        }
-        .phone-notch {
-            position: absolute; top: 0; left: 50%; transform: translateX(-50%);
-            width: 120px; height: 24px; background: #333;
-            border-bottom-left-radius: 14px; border-bottom-right-radius: 14px; z-index: 20;
-        }
-        .phone-screen {
-            background: #f8fafc; height: 100%; width: 100%; display: flex; flex-direction: column;
-        }
-        .screen-header {
-            background: var(--primary); height: 60px; display: flex; align-items: center;
-            justify-content: space-between; padding: 25px 15px 0; color: white; font-size: 0.9rem;
-        }
-        .screen-content { padding: 20px; flex: 1; display:flex; flex-direction:column; gap:15px; }
-        .fake-field { height: 40px; background: #e2e8f0; border-radius: 6px; width: 100%; }
-        .fake-btn { height:40px; background: #E11D48; border-radius: 6px; width:100%; margin-top:10px; }
-        .caption-text { color:#999; margin-top:10px; font-size:0.9rem; }
-
-        /* Main CTA */
-        .main-cta-btn {
-            display: inline-block; background: var(--primary); color: white;
-            padding: 1.2rem 4rem; border-radius: 50px; font-size: 1.4rem;
-            font-weight: 700; text-decoration: none; cursor: pointer;
-            box-shadow: 0 10px 25px rgba(0, 104, 183, 0.3); transition: 0.3s;
-            margin-bottom: 2rem;
-        }
-        .main-cta-btn:hover {
-            transform: translateY(-5px); background: var(--primary-dark);
-            box-shadow: 0 15px 30px rgba(0, 104, 183, 0.4);
+        /* 联系客服区块 */
+        .contact-section {
+            background: white;
+            padding: 4rem 0;
         }
 
-        /* --- 機型清單 (Accordions) --- */
-        .accordion { display: flex; flex-direction: column; gap: 1rem; }
-        .acc-item { background: white; border-radius: 12px; overflow: hidden; box-shadow: var(--shadow-sm); }
-        .acc-header {
-            padding: 1.5rem 2rem; display: flex; justify-content: space-between; align-items: center;
-            cursor: pointer; background: white; transition: 0.3s;
+        .contact-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
         }
-        .acc-header:hover { background: #f9fcff; }
-        .acc-header.active { background: #f0f7ff; }
-        .acc-header h3 { font-size: 1.2rem; font-weight: 700; color: var(--primary-dark); display: flex; align-items: center; gap: 10px; }
-        .acc-body { display: none; padding: 0 2rem 2rem; animation: slideDown 0.3s ease; }
-        
-        .model-table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
-        .model-table th { text-align: left; color: var(--text-light); padding: 1rem 0; border-bottom: 2px solid #eee; }
-        .model-table td { padding: 1.2rem 0; border-bottom: 1px solid #f5f5f5; color: var(--text-main); }
-        .price-highlight { color: var(--accent); font-weight: 900; font-size: 1.2rem; }
 
-        /* --- 註冊表單頁 --- */
-        .register-bg { background-color: #f0f4f8; min-height: 100vh; padding: 50px 0; }
-        .form-container {
-            max-width: 800px; margin: 0 auto; background: white;
-            padding: 3rem; border-radius: 20px; box-shadow: var(--shadow-lg);
+        .contact-card {
+            background: linear-gradient(135deg, #f0f9ff, white);
+            padding: 2rem;
+            border-radius: 16px;
+            text-align: center;
+            border: 2px solid #e0f2fe;
+            transition: var(--transition);
         }
-        .form-group { margin-bottom: 2rem; }
-        .form-label { display: block; font-size: 1.1rem; font-weight: 700; margin-bottom: 0.8rem; }
-        .form-input {
-            width: 100%; padding: 1rem 1.2rem; border: 2px solid #e2e8f0;
-            border-radius: 10px; font-size: 1rem; outline: none; transition: 0.3s;
-        }
-        .form-input:focus { border-color: var(--primary); box-shadow: 0 0 0 4px var(--primary-light); }
-        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
 
-        /* 上傳區塊 */
-        .upload-box {
-            border: 2px dashed #cbd5e1; border-radius: 12px; padding: 2rem;
-            text-align: center; cursor: pointer; transition: 0.3s; background: #f8fafc;
+        .contact-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 104, 183, 0.1);
+            border-color: var(--primary);
         }
-        .upload-box:hover { border-color: var(--primary); background: #f0f9ff; }
-        .upload-icon { font-size: 2.5rem; color: var(--text-light); margin-bottom: 1rem; }
-        .file-input { display: none; }
-        .submit-btn {
-            width: 100%; padding: 1.2rem; background: linear-gradient(to right, var(--primary), var(--secondary));
-            color: white; border: none; border-radius: 50px; font-size: 1.2rem;
-            font-weight: 700; cursor: pointer; transition: 0.3s; box-shadow: 0 4px 15px rgba(0, 104, 183, 0.3);
+
+        .contact-icon {
+            width: 60px;
+            height: 60px;
+            background: var(--primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            color: white;
+            font-size: 1.5rem;
         }
-        .submit-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(0, 104, 183, 0.4); }
+
+        .contact-link {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 1.1rem;
+            transition: 0.3s;
+        }
+
+        .contact-link:hover {
+            color: var(--secondary);
+        }
 
         /* Footer */
-        footer { background: var(--text-main); color: white; text-align: center; padding: 3rem 1rem; margin-top: 0; }
+        footer {
+            background: #0f172a;
+            color: white;
+            text-align: center;
+            padding: 4rem 1rem 2rem;
+            margin-top: 5rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .footer-wave {
+            position: absolute;
+            top: -1px;
+            left: 0;
+            width: 100%;
+            line-height: 0;
+            transform: rotate(180deg);
+        }
 
         /* RWD */
         @media (max-width: 992px) {
-            .navbar { padding: 0 1rem; }
-            .nav-menu { display: none; } 
-            .hero-title { font-size: 2.2rem; }
-            .step-detail-row { flex-direction: column; text-align: center; gap: 3rem; }
-            .bonus-actions-simple { flex-direction: column; gap: 3rem; }
-            .vertical-divider-simple { display: none; }
-            .action-col-simple { width: 100%; border-bottom: 1px solid #f1f5f9; padding-bottom: 2rem; }
-            .action-col-simple:last-child { border-bottom: none; padding-bottom: 0; }
-            .step-detail-left { text-align: center; }
-            .form-grid { grid-template-columns: 1fr; }
+            .hero-title {
+                font-size: 2.8rem;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .step-cards-row {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .step-detail-row {
+                flex-direction: column;
+                gap: 3rem;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+                gap: 0;
+            }
+
+            .navbar .nav-menu {
+                display: none;
+            }
+
+            .mobile-toggle {
+                display: block;
+            }
+
+            /* Mobile Menu */
+            .nav-menu.active {
+                display: flex;
+                position: fixed;
+                top: 90px;
+                right: 2%;
+                width: 96%;
+                background: white;
+                flex-direction: column;
+                padding: 2rem;
+                border-radius: 20px;
+                box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
+            }
+        }
+
+        @media (max-width: 576px) {
+            .navbar-container {
+                top: 10px;
+            }
+
+            .navbar {
+                height: 60px;
+                padding: 0 1rem;
+            }
+
+            .step-cards-row {
+                grid-template-columns: 1fr;
+            }
+
+            .bonus-amount {
+                font-size: 4rem;
+            }
+
+            .form-card {
+                padding: 1.5rem;
+            }
+
+            .time-box {
+                padding: 10px;
+                min-width: 70px;
+            }
+
+            .time-val {
+                font-size: 1.8rem;
+            }
+
+            .side-nav-container {
+                top: auto;
+                bottom: 30px;
+                right: 10px;
+                transform: none;
+            }
+
+            .side-btn {
+                width: 70px;
+                padding: 10px 5px;
+            }
+
+            .side-icon-circle {
+                width: 35px;
+                height: 35px;
+                font-size: 1rem;
+            }
+
+            .side-text-main {
+                font-size: 0.8rem;
+            }
+
+            .side-text-sub {
+                font-size: 0.65rem;
+            }
+
+            .scroll-to-top {
+                bottom: 80px;
+                right: 10px;
+                width: 45px;
+                height: 45px;
+                font-size: 1rem;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .service-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .rules-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .contact-grid {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
 
 <body>
 
-    <!-- 導覽列 -->
-    <nav class="navbar">
-        <img src="/Users/yangzhiyong/Library/Mobile Documents/com~apple~CloudDocs/冰點/特賣會/logo.jpg" alt="冰點空調" class="navbar-logo">
-        
-        <div class="nav-menu">
-            <a onclick="switchView('home', 'bonus')" class="nav-link" style="color:var(--accent); font-weight:700;">加碼抽獎</a>
-            <a onclick="switchView('home', 'models')" class="nav-link">活動機型清單</a>
-            <a onclick="switchView('register')" class="nav-link nav-btn-cta">
-                <i class="fa-solid fa-gift"></i> 登錄送好禮
+    <!-- 1. 頂部懸浮導覽列 (完整補回) -->
+    <div class="navbar-container" id="navbarContainer">
+        <nav class="navbar">
+            <a href="#" class="navbar-logo" onclick="switchView('home')">
+                <i class="fa-solid fa-snowflake logo-icon"></i>
+                <span>Bd 冰點</span>
             </a>
-        </div>
-    </nav>
 
-    <!-- 頁面 1：主頁 (Home View) -->
-    <div id="home-view" class="view-section active">
-        
-        <!-- Hero Banner -->
+            <div class="mobile-toggle" onclick="toggleMenu()">
+                <i class="fa-solid fa-bars"></i>
+            </div>
+
+            <div class="nav-menu" id="navMenu">
+                <a onclick="switchView('home', 'bonus'); toggleMenu()" class="nav-link nav-link-red">加碼抽獎</a>
+                <a onclick="switchView('home', 'models'); toggleMenu()" class="nav-link">活動機型</a>
+                <a onclick="switchView('home', 'faq'); toggleMenu()" class="nav-link">常見問題</a>
+                <a onclick="switchView('home', 'contact'); toggleMenu()" class="nav-link">聯絡我們</a>
+                <a onclick="switchView('register'); toggleMenu()" class="nav-link nav-btn-cta btn-shine">
+                    <i class="fa-solid fa-gift"></i> 登錄送好禮
+                </a>
+            </div>
+        </nav>
+    </div>
+
+    <!-- 2. 右側懸浮導覽列 -->
+    <aside class="side-nav-container">
+        <!-- 按鈕 A：回函登錄 -->
+        <a onclick="switchView('register')" class="side-btn side-btn-red">
+            <div class="side-icon-circle">
+                <i class="fa-solid fa-clipboard-check"></i>
+            </div>
+            <div class="side-text-main">立即<br>回函登錄</div>
+        </a>
+
+        <!-- 按鈕 B：加入 LINE -->
+        <a href="https://line.me/ti/p/@bingdian" target="_blank" class="side-btn side-btn-green">
+            <div class="side-icon-circle">
+                <i class="fa-brands fa-line"></i>
+            </div>
+            <div class="side-text-main">加入官方<br>LINE</div>
+            <div class="side-text-sub">填問卷<br>抽好禮</div>
+        </a>
+    </aside>
+
+    <!-- Main View: Home -->
+    <main id="home-view" class="view-section active">
+
+        <!-- Hero Banner with Wave -->
         <header class="hero-banner">
-            <div class="hero-overlay"></div>
-            <div class="hero-content">
-                <h1 class="hero-title">2025冰沁愛心·點亮公益</h1>
-                <p class="hero-subtitle">買指定冰點空調冷氣，登錄即享好禮多選一</p>
+            <div class="hero-content" data-aos="fade-up">
+                <span class="hero-badge">2025 愛心公益特賣</span>
+                <h1 class="hero-title">冰沁愛心 · 點亮公益<br><span
+                        style="font-size:0.5em; font-weight:300; display:block; margin-top:10px;">購買指定一級能效空調，登錄即享好禮多選一</span>
+                </h1>
+
+                <div class="countdown-wrap" id="countdown">
+                    <div class="time-box">
+                        <div class="time-val" id="days">00</div>
+                        <div class="time-label">Days</div>
+                    </div>
+                    <div class="time-box">
+                        <div class="time-val" id="hours">00</div>
+                        <div class="time-label">Hours</div>
+                    </div>
+                    <div class="time-box">
+                        <div class="time-val" id="minutes">00</div>
+                        <div class="time-label">Min</div>
+                    </div>
+                    <div class="time-box">
+                        <div class="time-val" id="seconds">00</div>
+                        <div class="time-label">Sec</div>
+                    </div>
+                </div>
+
+                <div style="display:flex; gap:15px; justify-content:center;">
+                    <a onclick="switchView('home', 'bonus')" class="nav-btn-cta btn-shine"
+                        style="padding: 1rem 3rem; font-size: 1.2rem; cursor: pointer;">
+                        查看優惠詳情 <i class="fa-solid fa-arrow-down"></i>
+                    </a>
+                </div>
+            </div>
+
+            <div class="hero-wave">
+                <svg viewBox="0 0 1440 320" xmlns="http://www.w3.org/2000/svg">
+                    <path fill="#f0f7ff" fill-opacity="1"
+                        d="M0,224L48,213.3C96,203,192,181,288,181.3C384,181,480,203,576,224C672,245,768,267,864,261.3C960,256,1056,224,1152,197.3C1248,171,1344,149,1392,138.7L1440,128L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z">
+                    </path>
+                </svg>
             </div>
         </header>
 
-        <!-- 加碼抽獎與詳情區塊 -->
-        <section id="bonus" class="bonus-section section-py">
-            <div class="container">
-                
-                <!-- 區塊 1：行銷標題與 CTA (Title + Buttons) -->
-                <div class="bonus-block-card">
-                    <!-- 標題 -->
-                    <div class="bonus-header-simple">
-                        <h2 class="bonus-title-large">
-                            加碼再送 <span class="text-red">$1,000</span> 全聯禮券！
-                        </h2>
-                        <div class="title-underline-red"></div>
-                        <p class="bonus-subtitle-simple">
-                            只要 5 分鐘，填寫滿意度調查問卷<br>
-                            再抽全聯 $1,000 禮券！
-                        </p>
+        <!-- Features Section -->
+        <section class="container features-section">
+            <div class="features-grid">
+                <div class="feature-card" data-aos="fade-up" data-aos-delay="100">
+                    <div class="feature-icon"><i class="fa-solid fa-leaf"></i></div>
+                    <h3>CSPF 一級能效</h3>
+                    <p style="color:#666; margin-top:10px;">符合國家最高標準，省電節能，為您的荷包精打細算。</p>
+                </div>
+                <div class="feature-card" data-aos="fade-up" data-aos-delay="200">
+                    <div class="feature-icon"><i class="fa-solid fa-volume-xmark"></i></div>
+                    <h3>極致靜音設計</h3>
+                    <p style="color:#666; margin-top:10px;">低分貝運轉技術，給您圖書館般的寧靜舒適空間。</p>
+                </div>
+                <div class="feature-card" data-aos="fade-up" data-aos-delay="300">
+                    <div class="feature-icon"><i class="fa-solid fa-shield-heart"></i></div>
+                    <h3>全機 7 年保固</h3>
+                    <p style="color:#666; margin-top:10px;">官網登錄即享全機 7 年保固服務，讓您買得安心、用得放心。專業技術團隊隨時為您服務。</p>
+                </div>
+                <!--<div class="feature-card" data-aos="fade-up" data-aos-delay="400">
+                    <div class="feature-icon"><i class="fa-solid fa-tools"></i></div>
+                    <h3>專業安裝服務</h3>
+                    <p style="color:#666; margin-top:10px;">由專業技師團隊提供標準化安裝服務，確保空調運轉效能最佳，並提供完整的安裝後檢查。</p>
+                </div>-->
+                <!--<div class="feature-card" data-aos="fade-up" data-aos-delay="500">
+                    <div class="feature-icon"><i class="fa-solid fa-headset"></i></div>
+                    <h3>24 小時客服</h3>
+                    <p style="color:#666; margin-top:10px;">全年無休的客服專線，隨時為您解答疑問。透過 LINE 官方帳號也能即時獲得協助。</p>
+                </div>-->
+                <!--<div class="feature-card" data-aos="fade-up" data-aos-delay="600">
+                    <div class="feature-icon"><i class="fa-solid fa-industry"></i></div>
+                    <h3>台灣在地製造</h3>
+                    <p style="color:#666; margin-top:10px;">深耕台灣，在地製造，世界品質。提供最專業的服務與完善的售後保障。</p>
+                </div>-->
+            </div>
+        </section>
+
+        <!-- Bonus Section -->
+        <section id="bonus" class="container section-py">
+            <div class="section-header" data-aos="fade-up">
+                <span class="section-tag">Lucky Draw</span>
+                <h2 class="section-title">填問卷，抽好禮</h2>
+                <p style="margin-top:1rem; color:#666;">只要完成線上滿意度調查，每月加碼抽出幸運得主！</p>
+            </div>
+
+            <div class="bonus-card-wrapper" data-aos="zoom-in">
+                <div class="bonus-top">
+                    <p style="font-size:1.2rem; font-weight:700; color:var(--text-main);">全聯禮券加碼送</p>
+                    <div class="bonus-amount">$1,000</div>
+                    <div style="width:50px; height:4px; background:var(--accent); margin:10px auto; border-radius:2px;">
                     </div>
-                    
-                    <!-- 左右行動區 -->
-                    <div class="bonus-actions-simple">
-                        <!-- 左邊：填問卷 -->
-                        <div class="action-col-simple">
-                            <p class="action-prompt">
-                                立刻填寫您的空調升級需求 👇<br>
-                                <span class="tag-pink">每月抽全聯 $1,000 好禮！</span>
-                            </p>
-                            <a onclick="switchView('register')" class="btn-pill btn-red">
-                                填問卷抽好禮 <i class="fa-solid fa-circle-arrow-right"></i>
+                    <p style="color:var(--text-light);">活動期間：2025/01/01 ~ 2025/12/31</p>
+
+                    <div style="display:flex; justify-content:center; gap:4rem; margin-top:3rem; flex-wrap:wrap;">
+                        <!-- Action 1 -->
+                        <div
+                            style="flex:1; min-width:280px; background:white; padding:2.5rem 2rem; border-radius:20px; box-shadow:0 10px 30px rgba(0,0,0,0.05); border:1px solid #eee; text-align:center;">
+                            <div style="font-size:2.5rem; color:var(--accent); margin-bottom:1rem;">
+                                <i class="fa-solid fa-clipboard-question"></i>
+                            </div>
+                            <h4 style="font-size:1.3rem; margin-bottom:0.5rem;">填寫滿意度問卷</h4>
+                            <p style="color:#666; font-size:0.9rem; margin-bottom:1.5rem;">完成問卷即獲抽獎資格</p>
+                            <a onclick="switchView('register')" class="nav-btn-cta btn-shine"
+                                style="background:var(--accent); justify-content:center;">
+                                立即前往 <i class="fa-solid fa-arrow-right"></i>
                             </a>
                         </div>
-                        <!-- 中間分隔線 -->
-                        <div class="vertical-divider-simple"></div>
-                        <!-- 右邊：加 LINE -->
-                        <div class="action-col-simple">
-                            <p class="action-prompt">
-                                立刻加入冰點官方 LINE 👇<br>
-                                <span class="tag-gray">第一手消息、好康優惠不漏接！</span>
-                            </p>
-                            <a href="https://line.me/ti/p/@bingdian" target="_blank" class="btn-pill btn-green">
-                                立即加入 <i class="fa-brands fa-line"></i>
+                        <!-- Action 2 -->
+                        <div
+                            style="flex:1; min-width:280px; background:white; padding:2.5rem 2rem; border-radius:20px; box-shadow:0 10px 30px rgba(0,0,0,0.05); border:1px solid #eee; text-align:center;">
+                            <div style="font-size:2.5rem; color:var(--success); margin-bottom:1rem;">
+                                <i class="fa-brands fa-line"></i>
+                            </div>
+                            <h4 style="font-size:1.3rem; margin-bottom:0.5rem;">加入官方 LINE</h4>
+                            <p style="color:#666; font-size:0.9rem; margin-bottom:1.5rem;">最新優惠與中獎名單公告</p>
+                            <a href="https://line.me/ti/p/@bingdian" target="_blank" class="nav-btn-cta btn-shine"
+                                style="background:var(--success); justify-content:center;">
+                                加好友 <i class="fa-solid fa-user-plus"></i>
                             </a>
                         </div>
                     </div>
                 </div>
+            </div>
+        </section>
 
-                <!-- 區塊 2：活動詳情 (Rules + Steps + Phone + Register Btn) -->
-                <div class="bonus-block-card top-border">
-                    <!-- 活動說明 (補回來的規則區塊) -->
-                    <div class="rules-container">
-                        <h3 class="rules-title">【活動說明】</h3>
-                        <ul class="rules-list">
-                            <li>
-                                <strong>活動時間：</strong>
-                                <span class="date-tag">購買期間 2025/01/01~2025/12/31</span> ｜ 
-                                <span class="date-tag">申請期間 2025/01/01~2026/01/15</span>
+        <!-- 活动规则区块 -->
+        <section id="rules" class="rules-section">
+            <div class="container">
+                <div class="section-header" data-aos="fade-up">
+                    <span class="section-tag">Rules</span>
+                    <h2 class="section-title">活動規則說明</h2>
+                </div>
+
+                <div class="rules-grid" data-aos="fade-up">
+                    <div class="rule-card">
+                        <div class="rule-title">
+                            <i class="fa-solid fa-gift"></i>
+                            <span>參加資格</span>
+                        </div>
+                        <ul class="rule-list">
+                            <li>購買指定一級能效空調機型</li>
+                            <li>於活動期間內完成產品登錄</li>
+                            <li>上傳完整發票及保固卡照片</li>
+                            <li>填寫完整安裝資料與聯絡資訊</li>
+                        </ul>
+                    </div>
+                    <div class="rule-card">
+                        <div class="rule-title">
+                            <i class="fa-solid fa-trophy"></i>
+                            <span>抽獎辦法</span>
+                        </div>
+                        <ul class="rule-list">
+                            <li>每月定期抽出幸運得主</li>
+                            <li>中獎名單將於官方 LINE 公告</li>
+                            <li>獎品將以簡訊通知領取方式</li>
+                            <li>每人限參加一次，不得重複登錄</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Process Steps (With Updated Phone Mockup) -->
+        <section class="process-bg section-py">
+            <div class="container">
+                <div class="section-header" data-aos="fade-up">
+                    <span class="section-tag">Process</span>
+                    <h2 class="section-title">簡單 4 步驟，輕鬆領獎</h2>
+                </div>
+
+                <div class="step-cards-row">
+                    <div class="step-card" data-aos="fade-up" data-aos-delay="100">
+                        <div class="step-num">1</div>
+                        <h4>購買指定機型</h4>
+                        <p style="font-size:0.9rem; color:#666; margin-top:5px;">確認購買發票與保固書</p>
+                    </div>
+                    <div class="step-card" data-aos="fade-up" data-aos-delay="200">
+                        <div class="step-num">2</div>
+                        <h4>填寫回函登錄卡</h4>
+                        <p style="font-size:0.9rem; color:#666; margin-top:5px;">掃描保固卡 QR Code</p>
+                    </div>
+                    <div class="step-card" data-aos="fade-up" data-aos-delay="300">
+                        <div class="step-num">3</div>
+                        <h4>上傳憑證照片</h4>
+                        <p style="font-size:0.9rem; color:#666; margin-top:5px;">上傳發票/收據及保卡</p>
+                    </div>
+                    <div class="step-card" data-aos="fade-up" data-aos-delay="400">
+                        <div class="step-num">4</div>
+                        <h4>審核通過抽獎</h4>
+                        <p style="font-size:0.9rem; color:#666; margin-top:5px;">等待簡訊通知審核結果</p>
+                    </div>
+                </div>
+
+                <!-- Detail with Phone -->
+                <div class="step-detail-row"
+                    style="display:flex; align-items:center; justify-content:center; gap:4rem; flex-wrap:wrap; padding-top:2rem;">
+                    <div style="max-width:400px;" data-aos="fade-right">
+                        <div
+                            style="border:6px solid #E11D48; color:#E11D48; padding:8px 24px; border-radius:50px; font-weight:800; display:inline-block; margin-bottom:1rem; letter-spacing:2px; background:linear-gradient(135deg, #fff1f2, #ffe4e6);">
+                            詳細說明</div>
+                        <h3 style="font-size:2rem; font-weight:900; margin:1rem 0;">手機填寫回函登錄卡<br></h3>
+                        <ul style="list-style:none; margin-top:1.5rem;">
+                            <li style="margin-bottom:1rem; display:flex; gap:10px; align-items:center;">
+                                <i class="fa-solid fa-check-circle" style="color:var(--success);"></i> 填寫機型資料與安裝資料
                             </li>
-                            <li>
-                                <strong>適用對象：</strong>
-                                於活動購買期間內購買指定機型之消費者（不含專案通路、特案優惠價，公關品及贈品等）。
+                            <li style="margin-bottom:1rem; display:flex; gap:10px; align-items:center;">
+                                <i class="fa-solid fa-check-circle" style="color:var(--success);"></i> 拍照上傳憑證
                             </li>
-                            <li>
-                                <strong>活動機型：</strong>
-                                詳見 <a onclick="switchView('home', 'models')" class="link-text">【活動機型清單】<i class="fa-solid fa-arrow-up-right-from-square"></i></a>
-                            </li>
+                            <!--<li style="margin-bottom:1rem; display:flex; gap:10px; align-items:center;">
+                                <i class="fa-solid fa-check-circle" style="color:var(--success);"></i> 即時查詢審核進度
+                            </li> -->
                         </ul>
                     </div>
 
-                    <!-- 4步驟流程圖 (補回來的圓圈) -->
-                    <div class="process-steps">
-                        <div class="step-item">
-                            <div class="step-circle">1</div>
-                            <div class="step-text">購買並安裝<br>指定機型</div>
-                        </div>
-                        <div class="step-line"></div>
-                        <div class="step-item">
-                            <div class="step-circle">2</div>
-                            <div class="step-text">線上回函登錄</div>
-                        </div>
-                        <div class="step-line"></div>
-                        <div class="step-item">
-                            <div class="step-circle">3</div>
-                            <div class="step-text">上傳發票<br>及保證書</div>
-                        </div>
-                        <div class="step-line"></div>
-                        <div class="step-item">
-                            <div class="step-circle">4</div>
-                            <div class="step-text">審核通過<br>獲得抽獎資格</div>
-                        </div>
-                    </div>
-
-                    <!-- 詳細步驟圖解 (手機區塊) -->
-                    <div class="step-detail-row">
-                        <div class="step-detail-left">
-                            <div class="step-pill-red">STEP 1</div>
-                            <h3 class="detail-title-big">冰點產品回函登錄</h3>
-                            <ul class="detail-list rules-list">
-                                <li>1. 掃描產品保固卡 QR code</li>
-                                <li>2. 填寫產品回函資料 (製造號碼/安裝日)</li>
-                                <li>3. 符合指定機型自動帶入活動登錄頁</li>
-                            </ul>
-                        </div>
-                        <div class="step-detail-right">
-                            <div class="phone-mockup">
-                                <div class="phone-notch"></div>
-                                <div class="phone-screen">
-                                    <div class="screen-header">
-                                        <span>Bd 冰點空調</span><i class="fa-solid fa-bars"></i>
-                                    </div>
-                                    <div class="screen-content">
-                                        <div style="text-align:center; font-weight:700; border-bottom:1px solid #ddd; padding-bottom:10px;">回函卡登錄</div>
-                                        <div style="font-size:0.7rem; color:#666;">製造號碼:</div>
-                                        <div class="fake-field"></div>
-                                        <div style="font-size:0.7rem; color:#666;">安裝日期:</div>
-                                        <div class="fake-field"></div>
-                                        <div class="fake-btn"></div>
-                                    </div>
-                                </div>
+                    <!-- 3D Phone Mockup (Updated to RWD look) -->
+                    <div class="phone-mockup" data-aos="fade-left">
+                        <div class="phone-notch"></div>
+                        <div class="phone-inner">
+                            <div class="phone-screen-header">
+                                <span>Bd 冰點空調</span> <i class="fa-solid fa-bars"></i>
                             </div>
-                            <p class="caption-text">手機畫面示意圖</p>
+                            <div class="phone-body">
+                                <h3 class="mock-title">回函卡登錄</h3>
+
+                                <div class="mock-field">
+                                    <label class="mock-label">製造號碼:</label>
+                                    <div class="mock-input"></div>
+                                </div>
+
+                                <div class="mock-field">
+                                    <label class="mock-label">安裝日期:</label>
+                                    <div class="mock-input"></div>
+                                </div>
+
+                                <div class="mock-btn"></div>
+                            </div>
                         </div>
                     </div>
-
-                    <!-- 立即登錄按鈕 (主 CTA) -->
-                    <a onclick="switchView('register')" class="main-cta-btn">
-                        立即登錄回函 <i class="fa-solid fa-arrow-right"></i>
-                    </a>
                 </div>
 
             </div>
         </section>
 
-        <!-- 機型清單 Section -->
+        <!-- Models List -->
         <section id="models" class="container section-py">
-            <div class="section-header">
-                <h2 class="section-title">活動機型清單</h2>
-                <p style="color:#666; margin-top:10px;">嚴選一級能效機種，點擊分類展開查看</p>
+            <div class="section-header" data-aos="fade-up">
+                <span class="section-tag">Products</span>
+                <h2 class="section-title">活動指定機型</h2>
             </div>
 
-            <div class="accordion">
-                <!-- 分類 1 -->
+            <div style="max-width:900px; margin:0 auto;" data-aos="fade-up">
                 <div class="acc-item">
                     <div class="acc-header" onclick="toggleAcc(this)">
-                        <h3><i class="fa-solid fa-wind" style="color:var(--secondary)"></i> AI 智慧變頻 (分離式冷暖)</h3>
-                        <i class="fa-solid fa-chevron-down" style="color:#999;"></i>
+                        <span><i class="fa-solid fa-wind" style="color:var(--secondary); margin-right:10px;"></i> AI
+                            智慧變頻冷暖系列</span>
+                        <i class="fa-solid fa-chevron-down"></i>
                     </div>
                     <div class="acc-body">
                         <table class="model-table">
-                            <thead><tr><th>機型</th><th>規格</th><th>優惠價</th></tr></thead>
+                            <thead>
+                                <tr>
+                                    <th>機型</th>
+                                    <th>適用坪數</th>
+                                    <th style="color:var(--accent)">優惠價</th>
+                                </tr>
+                            </thead>
                             <tbody>
-                                <tr><td>FI-23HSG</td><td>3-5坪 / 1級能效</td><td class="price-highlight">$19,800</td></tr>
-                                <tr><td>FI-29HSG</td><td>4-6坪 / 1級能效</td><td class="price-highlight">$22,500</td></tr>
-                                <tr><td>FI-50HSG</td><td>7-9坪 / 1級能效</td><td class="price-highlight">$34,500</td></tr>
+                                <tr>
+                                    <td>FI-23HSG</td>
+                                    <td>3-5 坪</td>
+                                    <td style="font-weight:700; color:var(--accent)">$19,800</td>
+                                </tr>
+                                <tr>
+                                    <td>FI-29HSG</td>
+                                    <td>4-6 坪</td>
+                                    <td style="font-weight:700; color:var(--accent)">$22,500</td>
+                                </tr>
+                                <tr>
+                                    <td>FI-50HSG</td>
+                                    <td>7-9 坪</td>
+                                    <td style="font-weight:700; color:var(--accent)">$34,500</td>
+                                </tr>
                             </tbody>
                         </table>
                     </div>
                 </div>
-                <!-- 分類 2 -->
+
                 <div class="acc-item">
                     <div class="acc-header" onclick="toggleAcc(this)">
-                        <h3><i class="fa-regular fa-snowflake" style="color:var(--secondary)"></i> 變頻單冷系列</h3>
-                        <i class="fa-solid fa-chevron-down" style="color:#999;"></i>
+                        <span><i class="fa-regular fa-snowflake" style="color:var(--secondary); margin-right:10px;"></i>
+                            變頻單冷系列</span>
+                        <i class="fa-solid fa-chevron-down"></i>
                     </div>
                     <div class="acc-body">
                         <table class="model-table">
-                            <thead><tr><th>機型</th><th>規格</th><th>優惠價</th></tr></thead>
+                            <thead>
+                                <tr>
+                                    <th>機型</th>
+                                    <th>適用坪數</th>
+                                    <th style="color:var(--accent)">優惠價</th>
+                                </tr>
+                            </thead>
                             <tbody>
-                                <tr><td>FI-23CSG</td><td>3-5坪 / 環保冷媒</td><td class="price-highlight">$17,500</td></tr>
-                                <tr><td>FI-41CSG</td><td>6-8坪 / 靜音設計</td><td class="price-highlight">$27,900</td></tr>
+                                <tr>
+                                    <td>FI-23CSG</td>
+                                    <td>3-5 坪</td>
+                                    <td style="font-weight:700; color:var(--accent)">$17,500</td>
+                                </tr>
+                                <tr>
+                                    <td>FI-41CSG</td>
+                                    <td>6-8 坪</td>
+                                    <td style="font-weight:700; color:var(--accent)">$27,900</td>
+                                </tr>
                             </tbody>
                         </table>
                     </div>
@@ -577,147 +1728,709 @@
             </div>
         </section>
 
-    </div>
+        <!-- 活动统计数字区块 -->
+        <!-- <section class="stats-section">
+            <div class="container">
+                <div class="stats-grid" data-aos="fade-up">
+                    <div class="stat-card">
+                        <div class="stat-number" data-count="1286">0</div>
+                        <div class="stat-label">已參與人數</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" data-count="95">0</div>
+                        <div class="stat-label">中獎人數</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" data-count="365">0</div>
+                        <div class="stat-label">活動天數</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" data-count="1000">0</div>
+                        <div class="stat-label">總獎金 (元)</div>
+                    </div>
+                </div>
+            </div>
+        </section>
 
-    <!-- 頁面 2：獨立登錄頁面 (Register View) -->
-    <div id="register-view" class="view-section register-bg">
+        <!-- FAQ 常见问题区块 -->
+        <section id="faq" class="faq-section">
+            <div class="container">
+                <div class="section-header" data-aos="fade-up">
+                    <span class="section-tag">FAQ</span>
+                    <h2 class="section-title">常見問題</h2>
+                </div>
+
+                <div style="max-width:900px; margin:0 auto;" data-aos="fade-up">
+                    <div class="faq-item">
+                        <div class="faq-header" onclick="toggleFaq(this)">
+                            <span><i class="fa-solid fa-circle-question"
+                                    style="color:var(--primary); margin-right:10px;"></i> 如何確認我的登錄是否成功？</span>
+                            <i class="fa-solid fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-body">
+                            <div class="faq-body-content">
+                                完成登錄後，系統會發送確認簡訊至您填寫的手機號碼。您也可以透過官方 LINE 帳號查詢登錄狀態。審核時間約為 3-5 個工作天。
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <div class="faq-header" onclick="toggleFaq(this)">
+                            <span><i class="fa-solid fa-circle-question"
+                                    style="color:var(--primary); margin-right:10px;"></i> 上傳的照片有什麼要求？</span>
+                            <i class="fa-solid fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-body">
+                            <div class="faq-body-content">
+                                請上傳清晰的發票或收據照片，以及保固卡照片。照片需能清楚看到購買日期、機型、金額等資訊。檔案格式支援 JPG、PNG，檔案大小不超過 5MB。
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <div class="faq-header" onclick="toggleFaq(this)">
+                            <span><i class="fa-solid fa-circle-question"
+                                    style="color:var(--primary); margin-right:10px;"></i> 抽獎活動多久舉辦一次？</span>
+                            <i class="fa-solid fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-body">
+                            <div class="faq-body-content">
+                                每月定期舉辦抽獎活動，中獎名單將於每月 15 日於官方 LINE 帳號公告。活動期間為 2025/01/01 至 2025/12/31，共計 12 次抽獎機會。
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <div class="faq-header" onclick="toggleFaq(this)">
+                            <span><i class="fa-solid fa-circle-question"
+                                    style="color:var(--primary); margin-right:10px;"></i> 如何查詢保固資訊？</span>
+                            <i class="fa-solid fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-body">
+                            <div class="faq-body-content">
+                                完成產品登錄後，系統會自動為您註冊 7 年保固服務。您可透過客服專線或官方 LINE 帳號查詢保固狀態。保固期間內如有任何問題，我們將提供免費維修服務。
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <div class="faq-header" onclick="toggleFaq(this)">
+                            <span><i class="fa-solid fa-circle-question"
+                                    style="color:var(--primary); margin-right:10px;"></i> 如果填寫錯誤可以修改嗎？</span>
+                            <i class="fa-solid fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-body">
+                            <div class="faq-body-content">
+                                在送出表單前，請仔細檢查所有資料。若已送出但發現錯誤，請立即聯繫客服專線或透過官方 LINE 帳號告知，我們將協助您修正資料。
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 联系客服区块 -->
+        <section id="contact" class="contact-section">
+            <div class="container">
+                <div class="section-header" data-aos="fade-up">
+                    <span class="section-tag">Contact</span>
+                    <h2 class="section-title">需要協助？聯絡我們</h2>
+                    <p style="margin-top:1rem; color:#666;">我們隨時為您提供專業服務</p>
+                </div>
+
+                <div class="contact-grid" data-aos="fade-up">
+                    <div class="contact-card">
+                        <div class="contact-icon">
+                            <i class="fa-solid fa-phone"></i>
+                        </div>
+                        <h3 style="font-size:1.3rem; margin-bottom:0.5rem;">客服專線</h3>
+                        <a href="tel:0800-123-456" class="contact-link">0800-123-456</a>
+                        <p style="color:#666; margin-top:0.5rem; font-size:0.9rem;">週一至週日 24 小時服務</p>
+                    </div>
+                    <div class="contact-card">
+                        <div class="contact-icon" style="background:var(--success);">
+                            <i class="fa-brands fa-line"></i>
+                        </div>
+                        <h3 style="font-size:1.3rem; margin-bottom:0.5rem;">LINE 官方帳號</h3>
+                        <a href="https://line.me/ti/p/@bingdian" target="_blank" class="contact-link">@bingdian</a>
+                        <p style="color:#666; margin-top:0.5rem; font-size:0.9rem;">即時訊息回覆</p>
+                    </div>
+                    <div class="contact-card">
+                        <div class="contact-icon" style="background:var(--accent);">
+                            <i class="fa-solid fa-envelope"></i>
+                        </div>
+                        <h3 style="font-size:1.3rem; margin-bottom:0.5rem;">電子郵件</h3>
+                        <a href="mailto:service@bingdian.com" class="contact-link">service@bingdian.com</a>
+                        <p style="color:#666; margin-top:0.5rem; font-size:0.9rem;">24 小時內回覆</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Register View (完整補齊欄位) -->
+    <div id="register-view" class="view-section" style="padding: 120px 0 50px;">
         <div class="container">
-            <div class="section-header">
+            <!-- 標題區塊 -->
+            <div class="register-header-wrap">
                 <h2 class="section-title">產品回函登錄</h2>
-                <p style="color:#666; margin-top:10px;">請填寫詳細資料並上傳購買憑證，以利贈品寄送</p>
             </div>
 
-            <div class="form-container">
-                <form onsubmit="event.preventDefault(); alert('資料已送出！');">
-                    <!-- 1. 產品資料 -->
-                    <h3 style="color:var(--primary); margin-bottom:1.5rem; border-left:4px solid var(--secondary); padding-left:10px;">產品資訊</h3>
-                    <div class="form-grid">
-                        <div class="form-group">
+            <div class="form-card" style="max-width:800px; margin:0 auto;">
+                <form id="regForm" onsubmit="handleFormSubmit(event)">
+
+                    <h4 class="form-section-title">｜產品資訊</h4>
+
+                    <!-- Error Message -->
+                    <div id="errorMsg" class="error-msg" style="margin-top:20px;">
+                        <i class="fa-solid fa-circle-exclamation"></i>
+                        <span id="errorText">請檢查表單欄位是否正確填寫</span>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="input-group">
                             <label class="form-label">室外機製造號碼 (Serial No.) *</label>
-                            <input type="text" class="form-input" placeholder="請輸入機身序號" required>
+                            <input type="text" name="serialNo" class="input-field" placeholder="請輸入機身序號" required>
+                            <span class="error-text">請輸入有效的製造號碼</span>
                         </div>
-                        <div class="form-group">
+                        <div class="input-group">
                             <label class="form-label">購買機型 *</label>
-                            <select class="form-input" required>
-                                <option value="" disabled selected>請選擇機型</option>
-                                <option>FI-23HSG</option>
-                                <option>FI-29HSG</option>
-                                <option>其他</option>
-                            </select>
+                            <div class="select-wrapper">
+                                <select name="model" class="input-field" required>
+                                    <option value="" disabled selected>請選擇機型</option>
+                                    <option value="FI-23HSG">FI-23HSG</option>
+                                    <option value="FI-29HSG">FI-29HSG</option>
+                                    <option value="FI-50HSG">FI-50HSG</option>
+                                    <option value="FI-23CSG">FI-23CSG</option>
+                                    <option value="FI-41CSG">FI-41CSG</option>
+                                </select>
+                                <i class="fa-solid fa-chevron-down select-arrow"></i>
+                            </div>
+                            <span class="error-text">請選擇機型</span>
                         </div>
                     </div>
-                    <div class="form-grid">
-                        <div class="form-group">
+
+                    <div class="form-row">
+                        <div class="input-group">
                             <label class="form-label">安裝日期 *</label>
-                            <input type="date" class="form-input" required>
+                            <input type="date" name="installDate" class="input-field" required max="">
+                            <span class="error-text">請選擇有效的安裝日期</span>
                         </div>
-                        <div class="form-group">
+                        <div class="input-group">
                             <label class="form-label">購買通路/店家 *</label>
-                            <input type="text" class="form-input" placeholder="例如：全國電子" required>
+                            <input type="text" name="store" class="input-field" placeholder="例如：全國電子" required>
+                            <span class="error-text">請輸入購買通路或店家名稱</span>
                         </div>
                     </div>
-                    <hr style="border:0; border-top:1px solid #eee; margin:2rem 0;">
 
-                    <!-- 2. 安裝資訊 -->
-                    <h3 style="color:var(--primary); margin-bottom:1.5rem; border-left:4px solid var(--secondary); padding-left:10px;">安裝資料</h3>
-                    <div class="form-group">
+                    <h4 class="form-section-title">｜安裝資料</h4>
+
+                    <div class="input-group">
                         <label class="form-label">安裝地址 *</label>
-                        <input type="text" class="form-input" placeholder="請輸入詳細地址" required>
+                        <input type="text" name="address" class="input-field" placeholder="請輸入詳細地址" required>
+                        <span class="error-text">請輸入完整的安裝地址</span>
                     </div>
-                    <div class="form-grid">
-                        <div class="form-group">
+
+                    <div class="form-row">
+                        <div class="input-group">
                             <label class="form-label">聯絡人姓名 *</label>
-                            <input type="text" class="form-input" required>
+                            <input type="text" name="contactName" class="input-field" placeholder="請輸入姓名" required>
+                            <span class="error-text">請輸入聯絡人姓名</span>
                         </div>
-                        <div class="form-group">
+                        <div class="input-group">
                             <label class="form-label">聯絡電話 *</label>
-                            <input type="tel" class="form-input" placeholder="09xx-xxx-xxx" required>
+                            <input type="tel" name="phone" class="input-field" placeholder="0912345678 或 09xx-xxx-xxx"
+                                pattern="[0-9]{10}|[0-9]{4}-[0-9]{3}-[0-9]{3}" required>
+                            <span class="error-text">請輸入正確的手機號碼格式（10位數字或 09xx-xxx-xxx）</span>
                         </div>
                     </div>
-                    <hr style="border:0; border-top:1px solid #eee; margin:2rem 0;">
 
-                    <!-- 3. 憑證上傳 -->
-                    <h3 style="color:var(--primary); margin-bottom:1.5rem; border-left:4px solid var(--secondary); padding-left:10px;">憑證上傳</h3>
-                    <div class="form-group">
-                        <label class="form-label">上傳購買發票及收據 (需蓋銷售章) *</label>
-                        <label class="upload-box" id="uploadLabel">
-                            <input type="file" class="file-input" accept="image/*" onchange="previewFile(this)">
-                            <div class="upload-icon"><i class="fa-solid fa-cloud-arrow-up"></i></div>
-                            <div class="upload-text">點擊選擇檔案 或 將圖片拖曳至此</div>
-                            <span style="display:block; color:#999; font-size:0.9rem; margin-top:5px;">支援 JPG, PNG 格式</span>
-                            <div id="fileName" style="margin-top:10px; color:var(--primary); font-weight:700;"></div>
-                        </label>
+                    <h4 class="form-section-title">｜憑證上傳</h4>
+
+                    <label class="file-upload-area" id="dropArea">
+                        <input type="file" name="certificate" id="fileInput" accept="image/jpeg,image/jpg,image/png"
+                            hidden onchange="handleFile(this)">
+                        <div class="upload-icon-wrap">
+                            <i class="fa-solid fa-image"></i>
+                        </div>
+                        <p style="font-weight:700; color:var(--text-main);">點擊上傳發票或保卡照片</p>
+                        <p style="font-size:0.9rem; color:var(--text-light);">支援 JPG, PNG 格式 (Max 5MB)</p>
+                        <div id="fileName" style="margin-top:10px; color:var(--primary); font-weight:700;"></div>
+                    </label>
+                    <div class="file-preview" id="filePreview">
+                        <img id="previewImage" src="" alt="預覽圖片">
                     </div>
 
-                    <button type="submit" class="submit-btn">確認送出資料</button>
+                    <!-- Success Message -->
+                    <div id="successMsg" class="success-msg" style="margin-top:20px;">
+                        <i class="fa-solid fa-circle-check"></i>
+                        <span>資料已成功送出！請留意手機簡訊通知。</span>
+                    </div>
+
+                    <button type="submit" id="submitBtn" class="nav-btn-cta btn-shine"
+                        style="width:100%; justify-content:center; padding:1.2rem; margin-top:2rem; font-size:1.2rem; border:none; cursor:pointer;">
+                        確認送出資料
+                    </button>
+
+                    <!-- 返回活動首頁 (移至下方) -->
                     <div style="text-align:center; margin-top:20px;">
-                        <a onclick="switchView('home')" style="color:#666; text-decoration:none; cursor:pointer;">取消，返回首頁</a>
+                        <a onclick="switchView('home')" class="back-link">
+                            <i class="fa-solid fa-arrow-left"></i> 返回活動首頁
+                        </a>
                     </div>
                 </form>
             </div>
         </div>
     </div>
 
+    <!-- 回到顶部按钮 -->
+    <button class="scroll-to-top" id="scrollToTop" onclick="scrollToTop()" aria-label="回到顶部">
+        <i class="fa-solid fa-arrow-up"></i>
+    </button>
+
     <!-- Footer -->
     <footer>
-        <p>Copyright © 2025 Bd Air Conditioning. All rights reserved.</p>
+        <div class="footer-wave">
+            <svg viewBox="0 0 1440 320" xmlns="http://www.w3.org/2000/svg">
+                <path fill="#0f172a" fill-opacity="1"
+                    d="M0,224L48,213.3C96,203,192,181,288,181.3C384,181,480,203,576,224C672,245,768,267,864,261.3C960,256,1056,224,1152,197.3C1248,171,1344,149,1392,138.7L1440,128L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z">
+                </path>
+            </svg>
+        </div>
+        <div class="container" style="position:relative; z-index:5;">
+            <h3 style="margin-bottom:1rem; font-weight:1000px;">冰點空調冷氣股份有限公司</h3>
+            <p style="opacity:0.7; font-size:1.0rem;">深耕台灣・在地製造・世界品質</p>
+            <div style="margin:20px 0; display:flex; gap:20px; justify-content:center; font-size:1.5rem;">
+                <i class="fa-brands fa-facebook"></i>
+                <i class="fa-brands fa-instagram"></i>
+                <i class="fa-brands fa-youtube"></i>
+            </div>
+            <p
+                style="opacity:0.5; font-size:0.8rem; border-top:1px solid rgba(255,255,255,0.1); padding-top:20px; margin-top:20px;">
+                Copyright © 2025 Bd Air Conditioning. All rights reserved.
+            </p>
+        </div>
     </footer>
 
+    <!-- Scripts -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
-        // 1. 視圖切換
+        // 1. 初始化 AOS 動畫
+        AOS.init({
+            duration: 800,
+            once: true,
+            offset: 100
+        });
+
+        // 2. 懸浮導覽列滾動偵測
+        window.addEventListener('scroll', function () {
+            const navContainer = document.getElementById('navbarContainer');
+            if (window.scrollY > 50) {
+                navContainer.classList.add('scrolled');
+            } else {
+                navContainer.classList.remove('scrolled');
+            }
+        });
+
+        // 3. 手機版選單切換
+        function toggleMenu() {
+            const menu = document.getElementById('navMenu');
+            menu.classList.toggle('active');
+        }
+
+        // 4. 頁面切換 (SPA)
         function switchView(viewId, anchorId = null) {
             document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
-            
+
             if (viewId === 'home') {
                 document.getElementById('home-view').classList.add('active');
                 if (anchorId) {
                     setTimeout(() => {
                         const el = document.getElementById(anchorId);
-                        if(el) {
-                            const offset = 90;
-                            const pos = el.getBoundingClientRect().top + window.pageYOffset - offset;
-                            window.scrollTo({ top: pos, behavior: "smooth" });
+                        if (el) {
+                            const y = el.getBoundingClientRect().top + window.pageYOffset - 80;
+                            window.scrollTo({ top: y, behavior: 'smooth' });
                         }
                     }, 100);
                 } else {
                     window.scrollTo(0, 0);
                 }
-            } else if (viewId === 'register') {
+                setTimeout(() => AOS.refresh(), 200);
+            } else {
                 document.getElementById('register-view').classList.add('active');
                 window.scrollTo(0, 0);
             }
         }
 
-        // 2. 摺疊選單
+        // 5. 手風琴效果
         function toggleAcc(header) {
-            header.classList.toggle('active');
+            const item = header.parentElement;
             const body = header.nextElementSibling;
-            if (body.style.display === "block") {
-                body.style.display = "none";
+            document.querySelectorAll('.acc-item').forEach(otherItem => {
+                if (otherItem !== item) {
+                    otherItem.classList.remove('open');
+                    otherItem.querySelector('.acc-body').style.maxHeight = null;
+                    otherItem.querySelector('.fa-chevron-down').style.transform = 'rotate(0deg)';
+                }
+            });
+            if (item.classList.contains('open')) {
+                item.classList.remove('open');
+                body.style.maxHeight = null;
                 header.querySelector('.fa-chevron-down').style.transform = 'rotate(0deg)';
             } else {
-                body.style.display = "block";
+                item.classList.add('open');
+                body.style.maxHeight = body.scrollHeight + "px";
                 header.querySelector('.fa-chevron-down').style.transform = 'rotate(180deg)';
             }
         }
 
-        // 3. 上傳預覽
-        function previewFile(input) {
-            const fileNameDiv = document.getElementById('fileName');
+        // 12. FAQ 手風琴效果
+        function toggleFaq(header) {
+            const item = header.parentElement;
+            const body = header.nextElementSibling;
+            document.querySelectorAll('.faq-item').forEach(otherItem => {
+                if (otherItem !== item) {
+                    otherItem.classList.remove('open');
+                }
+            });
+            item.classList.toggle('open');
+        }
+
+        // 13. 数字滚动动画
+        function animateCounter(element, target, duration = 2000) {
+            const start = 0;
+            const increment = target / (duration / 16);
+            let current = start;
+
+            const timer = setInterval(() => {
+                current += increment;
+                if (current >= target) {
+                    element.textContent = target.toLocaleString();
+                    clearInterval(timer);
+                } else {
+                    element.textContent = Math.floor(current).toLocaleString();
+                }
+            }, 16);
+        }
+
+        // 14. 观察统计数字区块
+        const observerOptions = {
+            threshold: 0.5,
+            rootMargin: '0px'
+        };
+
+        const statsObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const statNumbers = entry.target.querySelectorAll('.stat-number');
+                    statNumbers.forEach(stat => {
+                        const target = parseInt(stat.getAttribute('data-count'));
+                        if (target > 0 && stat.textContent === '0') {
+                            animateCounter(stat, target);
+                        }
+                    });
+                    statsObserver.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        // 初始化统计数字观察
+        window.addEventListener('load', function () {
+            const statsSection = document.querySelector('.stats-section');
+            if (statsSection) {
+                statsObserver.observe(statsSection);
+            }
+        });
+
+        // 6. 檔案上傳預覽與驗證
+        function handleFile(input) {
+            const nameBox = document.getElementById('fileName');
+            const box = document.getElementById('dropArea');
+            const preview = document.getElementById('filePreview');
+            const previewImg = document.getElementById('previewImage');
+            const errorMsg = document.getElementById('errorMsg');
+
             if (input.files && input.files[0]) {
-                fileNameDiv.innerHTML = '<i class="fa-solid fa-check"></i> ' + input.files[0].name;
-                document.getElementById('uploadLabel').style.borderColor = 'var(--primary)';
-                document.getElementById('uploadLabel').style.background = '#f0f7ff';
-            } else {
-                fileNameDiv.innerHTML = '';
+                const file = input.files[0];
+                const maxSize = 5 * 1024 * 1024; // 5MB
+                const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png'];
+
+                // 檢查檔案類型
+                if (!allowedTypes.includes(file.type)) {
+                    errorMsg.style.display = 'flex';
+                    document.getElementById('errorText').textContent = '檔案格式不正確，請上傳 JPG 或 PNG 格式的圖片';
+                    input.value = '';
+                    return;
+                }
+
+                // 檢查檔案大小
+                if (file.size > maxSize) {
+                    errorMsg.style.display = 'flex';
+                    document.getElementById('errorText').textContent = '檔案大小超過 5MB，請上傳較小的檔案';
+                    input.value = '';
+                    return;
+                }
+
+                // 顯示檔案名稱
+                nameBox.innerHTML = `<i class="fa-solid fa-check"></i> ${file.name} (${(file.size / 1024 / 1024).toFixed(2)} MB)`;
+                box.style.background = '#f0f9ff';
+                box.style.borderColor = 'var(--primary)';
+
+                // 隱藏錯誤訊息
+                errorMsg.style.display = 'none';
+
+                // 預覽圖片
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    previewImg.src = e.target.result;
+                    preview.classList.add('show');
+                };
+                reader.readAsDataURL(file);
             }
         }
-        
-        // Init
-        window.onload = function() {
-           const firstAcc = document.querySelector('.acc-header');
-           if(firstAcc) toggleAcc(firstAcc);
-        };
+
+        // 7. 表單驗證
+        function validateForm() {
+            const form = document.getElementById('regForm');
+            const inputs = form.querySelectorAll('.input-field[required]');
+            let isValid = true;
+
+            inputs.forEach(input => {
+                const group = input.closest('.input-group');
+                const errorText = group.querySelector('.error-text');
+
+                // 清除之前的驗證狀態
+                input.classList.remove('error', 'valid');
+                group.classList.remove('error');
+
+                // 電話號碼特殊驗證
+                if (input.name === 'phone') {
+                    const phonePattern = /^[0-9]{10}$|^[0-9]{4}-[0-9]{3}-[0-9]{3}$/;
+                    const phoneValue = input.value.replace(/\s/g, '');
+                    if (!phonePattern.test(phoneValue)) {
+                        input.classList.add('error');
+                        group.classList.add('error');
+                        isValid = false;
+                        return;
+                    }
+                }
+
+                // 日期驗證（不能是未來日期）
+                if (input.type === 'date') {
+                    const selectedDate = new Date(input.value);
+                    const today = new Date();
+                    today.setHours(23, 59, 59, 999);
+                    if (selectedDate > today) {
+                        input.classList.add('error');
+                        group.classList.add('error');
+                        isValid = false;
+                        return;
+                    }
+                }
+
+                // 一般必填驗證
+                if (!input.value.trim()) {
+                    input.classList.add('error');
+                    group.classList.add('error');
+                    isValid = false;
+                } else {
+                    input.classList.add('valid');
+                }
+            });
+
+            // 檢查檔案是否上傳
+            const fileInput = document.getElementById('fileInput');
+            if (!fileInput.files || fileInput.files.length === 0) {
+                const errorMsg = document.getElementById('errorMsg');
+                errorMsg.style.display = 'flex';
+                document.getElementById('errorText').textContent = '請上傳發票或保卡照片';
+                isValid = false;
+            }
+
+            return isValid;
+        }
+
+        // 8. 表單送出處理
+        function handleFormSubmit(e) {
+            e.preventDefault();
+
+            // 隱藏之前的錯誤訊息
+            document.getElementById('errorMsg').style.display = 'none';
+
+            // 驗證表單
+            if (!validateForm()) {
+                document.getElementById('errorMsg').style.display = 'flex';
+                document.getElementById('errorText').textContent = '請檢查表單欄位是否正確填寫';
+                // 滾動到第一個錯誤欄位
+                const firstError = document.querySelector('.input-field.error');
+                if (firstError) {
+                    firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    firstError.focus();
+                }
+                return;
+            }
+
+            const btn = document.getElementById('submitBtn');
+            const successMsg = document.getElementById('successMsg');
+            const form = document.getElementById('regForm');
+
+            // 保存表單數據到本地存儲（可選）
+            const formData = new FormData(form);
+            const formObject = {};
+            formData.forEach((value, key) => {
+                formObject[key] = value;
+            });
+            localStorage.setItem('formDraft', JSON.stringify(formObject));
+
+            btn.classList.add('loading');
+            btn.innerHTML = '<i class="fa-solid fa-spinner"></i> 資料傳送中...';
+            btn.disabled = true;
+
+            setTimeout(() => {
+                btn.classList.remove('loading');
+                btn.innerHTML = '確認送出資料';
+                btn.disabled = false;
+                successMsg.style.display = 'flex';
+
+                // 清除本地存儲
+                localStorage.removeItem('formDraft');
+
+                setTimeout(() => {
+                    switchView('home');
+                    successMsg.style.display = 'none';
+                    form.reset();
+                    document.getElementById('fileName').innerHTML = '';
+                    document.getElementById('filePreview').classList.remove('show');
+                    document.getElementById('dropArea').style.background = '#fafbfc';
+                    document.getElementById('dropArea').style.borderColor = '#cbd5e1';
+                    // 清除驗證狀態
+                    form.querySelectorAll('.input-field').forEach(input => {
+                        input.classList.remove('error', 'valid');
+                        input.closest('.input-group')?.classList.remove('error');
+                    });
+                }, 3000);
+            }, 1500);
+        }
+
+        // 9. 實時驗證
+        document.addEventListener('DOMContentLoaded', function () {
+            const form = document.getElementById('regForm');
+            if (form) {
+                const inputs = form.querySelectorAll('.input-field');
+                inputs.forEach(input => {
+                    input.addEventListener('blur', function () {
+                        const group = this.closest('.input-group');
+                        if (this.hasAttribute('required') && !this.value.trim()) {
+                            this.classList.add('error');
+                            group.classList.add('error');
+                        } else if (this.value.trim()) {
+                            this.classList.remove('error');
+                            this.classList.add('valid');
+                            group.classList.remove('error');
+                        }
+                    });
+
+                    input.addEventListener('input', function () {
+                        if (this.classList.contains('error') && this.value.trim()) {
+                            this.classList.remove('error');
+                            this.classList.add('valid');
+                            this.closest('.input-group').classList.remove('error');
+                        }
+                    });
+                });
+
+                // 電話號碼格式化
+                const phoneInput = form.querySelector('input[name="phone"]');
+                if (phoneInput) {
+                    phoneInput.addEventListener('input', function (e) {
+                        let value = e.target.value.replace(/\D/g, '');
+                        if (value.length > 0) {
+                            if (value.length <= 4) {
+                                value = value;
+                            } else if (value.length <= 7) {
+                                value = value.slice(0, 4) + '-' + value.slice(4);
+                            } else {
+                                value = value.slice(0, 4) + '-' + value.slice(4, 7) + '-' + value.slice(7, 10);
+                            }
+                        }
+                        e.target.value = value;
+                    });
+                }
+
+                // 設置日期最大值為今天
+                const dateInput = form.querySelector('input[type="date"]');
+                if (dateInput) {
+                    const today = new Date().toISOString().split('T')[0];
+                    dateInput.setAttribute('max', today);
+                }
+
+                // 載入保存的表單數據
+                const savedData = localStorage.getItem('formDraft');
+                if (savedData) {
+                    try {
+                        const data = JSON.parse(savedData);
+                        Object.keys(data).forEach(key => {
+                            const input = form.querySelector(`[name="${key}"]`);
+                            if (input && input.type !== 'file') {
+                                input.value = data[key];
+                            }
+                        });
+                    } catch (e) {
+                        console.error('載入表單數據失敗', e);
+                    }
+                }
+            }
+        });
+
+        // 10. 倒數計時器（包含秒數）
+        const countDownDate = new Date("Dec 31, 2025 23:59:59").getTime();
+        const timer = setInterval(function () {
+            const now = new Date().getTime();
+            const distance = countDownDate - now;
+
+            if (distance < 0) {
+                clearInterval(timer);
+                document.getElementById("days").innerText = "00";
+                document.getElementById("hours").innerText = "00";
+                document.getElementById("minutes").innerText = "00";
+                document.getElementById("seconds").innerText = "00";
+                return;
+            }
+
+            const d = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const h = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const m = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const s = Math.floor((distance % (1000 * 60)) / 1000);
+
+            document.getElementById("days").innerText = d < 10 ? "0" + d : d;
+            document.getElementById("hours").innerText = h < 10 ? "0" + h : h;
+            document.getElementById("minutes").innerText = m < 10 ? "0" + m : m;
+            document.getElementById("seconds").innerText = s < 10 ? "0" + s : s;
+        }, 1000);
+
+        // 11. 回到頂部按鈕
+        function scrollToTop() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        }
+
+        // 顯示/隱藏回到頂部按鈕
+        window.addEventListener('scroll', function () {
+            const scrollBtn = document.getElementById('scrollToTop');
+            if (window.scrollY > 300) {
+                scrollBtn.classList.add('show');
+            } else {
+                scrollBtn.classList.remove('show');
+            }
+        });
+
+        window.onload = function () {
+            const firstAcc = document.querySelector('.acc-header');
+            if (firstAcc) toggleAcc(firstAcc);
+        }
     </script>
 </body>
+
 </html>
