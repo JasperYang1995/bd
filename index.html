@@ -300,6 +300,26 @@
             overflow: hidden;
         }
 
+        .hero-animated-bg {
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at 20% 30%, rgba(0, 160, 233, 0.15), transparent 35%),
+                radial-gradient(circle at 80% 20%, rgba(225, 29, 72, 0.12), transparent 30%),
+                radial-gradient(circle at 60% 70%, rgba(0, 104, 183, 0.12), transparent 35%);
+            animation: floatGlow 12s ease-in-out infinite alternate;
+            z-index: 1;
+        }
+
+        @keyframes floatGlow {
+            0% {
+                transform: translateY(0px) scale(1);
+            }
+
+            100% {
+                transform: translateY(-12px) scale(1.02);
+            }
+        }
+
         .hero-wave {
             position: absolute;
             bottom: -5px;
@@ -494,6 +514,18 @@
             grid-template-columns: repeat(4, 1fr);
             gap: 1.5rem;
             margin-bottom: 4rem;
+            position: relative;
+        }
+
+        .step-cards-row::before {
+            content: '';
+            position: absolute;
+            top: 55px;
+            left: 10%;
+            right: 10%;
+            height: 3px;
+            background: linear-gradient(90deg, rgba(0, 104, 183, 0.15), rgba(0, 160, 233, 0.35), rgba(0, 104, 183, 0.15));
+            z-index: 0;
         }
 
         .step-card {
@@ -504,6 +536,8 @@
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
             border: 1px solid #eef2f6;
             transition: var(--transition);
+            position: relative;
+            z-index: 1;
         }
 
         .step-card:hover {
@@ -667,6 +701,41 @@
             background: #f8fafc;
         }
 
+        /* 子手風琴（機型冷暖/冷專） */
+        .sub-acc-item {
+            margin: 0 1rem 1rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            background: #fff;
+            overflow: hidden;
+        }
+
+        .sub-acc-header {
+            padding: 1rem 1.25rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            font-weight: 700;
+            color: var(--text-main);
+            background: linear-gradient(90deg, #f8fafc, #fff);
+        }
+
+        .sub-acc-body {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.35s ease;
+            padding: 0 1rem;
+        }
+
+        .sub-acc-item.open .sub-acc-body {
+            padding: 0 1rem 1rem;
+        }
+
+        .sub-acc-item.open .sub-acc-header i {
+            transform: rotate(180deg);
+        }
+
         .model-table {
             width: 100%;
             border-collapse: separate;
@@ -801,6 +870,11 @@
         .file-upload-area:hover {
             border-color: var(--primary);
             background: #f0f9ff;
+        }
+
+        .file-upload-area.dragover {
+            border-color: var(--primary);
+            background: #e0f2fe;
         }
 
         .upload-icon-wrap {
@@ -1110,53 +1184,175 @@
         /* 活动规则区块 */
         .rules-section {
             background: #f8fafc;
-            padding: 4rem 0;
+            padding: 6rem 0;
             border-top: 1px solid #e2e8f0;
             border-bottom: 1px solid #e2e8f0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .rules-section::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at 20% 20%, rgba(0, 160, 233, 0.08), transparent 35%),
+                radial-gradient(circle at 80% 10%, rgba(225, 29, 72, 0.06), transparent 30%),
+                radial-gradient(circle at 50% 80%, rgba(0, 104, 183, 0.05), transparent 35%);
+            pointer-events: none;
         }
 
         .rules-grid {
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
+            grid-template-columns: 1fr;
             gap: 2rem;
+        }
+
+        .rules-meta {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .rules-meta-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: white;
+            padding: 1rem 1.25rem;
+            border-radius: 14px;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.04);
+        }
+
+        .rules-meta-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--primary-light);
+            color: var(--primary);
+            font-size: 1.1rem;
+            flex-shrink: 0;
+        }
+
+        .rules-meta-text {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .rules-meta-title {
+            font-weight: 800;
+            color: var(--primary);
+            font-size: 1rem;
+        }
+
+        .rules-meta-desc {
+            color: var(--text-light);
+            font-size: 0.95rem;
+        }
+
+        /* 活動規則區塊放大並置中 */
+        #rules .section-title {
+            font-size: 2.8rem;
         }
 
         .rule-card {
             background: white;
-            padding: 2rem;
+            padding: 3rem;
             border-radius: 16px;
-            border-left: 4px solid var(--accent);
+            border-left: 4px solid var(--primary);
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            min-height: 320px;
+            text-align: center;
         }
 
         .rule-title {
-            font-size: 1.2rem;
+            font-size: 1.4rem;
             font-weight: 700;
-            color: var(--accent);
+            color: var(--primary);
             margin-bottom: 1rem;
             display: flex;
             align-items: center;
             gap: 10px;
+            justify-content: center;
         }
 
         .rule-list {
             list-style: none;
             padding: 0;
+            text-align: left;
+            margin: 0 auto;
+            max-width: 560px;
+            width: fit-content;
         }
 
         .rule-list li {
-            padding: 0.5rem 0;
-            padding-left: 1.5rem;
+            padding: 0.7rem 0;
             position: relative;
             color: var(--text-main);
+            font-size: 1.15rem;
         }
 
         .rule-list li::before {
             content: '✓';
-            position: absolute;
-            left: 0;
             color: var(--success);
             font-weight: 700;
+            margin-right: 8px;
+        }
+
+        /* 機型篩選 */
+        .model-filters {
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 16px;
+            padding: 1.5rem;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .filter-label {
+            font-weight: 700;
+            color: var(--text-main);
+            display: block;
+            margin-bottom: 0.35rem;
+        }
+
+        .filter-input {
+            width: 100%;
+            padding: 0.65rem 0.75rem;
+            border: 1px solid #d1d5db;
+            border-radius: 10px;
+            font-size: 0.95rem;
+        }
+
+        .filter-actions {
+            display: flex;
+            gap: 0.75rem;
+            align-items: flex-end;
+        }
+
+        .filter-btn {
+            padding: 0.75rem 1.2rem;
+            border-radius: 12px;
+            border: none;
+            font-weight: 800;
+            cursor: pointer;
+            color: white;
+            background: linear-gradient(135deg, var(--secondary), var(--primary));
+            box-shadow: 0 8px 20px rgba(0, 160, 233, 0.25);
+        }
+
+        .filter-reset {
+            background: #e2e8f0;
+            color: #334155;
+            box-shadow: none;
         }
 
         /* 联系客服区块 */
@@ -1211,6 +1407,78 @@
             color: var(--secondary);
         }
 
+        /* 分公司資訊頁面 */
+        .office-section {
+            background: white;
+            padding: 4rem 0;
+        }
+
+        .office-card {
+            background: white;
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: var(--transition);
+        }
+
+        .office-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 104, 183, 0.1);
+            border-color: var(--primary);
+        }
+
+        .office-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .office-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .office-info-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+        }
+
+        .office-info-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--primary-light);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+            flex-shrink: 0;
+        }
+
+        .office-info-content {
+            flex: 1;
+        }
+
+        .office-info-label {
+            font-size: 0.85rem;
+            color: var(--text-light);
+            margin-bottom: 0.25rem;
+        }
+
+        .office-info-value {
+            font-size: 1rem;
+            color: var(--text-main);
+            font-weight: 500;
+        }
+
         /* Footer */
         footer {
             background: #0f172a;
@@ -1229,6 +1497,162 @@
             width: 100%;
             line-height: 0;
             transform: rotate(180deg);
+        }
+
+        /* 注意事項區塊 */
+        .notice-section {
+            background: #f8fafc;
+            padding: 4rem 0;
+            border-top: 1px solid #e2e8f0;
+        }
+
+        .notice-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .notice-card {
+            background: white;
+            border-radius: 16px;
+            padding: 2rem;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.05);
+        }
+
+        .notice-card.bad {
+            border-left: 4px solid var(--accent);
+        }
+
+        .notice-title {
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: var(--primary);
+            margin-bottom: 1rem;
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .notice-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            color: var(--text-main);
+            line-height: 1.7;
+        }
+
+        .notice-list li {
+            padding: 0.4rem 0;
+            position: relative;
+            padding-left: 1.4rem;
+        }
+
+        .notice-list li::before {
+            content: '•';
+            position: absolute;
+            left: 0;
+            color: var(--primary);
+            font-weight: 900;
+        }
+
+        .notice-bad-list li::before {
+            color: var(--accent);
+        }
+
+        /* FAQ 搜尋 */
+        .faq-search {
+            max-width: 420px;
+            margin: 0 auto 1.5rem;
+            position: relative;
+        }
+
+        .faq-search input {
+            width: 100%;
+            padding: 0.85rem 1rem 0.85rem 2.5rem;
+            border-radius: 14px;
+            border: 1px solid #d1d5db;
+            font-size: 1rem;
+            outline: none;
+            transition: var(--transition);
+        }
+
+        .faq-search input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(0, 104, 183, 0.12);
+        }
+
+        .faq-search i {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-light);
+        }
+
+        /* 表單進度條 */
+        .form-progress {
+            width: 100%;
+            background: #e5e7eb;
+            border-radius: 999px;
+            height: 12px;
+            margin: 0.5rem 0 1.5rem;
+            overflow: hidden;
+        }
+
+        .form-progress-fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, var(--secondary), var(--primary));
+            border-radius: 999px;
+            transition: width 0.4s ease;
+        }
+
+        .form-progress-text {
+            font-size: 0.95rem;
+            color: var(--text-light);
+            margin-bottom: 0.2rem;
+        }
+
+        /* 手機底部 CTA 工具條 */
+        .mobile-cta-bar {
+            position: fixed;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255, 255, 255, 0.95);
+            border-top: 1px solid #e2e8f0;
+            box-shadow: 0 -6px 18px rgba(0, 0, 0, 0.08);
+            padding: 0.6rem 1rem;
+            display: none;
+            z-index: 2200;
+        }
+
+        .mobile-cta-actions {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.6rem;
+        }
+
+        .mobile-cta-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            padding: 0.7rem 0.5rem;
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+            background: #f8fafc;
+            color: var(--text-main);
+            font-weight: 700;
+            font-size: 0.95rem;
+        }
+
+        .mobile-cta-btn.primary {
+            background: linear-gradient(135deg, var(--secondary), var(--primary));
+            color: white;
+            border: none;
+            box-shadow: 0 6px 14px rgba(0, 160, 233, 0.25);
         }
 
         /* RWD */
@@ -1362,6 +1786,14 @@
             .contact-grid {
                 grid-template-columns: 1fr;
             }
+
+            .mobile-cta-bar {
+                display: block;
+            }
+
+            .step-cards-row::before {
+                display: none;
+            }
         }
     </style>
 </head>
@@ -1385,6 +1817,9 @@
                 <a onclick="switchView('home', 'models'); toggleMenu()" class="nav-link">活動機型</a>
                 <a onclick="switchView('home', 'faq'); toggleMenu()" class="nav-link">常見問題</a>
                 <a onclick="switchView('home', 'contact'); toggleMenu()" class="nav-link">聯絡我們</a>
+                <a onclick="switchView('home', 'notice'); toggleMenu()" class="nav-link">注意事項</a>
+                <a onclick="switchView('offices'); toggleMenu()" class="nav-link">購買地點</a>
+                <a href="https://www.bingdian.com.tw/" target="_blank" class="nav-link">公司官網</a>
                 <a onclick="switchView('register'); toggleMenu()" class="nav-link nav-btn-cta btn-shine">
                     <i class="fa-solid fa-gift"></i> 登錄送好禮
                 </a>
@@ -1410,6 +1845,14 @@
             <div class="side-text-main">加入官方<br>LINE</div>
             <div class="side-text-sub">填問卷<br>抽好禮</div>
         </a>
+
+        <!-- 按鈕 C：注意事項 -->
+        <a onclick="switchView('home', 'notice')" class="side-btn">
+            <div class="side-icon-circle" style="background:#0ea5e9; box-shadow:0 3px 8px rgba(14,165,233,0.3);">
+                <i class="fa-solid fa-circle-info"></i>
+            </div>
+            <div class="side-text-main">注意<br>事項</div>
+        </a>
     </aside>
 
     <!-- Main View: Home -->
@@ -1417,10 +1860,11 @@
 
         <!-- Hero Banner with Wave -->
         <header class="hero-banner">
+            <div class="hero-animated-bg"></div>
             <div class="hero-content" data-aos="fade-up">
                 <span class="hero-badge">2025 愛心公益特賣</span>
-                <h1 class="hero-title">冰沁愛心 · 點亮公益<br><span
-                        style="font-size:0.5em; font-weight:300; display:block; margin-top:10px;">購買指定一級能效空調，登錄即享好禮多選一</span>
+                <h1 class="hero-title">冰點愛心公益特賣<br><span
+                        style="font-size:0.5em; font-weight:300; display:block; margin-top:10px;">購買指定冰點空調冷氣，登錄即享好禮</span>
                 </h1>
 
                 <div class="countdown-wrap" id="countdown">
@@ -1498,9 +1942,9 @@
         <!-- Bonus Section -->
         <section id="bonus" class="container section-py">
             <div class="section-header" data-aos="fade-up">
-                <span class="section-tag">Lucky Draw</span>
-                <h2 class="section-title">填問卷，抽好禮</h2>
-                <p style="margin-top:1rem; color:#666;">只要完成線上滿意度調查，每月加碼抽出幸運得主！</p>
+                <!--<span class="section-tag">Lucky Draw</span>-->
+                <h2 class="section-title">填回函，送好禮</h2>
+                <p style="margin-top:1rem; color:#666;">只要完成回函登錄，即送全聯禮券 $1,000！</p>
             </div>
 
             <div class="bonus-card-wrapper" data-aos="zoom-in">
@@ -1518,8 +1962,8 @@
                             <div style="font-size:2.5rem; color:var(--accent); margin-bottom:1rem;">
                                 <i class="fa-solid fa-clipboard-question"></i>
                             </div>
-                            <h4 style="font-size:1.3rem; margin-bottom:0.5rem;">填寫滿意度問卷</h4>
-                            <p style="color:#666; font-size:0.9rem; margin-bottom:1.5rem;">完成問卷即獲抽獎資格</p>
+                            <h4 style="font-size:1.3rem; margin-bottom:0.5rem;">填寫回函</h4>
+                            <p style="color:#666; font-size:0.9rem; margin-bottom:1.5rem;">完成回函即送全聯禮券 $1,000！</p>
                             <a onclick="switchView('register')" class="nav-btn-cta btn-shine"
                                 style="background:var(--accent); justify-content:center;">
                                 立即前往 <i class="fa-solid fa-arrow-right"></i>
@@ -1532,7 +1976,7 @@
                                 <i class="fa-brands fa-line"></i>
                             </div>
                             <h4 style="font-size:1.3rem; margin-bottom:0.5rem;">加入官方 LINE</h4>
-                            <p style="color:#666; font-size:0.9rem; margin-bottom:1.5rem;">最新優惠與中獎名單公告</p>
+                            <p style="color:#666; font-size:0.9rem; margin-bottom:1.5rem;">最新優惠資訊及活動公告</p>
                             <a href="https://line.me/ti/p/~@447uompo" target="_blank" class="nav-btn-cta btn-shine"
                                 style="background:var(--success); justify-content:center;">
                                 加好友 <i class="fa-solid fa-user-plus"></i>
@@ -1551,6 +1995,36 @@
                     <h2 class="section-title">活動規則說明</h2>
                 </div>
 
+                <div class="rules-meta" data-aos="fade-up">
+                    <div class="rules-meta-item">
+                        <div class="rules-meta-icon">
+                            <i class="fa-solid fa-calendar-days"></i>
+                        </div>
+                        <div class="rules-meta-text">
+                            <span class="rules-meta-title">購買期間</span>
+                            <span class="rules-meta-desc">2025/01/01 - 2025/12/31</span>
+                        </div>
+                    </div>
+                    <div class="rules-meta-item">
+                        <div class="rules-meta-icon">
+                            <i class="fa-solid fa-clipboard-check"></i>
+                        </div>
+                        <div class="rules-meta-text">
+                            <span class="rules-meta-title">登錄截止</span>
+                            <span class="rules-meta-desc">購買後 30 天內完成回函登錄</span>
+                        </div>
+                    </div>
+                    <div class="rules-meta-item">
+                        <div class="rules-meta-icon">
+                            <i class="fa-solid fa-file-circle-check"></i>
+                        </div>
+                        <div class="rules-meta-text">
+                            <span class="rules-meta-title">必備憑證</span>
+                            <span class="rules-meta-desc">發票/收據 + 保固卡清晰照片</span>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="rules-grid" data-aos="fade-up">
                     <div class="rule-card">
                         <div class="rule-title">
@@ -1558,13 +2032,16 @@
                             <span>參加資格</span>
                         </div>
                         <ul class="rule-list">
-                            <li>購買指定一級能效空調機型</li>
+                            <li>購買指定空調機型</li>
                             <li>於活動期間內完成產品登錄</li>
                             <li>上傳完整發票及保固卡照片</li>
                             <li>填寫完整安裝資料與聯絡資訊</li>
                         </ul>
+                        <p style="color:var(--text-light); margin-top:1rem; font-size:0.95rem;">
+                            小提醒：購買後 30 天內完成登錄並上傳清晰憑證，避免因資訊不足影響審核。
+                        </p>
                     </div>
-                    <div class="rule-card">
+                    <!--<div class="rule-card">
                         <div class="rule-title">
                             <i class="fa-solid fa-trophy"></i>
                             <span>抽獎辦法</span>
@@ -1575,7 +2052,7 @@
                             <li>獎品將以簡訊通知領取方式</li>
                             <li>每人限參加一次，不得重複登錄</li>
                         </ul>
-                    </div>
+                    </div>-->
                 </div>
             </div>
         </section>
@@ -1597,7 +2074,7 @@
                     <div class="step-card" data-aos="fade-up" data-aos-delay="200">
                         <div class="step-num">2</div>
                         <h4>填寫回函登錄卡</h4>
-                        <p style="font-size:0.9rem; color:#666; margin-top:5px;">掃描保固卡 QR Code</p>
+                        <p style="font-size:0.9rem; color:#666; margin-top:5px;">填寫登錄卡相關資料</p>
                     </div>
                     <div class="step-card" data-aos="fade-up" data-aos-delay="300">
                         <div class="step-num">3</div>
@@ -1606,7 +2083,7 @@
                     </div>
                     <div class="step-card" data-aos="fade-up" data-aos-delay="400">
                         <div class="step-num">4</div>
-                        <h4>審核通過抽獎</h4>
+                        <h4>審核通過</h4>
                         <p style="font-size:0.9rem; color:#666; margin-top:5px;">等待簡訊通知審核結果</p>
                     </div>
                 </div>
@@ -1618,7 +2095,7 @@
                         <div
                             style="border:6px solid #E11D48; color:#E11D48; padding:8px 24px; border-radius:50px; font-weight:800; display:inline-block; margin-bottom:1rem; letter-spacing:2px; background:linear-gradient(135deg, #fff1f2, #ffe4e6);">
                             填寫說明</div>
-                        <h3 style="font-size:2rem; font-weight:900; margin:1rem 0;">手機填寫回函登錄卡<br></h3>
+                        <h3 style="font-size:2rem; font-weight:900; margin:1rem 0;">填寫回函登錄卡<br></h3>
                         <ul style="list-style:none; margin-top:1.5rem;">
                             <li style="margin-bottom:1rem; display:flex; gap:10px; align-items:center;">
                                 <i class="fa-solid fa-check-circle" style="color:var(--success);"></i> 填寫機型資料與安裝資料
@@ -1668,71 +2145,208 @@
                 <h2 class="section-title">活動指定機型</h2>
             </div>
 
-            <div style="max-width:900px; margin:0 auto;" data-aos="fade-up">
-                <div class="acc-item">
+            <div class="model-filters" data-aos="fade-up">
+                <div>
+                    <label class="filter-label">類型</label>
+                    <select id="filterType" class="filter-input">
+                        <option value="">全部</option>
+                        <option value="split">分離式</option>
+                        <option value="window">窗型</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="filter-label">冷暖 / 冷專</label>
+                    <select id="filterMode" class="filter-input">
+                        <option value="">全部</option>
+                        <option value="warm">冷暖</option>
+                        <option value="cold">冷專</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="filter-label">Kw 值上限</label>
+                    <input id="filterKw" type="number" step="0.1" placeholder="如 3.5" class="filter-input">
+                </div>
+                <div>
+                    <label class="filter-label">坪數上限</label>
+                    <input id="filterPing" type="number" step="0.1" placeholder="如 6" class="filter-input">
+                </div>
+                <div>
+                    <label class="filter-label">價格上限</label>
+                    <input id="filterPrice" type="number" step="100" placeholder="如 25000" class="filter-input">
+                </div>
+                <div class="filter-actions">
+                    <button class="filter-btn" onclick="applyModelFilter()">套用篩選</button>
+                    <button class="filter-btn filter-reset" onclick="resetModelFilter()">重置</button>
+                </div>
+            </div>
+
+            <div style="max-width:1100px; margin:0 auto;" data-aos="fade-up">
+                <!-- 壁掛式 -->
+                <div class="acc-item" style="margin-bottom:2rem;">
                     <div class="acc-header" onclick="toggleAcc(this)">
-                        <span><i class="fa-solid fa-wind" style="color:var(--secondary); margin-right:10px;"></i> AI
-                            智慧變頻冷暖系列</span>
+                        <span><i class="fa-solid fa-wind" style="color:var(--secondary); margin-right:10px;"></i>
+                            分離式</span>
                         <i class="fa-solid fa-chevron-down"></i>
                     </div>
                     <div class="acc-body">
-                        <table class="model-table">
-                            <thead>
-                                <tr>
-                                    <th>機型</th>
-                                    <th>適用坪數</th>
-                                    <th style="color:var(--accent)">優惠價</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>FI-23HSG</td>
-                                    <td>3-5 坪</td>
-                                    <td style="font-weight:700; color:var(--accent)">$19,800</td>
-                                </tr>
-                                <tr>
-                                    <td>FI-29HSG</td>
-                                    <td>4-6 坪</td>
-                                    <td style="font-weight:700; color:var(--accent)">$22,500</td>
-                                </tr>
-                                <tr>
-                                    <td>FI-50HSG</td>
-                                    <td>7-9 坪</td>
-                                    <td style="font-weight:700; color:var(--accent)">$34,500</td>
-                                </tr>
-                            </tbody>
-                        </table>
+                        <!-- 分離式 - 冷暖 -->
+                        <div class="sub-acc-item">
+                            <div class="sub-acc-header" onclick="toggleSubAcc(this)">
+                                <span><i class="fa-solid fa-snowflake" style="margin-right:8px;"></i>冷暖型</span>
+                                <i class="fa-solid fa-chevron-down"></i>
+                            </div>
+                            <div class="sub-acc-body">
+                                <table class="model-table">
+                                    <thead>
+                                        <tr>
+                                            <th>機型</th>
+                                            <th>適用坪數</th>
+                                            <th>Kw值</th>
+                                            <th style="color:var(--accent)">公益專案價</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr class="model-row" data-type="split" data-mode="warm" data-kw="2.3"
+                                            data-ping-min="3" data-ping-max="5" data-price="19800">
+                                            <td>FI-23HSG</td>
+                                            <td>3-5 坪</td>
+                                            <td>2.3 kW</td>
+                                            <td style="font-weight:700; color:var(--accent)">$19,800</td>
+                                        </tr>
+                                        <tr class="model-row" data-type="split" data-mode="warm" data-kw="2.9"
+                                            data-ping-min="4" data-ping-max="6" data-price="22500">
+                                            <td>FI-29HSG</td>
+                                            <td>4-6 坪</td>
+                                            <td>2.9 kW</td>
+                                            <td style="font-weight:700; color:var(--accent)">$22,500</td>
+                                        </tr>
+                                        <tr class="model-row" data-type="split" data-mode="warm" data-kw="5.0"
+                                            data-ping-min="7" data-ping-max="9" data-price="34500">
+                                            <td>FI-50HSG</td>
+                                            <td>7-9 坪</td>
+                                            <td>5.0 kW</td>
+                                            <td style="font-weight:700; color:var(--accent)">$34,500</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <!-- 分離式 - 冷專 -->
+                        <div class="sub-acc-item">
+                            <div class="sub-acc-header" onclick="toggleSubAcc(this)">
+                                <span><i class="fa-regular fa-snowflake" style="margin-right:8px;"></i>冷專型</span>
+                                <i class="fa-solid fa-chevron-down"></i>
+                            </div>
+                            <div class="sub-acc-body">
+                                <table class="model-table">
+                                    <thead>
+                                        <tr>
+                                            <th>機型</th>
+                                            <th>適用坪數</th>
+                                            <th>Kw值</th>
+                                            <th style="color:var(--accent)">公益專案價</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr class="model-row" data-type="split" data-mode="cold" data-kw="2.3"
+                                            data-ping-min="3" data-ping-max="5" data-price="17500">
+                                            <td>FI-23CSG</td>
+                                            <td>3-5 坪</td>
+                                            <td>2.3 kW</td>
+                                            <td style="font-weight:700; color:var(--accent)">$17,500</td>
+                                        </tr>
+                                        <tr class="model-row" data-type="split" data-mode="cold" data-kw="4.1"
+                                            data-ping-min="6" data-ping-max="8" data-price="27900">
+                                            <td>FI-41CSG</td>
+                                            <td>6-8 坪</td>
+                                            <td>4.1 kW</td>
+                                            <td style="font-weight:700; color:var(--accent)">$27,900</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
+                <!-- 窗機 -->
                 <div class="acc-item">
                     <div class="acc-header" onclick="toggleAcc(this)">
-                        <span><i class="fa-regular fa-snowflake" style="color:var(--secondary); margin-right:10px;"></i>
-                            變頻單冷系列</span>
+                        <span><i class="fa-solid fa-window-maximize"
+                                style="color:var(--secondary); margin-right:10px;"></i> 窗型</span>
                         <i class="fa-solid fa-chevron-down"></i>
                     </div>
                     <div class="acc-body">
-                        <table class="model-table">
-                            <thead>
-                                <tr>
-                                    <th>機型</th>
-                                    <th>適用坪數</th>
-                                    <th style="color:var(--accent)">優惠價</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>FI-23CSG</td>
-                                    <td>3-5 坪</td>
-                                    <td style="font-weight:700; color:var(--accent)">$17,500</td>
-                                </tr>
-                                <tr>
-                                    <td>FI-41CSG</td>
-                                    <td>6-8 坪</td>
-                                    <td style="font-weight:700; color:var(--accent)">$27,900</td>
-                                </tr>
-                            </tbody>
-                        </table>
+                        <!-- 窗型 - 冷暖 -->
+                        <div class="sub-acc-item">
+                            <div class="sub-acc-header" onclick="toggleSubAcc(this)">
+                                <span><i class="fa-solid fa-snowflake" style="margin-right:8px;"></i>冷暖型</span>
+                                <i class="fa-solid fa-chevron-down"></i>
+                            </div>
+                            <div class="sub-acc-body">
+                                <table class="model-table">
+                                    <thead>
+                                        <tr>
+                                            <th>機型</th>
+                                            <th>適用坪數</th>
+                                            <th>Kw值</th>
+                                            <th style="color:var(--accent)">公益專案價</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr class="model-row" data-type="window" data-mode="warm" data-kw="2.3"
+                                            data-ping-min="3" data-ping-max="5" data-price="18500">
+                                            <td>WC-23HSG</td>
+                                            <td>3-5 坪</td>
+                                            <td>2.3 kW</td>
+                                            <td style="font-weight:700; color:var(--accent)">$18,500</td>
+                                        </tr>
+                                        <tr class="model-row" data-type="window" data-mode="warm" data-kw="2.9"
+                                            data-ping-min="4" data-ping-max="6" data-price="21200">
+                                            <td>WC-29HSG</td>
+                                            <td>4-6 坪</td>
+                                            <td>2.9 kW</td>
+                                            <td style="font-weight:700; color:var(--accent)">$21,200</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <!-- 窗型 - 冷專 -->
+                        <div class="sub-acc-item">
+                            <div class="sub-acc-header" onclick="toggleSubAcc(this)">
+                                <span><i class="fa-regular fa-snowflake" style="margin-right:8px;"></i>冷專型</span>
+                                <i class="fa-solid fa-chevron-down"></i>
+                            </div>
+                            <div class="sub-acc-body">
+                                <table class="model-table">
+                                    <thead>
+                                        <tr>
+                                            <th>機型</th>
+                                            <th>適用坪數</th>
+                                            <th>Kw值</th>
+                                            <th style="color:var(--accent)">公益專案價</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr class="model-row" data-type="window" data-mode="cold" data-kw="2.3"
+                                            data-ping-min="3" data-ping-max="5" data-price="16200">
+                                            <td>WC-23CSG</td>
+                                            <td>3-5 坪</td>
+                                            <td>2.3 kW</td>
+                                            <td style="font-weight:700; color:var(--accent)">$16,200</td>
+                                        </tr>
+                                        <tr class="model-row" data-type="window" data-mode="cold" data-kw="4.1"
+                                            data-ping-min="6" data-ping-max="8" data-price="26500">
+                                            <td>WC-41CSG</td>
+                                            <td>6-8 坪</td>
+                                            <td>4.1 kW</td>
+                                            <td style="font-weight:700; color:var(--accent)">$26,500</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -1770,7 +2384,12 @@
                     <h2 class="section-title">常見問題</h2>
                 </div>
 
-                <div style="max-width:900px; margin:0 auto;" data-aos="fade-up">
+                <div class="faq-search" data-aos="fade-up">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input type="text" id="faqSearch" placeholder="輸入關鍵字快速尋找答案">
+                </div>
+
+                <div style="max-width:900px; margin:0 auto;" data-aos="fade-up" id="faqList">
                     <div class="faq-item">
                         <div class="faq-header" onclick="toggleFaq(this)">
                             <span><i class="fa-solid fa-circle-question"
@@ -1878,6 +2497,253 @@
         </section>
     </main>
 
+    <!-- Offices View (分公司資訊) -->
+    <div id="offices-view" class="view-section" style="padding: 120px 0 50px;">
+        <div class="container">
+            <div class="register-header-wrap">
+                <h2 class="section-title">購買地點</h2>
+                <p style="margin-top:1rem; color:#666;">各分公司聯絡資訊，歡迎就近洽詢</p>
+            </div>
+
+            <div class="office-section">
+                <!-- 北部分公司 -->
+                <div class="office-card" data-aos="fade-up">
+                    <div class="office-title">
+                        <i class="fa-solid fa-building"></i>
+                        <span>北部分公司</span>
+                    </div>
+                    <div class="office-info">
+                        <div class="office-info-item">
+                            <div class="office-info-icon">
+                                <i class="fa-solid fa-phone"></i>
+                            </div>
+                            <div class="office-info-content">
+                                <div class="office-info-label">電話 (Tel)</div>
+                                <div class="office-info-value"><a href="tel:02-1234-5678"
+                                        style="color:var(--primary); text-decoration:none;">02-1234-5678</a></div>
+                            </div>
+                        </div>
+                        <div class="office-info-item">
+                            <div class="office-info-icon">
+                                <i class="fa-solid fa-fax"></i>
+                            </div>
+                            <div class="office-info-content">
+                                <div class="office-info-label">傳真 (Fax)</div>
+                                <div class="office-info-value">02-1234-5679</div>
+                            </div>
+                        </div>
+                        <div class="office-info-item">
+                            <div class="office-info-icon">
+                                <i class="fa-solid fa-location-dot"></i>
+                            </div>
+                            <div class="office-info-content">
+                                <div class="office-info-label">地址</div>
+                                <div class="office-info-value">台北市信義區信義路五段7號</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 桃園分公司 -->
+                <div class="office-card" data-aos="fade-up" data-aos-delay="100">
+                    <div class="office-title">
+                        <i class="fa-solid fa-building"></i>
+                        <span>桃園分公司</span>
+                    </div>
+                    <div class="office-info">
+                        <div class="office-info-item">
+                            <div class="office-info-icon">
+                                <i class="fa-solid fa-phone"></i>
+                            </div>
+                            <div class="office-info-content">
+                                <div class="office-info-label">電話 (Tel)</div>
+                                <div class="office-info-value"><a href="tel:03-1234-5678"
+                                        style="color:var(--primary); text-decoration:none;">03-1234-5678</a></div>
+                            </div>
+                        </div>
+                        <div class="office-info-item">
+                            <div class="office-info-icon">
+                                <i class="fa-solid fa-fax"></i>
+                            </div>
+                            <div class="office-info-content">
+                                <div class="office-info-label">傳真 (Fax)</div>
+                                <div class="office-info-value">03-1234-5679</div>
+                            </div>
+                        </div>
+                        <div class="office-info-item">
+                            <div class="office-info-icon">
+                                <i class="fa-solid fa-location-dot"></i>
+                            </div>
+                            <div class="office-info-content">
+                                <div class="office-info-label">地址</div>
+                                <div class="office-info-value">桃園市桃園區中正路123號</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 竹苗分公司 -->
+                <div class="office-card" data-aos="fade-up" data-aos-delay="200">
+                    <div class="office-title">
+                        <i class="fa-solid fa-building"></i>
+                        <span>竹苗分公司</span>
+                    </div>
+                    <div class="office-info">
+                        <div class="office-info-item">
+                            <div class="office-info-icon">
+                                <i class="fa-solid fa-phone"></i>
+                            </div>
+                            <div class="office-info-content">
+                                <div class="office-info-label">電話 (Tel)</div>
+                                <div class="office-info-value"><a href="tel:03-2345-6789"
+                                        style="color:var(--primary); text-decoration:none;">03-2345-6789</a></div>
+                            </div>
+                        </div>
+                        <div class="office-info-item">
+                            <div class="office-info-icon">
+                                <i class="fa-solid fa-fax"></i>
+                            </div>
+                            <div class="office-info-content">
+                                <div class="office-info-label">傳真 (Fax)</div>
+                                <div class="office-info-value">03-2345-6790</div>
+                            </div>
+                        </div>
+                        <div class="office-info-item">
+                            <div class="office-info-icon">
+                                <i class="fa-solid fa-location-dot"></i>
+                            </div>
+                            <div class="office-info-content">
+                                <div class="office-info-label">地址</div>
+                                <div class="office-info-value">新竹市東區光復路二段101號</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 中部分公司 -->
+                <div class="office-card" data-aos="fade-up" data-aos-delay="300">
+                    <div class="office-title">
+                        <i class="fa-solid fa-building"></i>
+                        <span>中部分公司</span>
+                    </div>
+                    <div class="office-info">
+                        <div class="office-info-item">
+                            <div class="office-info-icon">
+                                <i class="fa-solid fa-phone"></i>
+                            </div>
+                            <div class="office-info-content">
+                                <div class="office-info-label">電話 (Tel)</div>
+                                <div class="office-info-value"><a href="tel:04-3456-7890"
+                                        style="color:var(--primary); text-decoration:none;">04-3456-7890</a></div>
+                            </div>
+                        </div>
+                        <div class="office-info-item">
+                            <div class="office-info-icon">
+                                <i class="fa-solid fa-fax"></i>
+                            </div>
+                            <div class="office-info-content">
+                                <div class="office-info-label">傳真 (Fax)</div>
+                                <div class="office-info-value">04-3456-7891</div>
+                            </div>
+                        </div>
+                        <div class="office-info-item">
+                            <div class="office-info-icon">
+                                <i class="fa-solid fa-location-dot"></i>
+                            </div>
+                            <div class="office-info-content">
+                                <div class="office-info-label">地址</div>
+                                <div class="office-info-value">台中市西屯區台灣大道三段99號</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 南部分公司 -->
+                <div class="office-card" data-aos="fade-up" data-aos-delay="400">
+                    <div class="office-title">
+                        <i class="fa-solid fa-building"></i>
+                        <span>南部分公司</span>
+                    </div>
+                    <div class="office-info">
+                        <div class="office-info-item">
+                            <div class="office-info-icon">
+                                <i class="fa-solid fa-phone"></i>
+                            </div>
+                            <div class="office-info-content">
+                                <div class="office-info-label">電話 (Tel)</div>
+                                <div class="office-info-value"><a href="tel:06-4567-8901"
+                                        style="color:var(--primary); text-decoration:none;">06-4567-8901</a></div>
+                            </div>
+                        </div>
+                        <div class="office-info-item">
+                            <div class="office-info-icon">
+                                <i class="fa-solid fa-fax"></i>
+                            </div>
+                            <div class="office-info-content">
+                                <div class="office-info-label">傳真 (Fax)</div>
+                                <div class="office-info-value">06-4567-8902</div>
+                            </div>
+                        </div>
+                        <div class="office-info-item">
+                            <div class="office-info-icon">
+                                <i class="fa-solid fa-location-dot"></i>
+                            </div>
+                            <div class="office-info-content">
+                                <div class="office-info-label">地址</div>
+                                <div class="office-info-value">台南市安平區健康路三段348號</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 東部及外島分公司 -->
+                <div class="office-card" data-aos="fade-up" data-aos-delay="500">
+                    <div class="office-title">
+                        <i class="fa-solid fa-building"></i>
+                        <span>東部及外島分公司</span>
+                    </div>
+                    <div class="office-info">
+                        <div class="office-info-item">
+                            <div class="office-info-icon">
+                                <i class="fa-solid fa-phone"></i>
+                            </div>
+                            <div class="office-info-content">
+                                <div class="office-info-label">電話 (Tel)</div>
+                                <div class="office-info-value"><a href="tel:03-5678-9012"
+                                        style="color:var(--primary); text-decoration:none;">03-5678-9012</a></div>
+                            </div>
+                        </div>
+                        <div class="office-info-item">
+                            <div class="office-info-icon">
+                                <i class="fa-solid fa-fax"></i>
+                            </div>
+                            <div class="office-info-content">
+                                <div class="office-info-label">傳真 (Fax)</div>
+                                <div class="office-info-value">03-5678-9013</div>
+                            </div>
+                        </div>
+                        <div class="office-info-item">
+                            <div class="office-info-icon">
+                                <i class="fa-solid fa-location-dot"></i>
+                            </div>
+                            <div class="office-info-content">
+                                <div class="office-info-label">地址</div>
+                                <div class="office-info-value">花蓮縣花蓮市中山路500號</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 返回活動首頁 -->
+            <div style="text-align:center; margin-top:30px;">
+                <a onclick="switchView('home')" class="back-link">
+                    <i class="fa-solid fa-arrow-left"></i> 返回活動首頁
+                </a>
+            </div>
+        </div>
+    </div>
+
     <!-- Register View (完整補齊欄位) -->
     <div id="register-view" class="view-section" style="padding: 120px 0 50px;">
         <div class="container">
@@ -1888,6 +2754,11 @@
 
             <div class="form-card" style="max-width:800px; margin:0 auto;">
                 <form id="regForm" onsubmit="handleFormSubmit(event)">
+
+                    <div class="form-progress-text">填寫進度：<span id="formProgressText">0%</span></div>
+                    <div class="form-progress">
+                        <div class="form-progress-fill" id="formProgressFill"></div>
+                    </div>
 
                     <h4 class="form-section-title">｜產品資訊</h4>
 
@@ -1908,11 +2779,23 @@
                             <div class="select-wrapper">
                                 <select name="model" class="input-field" required>
                                     <option value="" disabled selected>請選擇機型</option>
-                                    <option value="FI-23HSG">FI-23HSG</option>
-                                    <option value="FI-29HSG">FI-29HSG</option>
-                                    <option value="FI-50HSG">FI-50HSG</option>
-                                    <option value="FI-23CSG">FI-23CSG</option>
-                                    <option value="FI-41CSG">FI-41CSG</option>
+                                    <optgroup label="分離式 - 冷暖">
+                                        <option value="FI-23HSG">FI-23HSG</option>
+                                        <option value="FI-29HSG">FI-29HSG</option>
+                                        <option value="FI-50HSG">FI-50HSG</option>
+                                    </optgroup>
+                                    <optgroup label="分離式 - 冷專">
+                                        <option value="FI-23CSG">FI-23CSG</option>
+                                        <option value="FI-41CSG">FI-41CSG</option>
+                                    </optgroup>
+                                    <optgroup label="窗型 - 冷暖">
+                                        <option value="WC-23HSG">WC-23HSG</option>
+                                        <option value="WC-29HSG">WC-29HSG</option>
+                                    </optgroup>
+                                    <optgroup label="窗型 - 冷專">
+                                        <option value="WC-23CSG">WC-23CSG</option>
+                                        <option value="WC-41CSG">WC-41CSG</option>
+                                    </optgroup>
                                 </select>
                                 <i class="fa-solid fa-chevron-down select-arrow"></i>
                             </div>
@@ -1928,7 +2811,7 @@
                         </div>
                         <div class="input-group">
                             <label class="form-label">購買通路/店家 *</label>
-                            <input type="text" name="store" class="input-field" placeholder="例如：全國電子" required>
+                            <input type="text" name="store" class="input-field" placeholder="例如：北部分公司" required>
                             <span class="error-text">請輸入購買通路或店家名稱</span>
                         </div>
                     </div>
@@ -1993,10 +2876,69 @@
         </div>
     </div>
 
+    <!-- 手機底部 CTA 工具條 -->
+    <div class="mobile-cta-bar">
+        <div class="mobile-cta-actions">
+            <button class="mobile-cta-btn primary" onclick="switchView('register')">
+                <i class="fa-solid fa-gift"></i> 登錄好禮
+            </button>
+            <a class="mobile-cta-btn" href="tel:0800-026-568">
+                <i class="fa-solid fa-phone"></i> 撥打客服
+            </a>
+            <button class="mobile-cta-btn" onclick="switchView('home','notice')">
+                <i class="fa-solid fa-circle-info"></i> 注意事項
+            </button>
+        </div>
+    </div>
+
     <!-- 回到顶部按钮 -->
     <button class="scroll-to-top" id="scrollToTop" onclick="scrollToTop()" aria-label="回到顶部">
         <i class="fa-solid fa-arrow-up"></i>
     </button>
+
+    <!-- 注意事項區塊 -->
+    <section id="notice" class="notice-section">
+        <div class="container">
+            <div class="section-header" data-aos="fade-up">
+                <span class="section-tag">Notice</span>
+                <h2 class="section-title">注意事項</h2>
+            </div>
+
+            <div class="notice-grid" data-aos="fade-up">
+                <div class="notice-card">
+                    <div class="notice-title">
+                        <i class="fa-solid fa-circle-info"></i> 注意事項
+                    </div>
+                    <ul class="notice-list">
+                        <li>須於活動期間購買指定機型並完成回函登錄。</li>
+                        <li>需上傳符合規範的發票/收據與保固卡照片。</li>
+                        <li>若資料未填完整或資訊填錯，將視為不符合資格。</li>
+                        <li>活動須依公告辦理，主辦單位保有變動權限。</li>
+                        <li>發票/收據需能清楚辨識購買日期、機型與店家資訊。</li>
+                    </ul>
+                </div>
+
+                <div class="notice-card bad">
+                    <div class="notice-title">
+                        <i class="fa-solid fa-triangle-exclamation" style="color:var(--accent);"></i> 不符合資格參考
+                    </div>
+                    <ul class="notice-list notice-bad-list">
+                        <li>非活動期間、非指定機型或非指定通路購買。</li>
+                        <li>未上傳發票/收據或影像不清、無店章等資訊不足。</li>
+                        <li>回函資料未填寫完整、未參加活動資料有誤。</li>
+                        <!--<li>回函姓名與收款帳戶戶名不符、使用估價單上傳等。</li>-->
+                        <li>專案/特案優惠、公關品或贈品等非一般消費購買。</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!--p style="text-align:center; color:var(--text-light); margin-top:1.5rem; font-size:0.95rem;">
+                以上內容參考自櫻花活動注意事項與不符合資格範例
+                (<a href="https://www.sakura.com.tw/events/sakura_2025q4sp/?utm_source=line&utm_medium=ads&utm_campaign=2025q4sp_ula&utm_content=mvp%20%E5%8D%8A%E7%89%88&openExternalBrowser=1&ldtag_cl=Be_q0tiMRY6c31esXlBp0gAA&lt_r=113"
+                    target="_blank" style="color:var(--primary); text-decoration:underline;">來源</a>)
+            </p>-->
+        </div>
+    </section>
 
     <!-- Footer -->
     <footer>
@@ -2011,13 +2953,22 @@
             <h3 style="margin-bottom:1rem; font-weight:1000px;">冰點空調冷氣股份有限公司</h3>
             <p style="opacity:0.7; font-size:1.0rem;">深耕台灣・在地製造・世界品質</p>
             <div style="margin:20px 0; display:flex; gap:20px; justify-content:center; font-size:1.5rem;">
-                <i class="fa-brands fa-facebook"></i>
-                <i class="fa-brands fa-instagram"></i>
-                <i class="fa-brands fa-youtube"></i>
+                <a href="https://www.facebook.com/bingdian.taiwan/?locale=zh_TW" target="_blank" aria-label="Facebook"
+                    style="color:white;">
+                    <i class="fa-brands fa-facebook"></i>
+                </a>
+                <a href="https://www.instagram.com/bd_bingdian.com.tw/" target="_blank" aria-label="Instagram"
+                    style="color:white;">
+                    <i class="fa-brands fa-instagram"></i>
+                </a>
+                <a href="https://www.youtube.com/@bdcorona596" target="_blank" aria-label="YouTube"
+                    style="color:white;">
+                    <i class="fa-brands fa-youtube"></i>
+                </a>
             </div>
             <p
                 style="opacity:0.5; font-size:0.8rem; border-top:1px solid rgba(255,255,255,0.1); padding-top:20px; margin-top:20px;">
-                Copyright © 2025 Bd Air Conditioning. All rights reserved.
+                Copyright © 2025 冰點空調冷氣股份有限公司. All rights reserved.
             </p>
         </div>
     </footer>
@@ -2066,31 +3017,99 @@
                     window.scrollTo(0, 0);
                 }
                 setTimeout(() => AOS.refresh(), 200);
+            } else if (viewId === 'offices') {
+                document.getElementById('offices-view').classList.add('active');
+                window.scrollTo(0, 0);
+                setTimeout(() => AOS.refresh(), 200);
             } else {
                 document.getElementById('register-view').classList.add('active');
                 window.scrollTo(0, 0);
             }
         }
 
-        // 5. 手風琴效果
+        // 5. 父層手風琴效果 (已修正)
         function toggleAcc(header) {
             const item = header.parentElement;
             const body = header.nextElementSibling;
+            const icon = header.querySelector('.fa-chevron-down');
+
+            // 1. 關閉其他已開啟的主選單
             document.querySelectorAll('.acc-item').forEach(otherItem => {
-                if (otherItem !== item) {
-                    otherItem.classList.remove('open');
-                    otherItem.querySelector('.acc-body').style.maxHeight = null;
-                    otherItem.querySelector('.fa-chevron-down').style.transform = 'rotate(0deg)';
+                if (otherItem !== item && otherItem.classList.contains('open')) {
+                    const otherBody = otherItem.querySelector('.acc-body');
+                    const otherIcon = otherItem.querySelector('.acc-header .fa-chevron-down');
+
+                    // 關閉前先設回具體高度，這樣才有縮回去的動畫效果
+                    otherBody.style.maxHeight = otherBody.scrollHeight + "px";
+                    // 強制瀏覽器進行重繪 (Reflow)
+                    otherBody.offsetHeight;
+
+                    // 執行收合
+                    requestAnimationFrame(() => {
+                        otherItem.classList.remove('open');
+                        otherBody.style.maxHeight = null;
+                        if (otherIcon) otherIcon.style.transform = 'rotate(0deg)';
+                    });
                 }
             });
+
+            // 2. 切換當前選單
+            if (item.classList.contains('open')) {
+                // --- 關閉 ---
+                // 先將 max-height 從 'none' 設回目前的像素高度，以便進行動畫
+                body.style.maxHeight = body.scrollHeight + "px";
+                body.offsetHeight; // 強制重繪
+
+                // 下一幀執行收合
+                requestAnimationFrame(() => {
+                    item.classList.remove('open');
+                    body.style.maxHeight = null;
+                    if (icon) icon.style.transform = 'rotate(0deg)';
+                });
+            } else {
+                // --- 開啟 ---
+                item.classList.add('open');
+                body.style.maxHeight = body.scrollHeight + "px";
+                if (icon) icon.style.transform = 'rotate(180deg)';
+
+                // 【關鍵修正】：等待 400ms (CSS transition 時間) 動畫結束後
+                // 將 max-height 設為 none，這樣內層子選單展開時父層就會自動長高
+                setTimeout(() => {
+                    if (item.classList.contains('open')) {
+                        body.style.maxHeight = "none";
+                    }
+                }, 400);
+            }
+        }
+
+        // 5-1. 子手風琴（已簡化，不再需要計算父層高度）
+        function toggleSubAcc(header) {
+            const item = header.parentElement;
+            const body = header.nextElementSibling;
+            const icon = header.querySelector('.fa-chevron-down');
+
+            // 關閉同層級的其他子選單
+            const siblings = item.parentElement.querySelectorAll('.sub-acc-item');
+            siblings.forEach(other => {
+                if (other !== item && other.classList.contains('open')) {
+                    other.classList.remove('open');
+                    const otherBody = other.querySelector('.sub-acc-body');
+                    const otherIcon = other.querySelector('.sub-acc-header .fa-chevron-down');
+
+                    otherBody.style.maxHeight = null;
+                    if (otherIcon) otherIcon.style.transform = 'rotate(0deg)';
+                }
+            });
+
+            // 切換當前子選單
             if (item.classList.contains('open')) {
                 item.classList.remove('open');
                 body.style.maxHeight = null;
-                header.querySelector('.fa-chevron-down').style.transform = 'rotate(0deg)';
+                if (icon) icon.style.transform = 'rotate(0deg)';
             } else {
                 item.classList.add('open');
                 body.style.maxHeight = body.scrollHeight + "px";
-                header.querySelector('.fa-chevron-down').style.transform = 'rotate(180deg)';
+                if (icon) icon.style.transform = 'rotate(180deg)';
             }
         }
 
@@ -2197,6 +3216,27 @@
                 };
                 reader.readAsDataURL(file);
             }
+        }
+
+        // 6-1. 表單進度條更新
+        function updateFormProgress() {
+            const form = document.getElementById('regForm');
+            if (!form) return;
+            const requiredFields = form.querySelectorAll('.input-field[required]');
+            const fileInput = document.getElementById('fileInput');
+            let filled = 0;
+            requiredFields.forEach(input => {
+                if (input.value && input.value.trim()) filled++;
+            });
+            if (fileInput && fileInput.files && fileInput.files.length > 0) {
+                filled++;
+            }
+            const total = requiredFields.length + 1; // +1 for file upload
+            const percent = Math.min(100, Math.round((filled / total) * 100));
+            const bar = document.getElementById('formProgressFill');
+            const text = document.getElementById('formProgressText');
+            if (bar) bar.style.width = percent + '%';
+            if (text) text.textContent = percent + '%';
         }
 
         // 7. 表單驗證
@@ -2309,6 +3349,7 @@
                     switchView('home');
                     successMsg.style.display = 'none';
                     form.reset();
+                    updateFormProgress();
                     document.getElementById('fileName').innerHTML = '';
                     document.getElementById('filePreview').classList.remove('show');
                     document.getElementById('dropArea').style.background = '#fafbfc';
@@ -2346,6 +3387,7 @@
                             this.classList.add('valid');
                             this.closest('.input-group').classList.remove('error');
                         }
+                        updateFormProgress();
                     });
                 });
 
@@ -2389,6 +3431,161 @@
                         console.error('載入表單數據失敗', e);
                     }
                 }
+
+                // 初始進度
+                updateFormProgress();
+
+                // 檔案拖曳事件
+                const dropArea = document.getElementById('dropArea');
+                const fileInput = document.getElementById('fileInput');
+                if (dropArea && fileInput) {
+                    ['dragenter', 'dragover'].forEach(evt => {
+                        dropArea.addEventListener(evt, (e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            dropArea.classList.add('dragover');
+                        });
+                    });
+                    ['dragleave', 'drop'].forEach(evt => {
+                        dropArea.addEventListener(evt, (e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            dropArea.classList.remove('dragover');
+                        });
+                    });
+                    dropArea.addEventListener('drop', (e) => {
+                        if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+                            fileInput.files = e.dataTransfer.files;
+                            handleFile(fileInput);
+                            updateFormProgress();
+                            e.dataTransfer.clearData();
+                        }
+                    });
+                    fileInput.addEventListener('change', updateFormProgress);
+                }
+            }
+
+            // FAQ 搜尋
+            const faqSearch = document.getElementById('faqSearch');
+            const faqItems = document.querySelectorAll('#faqList .faq-item');
+            if (faqSearch && faqItems.length) {
+                faqSearch.addEventListener('input', function () {
+                    const keyword = this.value.trim().toLowerCase();
+                    faqItems.forEach(item => {
+                        const text = item.innerText.toLowerCase();
+                        item.style.display = text.includes(keyword) ? 'block' : 'none';
+                    });
+                });
+            }
+
+            // 手機 mockup 3D tilt
+            const phone = document.querySelector('.phone-mockup');
+            if (phone) {
+                phone.addEventListener('mousemove', (e) => {
+                    const rect = phone.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+                    const centerX = rect.width / 2;
+                    const centerY = rect.height / 2;
+                    const rotateX = ((y - centerY) / centerY) * -6;
+                    const rotateY = ((x - centerX) / centerX) * 6;
+                    phone.style.transform = `scale(1.03) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+                });
+                phone.addEventListener('mouseleave', () => {
+                    phone.style.transform = '';
+                });
+            }
+
+            // 機型篩選
+            window.applyModelFilter = function () {
+                const type = document.getElementById('filterType').value;
+                const mode = document.getElementById('filterMode').value;
+                const kwMax = parseFloat(document.getElementById('filterKw').value) || null;
+                const pingMax = parseFloat(document.getElementById('filterPing').value) || null;
+                const priceMax = parseInt(document.getElementById('filterPrice').value) || null;
+                const rows = document.querySelectorAll('.model-row');
+
+                const setSubOpen = (sub, open) => {
+                    const body = sub.querySelector('.sub-acc-body');
+                    const icon = sub.querySelector('.sub-acc-header .fa-chevron-down');
+                    if (!body) return;
+                    if (open) {
+                        sub.classList.add('open');
+                        body.style.maxHeight = body.scrollHeight + "px";
+                        if (icon) icon.style.transform = 'rotate(180deg)';
+                    } else {
+                        sub.classList.remove('open');
+                        body.style.maxHeight = null;
+                        if (icon) icon.style.transform = 'rotate(0deg)';
+                    }
+                };
+
+                const setAccOpen = (acc, open) => {
+                    const body = acc.querySelector('.acc-body');
+                    const icon = acc.querySelector('.acc-header .fa-chevron-down');
+                    if (!body) return;
+                    if (open) {
+                        acc.classList.add('open');
+                        body.style.maxHeight = body.scrollHeight + "px";
+                        setTimeout(() => {
+                            if (acc.classList.contains('open')) body.style.maxHeight = "none";
+                        }, 400);
+                        if (icon) icon.style.transform = 'rotate(180deg)';
+                    } else {
+                        acc.classList.remove('open');
+                        body.style.maxHeight = null;
+                        if (icon) icon.style.transform = 'rotate(0deg)';
+                        acc.querySelectorAll('.sub-acc-item').forEach(sub => setSubOpen(sub, false));
+                    }
+                };
+
+                rows.forEach(row => {
+                    const rType = row.getAttribute('data-type');
+                    const rMode = row.getAttribute('data-mode');
+                    const rKw = parseFloat(row.getAttribute('data-kw')) || 0;
+                    const rPingMin = parseFloat(row.getAttribute('data-ping-min')) || 0;
+                    const rPingMax = parseFloat(row.getAttribute('data-ping-max')) || 0;
+                    const rPrice = parseInt(row.getAttribute('data-price')) || 0;
+
+                    let visible = true;
+                    if (type && type !== rType) visible = false;
+                    if (mode && mode !== rMode) visible = false;
+                    if (kwMax !== null && rKw > kwMax) visible = false;
+                    if (pingMax !== null && rPingMin > pingMax) visible = false;
+                    if (pingMax !== null && rPingMax > pingMax && rPingMin <= pingMax) {
+                        // still ok if within upper bound; only hide if both min/max exceed? simplified keep visible
+                    }
+                    if (priceMax !== null && rPrice > priceMax) visible = false;
+
+                    row.style.display = visible ? '' : 'none';
+                });
+
+                // 展開有結果的手風琴
+                const accItems = document.querySelectorAll('.acc-item');
+                accItems.forEach(acc => {
+                    const subItems = acc.querySelectorAll('.sub-acc-item');
+                    let accHasVisible = false;
+                    subItems.forEach(sub => {
+                        const hasVisible = Array.from(sub.querySelectorAll('.model-row')).some(r => r.style.display !== 'none');
+                        setSubOpen(sub, hasVisible);
+                        if (hasVisible) accHasVisible = true;
+                    });
+                    setAccOpen(acc, accHasVisible);
+                });
+
+                // 滾動至機型區域
+                const modelsSection = document.getElementById('models');
+                if (modelsSection) {
+                    modelsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            }
+
+            window.resetModelFilter = function () {
+                ['filterType', 'filterMode', 'filterKw', 'filterPing', 'filterPrice'].forEach(id => {
+                    const el = document.getElementById(id);
+                    if (el) el.value = '';
+                });
+                applyModelFilter();
             }
         });
 
@@ -2437,8 +3634,6 @@
         });
 
         window.onload = function () {
-            const firstAcc = document.querySelector('.acc-header');
-            if (firstAcc) toggleAcc(firstAcc);
         }
     </script>
 </body>
