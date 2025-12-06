@@ -70,7 +70,7 @@
         .navbar {
             width: 90%;
             max-width: 1200px;
-            height: 70px;
+            height: 110px;
             background: rgba(255, 255, 255, 0.9);
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
@@ -93,7 +93,7 @@
             width: 100%;
             max-width: 100%;
             border-radius: 0;
-            height: 70px;
+            height: 100px;
             background: rgba(255, 255, 255, 0.95);
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
         }
@@ -1614,6 +1614,41 @@
             margin-bottom: 0.2rem;
         }
 
+        /* 城市下拉選單 */
+        .city-dropdown {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: white;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            max-height: 300px;
+            overflow-y: auto;
+            z-index: 1000;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            margin-top: 4px;
+        }
+
+        .city-option {
+            padding: 0.75rem 1rem;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        .city-option:last-child {
+            border-bottom: none;
+        }
+
+        .city-option:hover {
+            background-color: var(--primary-light);
+        }
+
+        .city-option.hidden {
+            display: none;
+        }
+
         /* 手機底部 CTA 工具條 */
         .mobile-cta-bar {
             position: fixed;
@@ -1677,6 +1712,10 @@
             .form-row {
                 grid-template-columns: 1fr;
                 gap: 0;
+            }
+
+            .notice-grid {
+                grid-template-columns: 1fr !important;
             }
 
             .navbar .nav-menu {
@@ -1787,6 +1826,20 @@
                 grid-template-columns: 1fr;
             }
 
+            .notice-grid {
+                grid-template-columns: 1fr !important;
+            }
+
+            .notice-contact-info {
+                padding: 1rem !important;
+            }
+
+            .notice-contact-links {
+                flex-direction: column;
+                gap: 1rem !important;
+                align-items: center;
+            }
+
             .mobile-cta-bar {
                 display: block;
             }
@@ -1804,8 +1857,8 @@
     <div class="navbar-container" id="navbarContainer">
         <nav class="navbar">
             <a href="#" class="navbar-logo" onclick="switchView('home')">
-                <i class="fa-solid fa-snowflake logo-icon"></i>
-                <span>Bd 冰點</span>
+                <img src="/Users/yangzhiyong/Library/Mobile Documents/com~apple~CloudDocs/冰點/特賣會/logo.png" alt="Bd 冰點"
+                    style="height:96px; max-width:360px; width:auto; display:block;" />
             </a>
 
             <div class="mobile-toggle" onclick="toggleMenu()">
@@ -1813,11 +1866,12 @@
             </div>
 
             <div class="nav-menu" id="navMenu">
-                <a onclick="switchView('home', 'bonus'); toggleMenu()" class="nav-link nav-link-red">加碼抽獎</a>
+                <!--<a onclick="switchView('home', 'bonus'); toggleMenu()" class="nav-link nav-link-red">加</a>-->
                 <a onclick="switchView('home', 'models'); toggleMenu()" class="nav-link">活動機型</a>
                 <a onclick="switchView('home', 'faq'); toggleMenu()" class="nav-link">常見問題</a>
                 <a onclick="switchView('home', 'contact'); toggleMenu()" class="nav-link">聯絡我們</a>
                 <a onclick="switchView('home', 'notice'); toggleMenu()" class="nav-link">注意事項</a>
+                <a onclick="switchView('maintenance'); toggleMenu()" class="nav-link">年終掃除應援保養</a>
                 <a onclick="switchView('offices'); toggleMenu()" class="nav-link">購買地點</a>
                 <a href="https://www.bingdian.com.tw/" target="_blank" class="nav-link">公司官網</a>
                 <a onclick="switchView('register'); toggleMenu()" class="nav-link nav-btn-cta btn-shine">
@@ -1843,7 +1897,7 @@
                 <i class="fa-brands fa-line"></i>
             </div>
             <div class="side-text-main">加入官方<br>LINE</div>
-            <div class="side-text-sub">填問卷<br>抽好禮</div>
+            <div class="side-text-sub">諮詢<br>最新消息</div>
         </a>
 
         <!-- 按鈕 C：注意事項 -->
@@ -1863,8 +1917,8 @@
             <div class="hero-animated-bg"></div>
             <div class="hero-content" data-aos="fade-up">
                 <span class="hero-badge">2025 愛心公益特賣</span>
-                <h1 class="hero-title">冰點愛心公益特賣<br><span
-                        style="font-size:0.5em; font-weight:300; display:block; margin-top:10px;">購買指定冰點空調冷氣，登錄即享好禮</span>
+                <h1 class="hero-title">冰點·從家的溫度開始<br><span
+                        style="font-size:0.5em; font-weight:300; display:block; margin-top:10px;">暖心·暖房·暖世界</span>
                 </h1>
 
                 <div class="countdown-wrap" id="countdown">
@@ -1887,7 +1941,7 @@
                 </div>
 
                 <div style="display:flex; gap:15px; justify-content:center;">
-                    <a onclick="switchView('home', 'bonus')" class="nav-btn-cta btn-shine"
+                    <a onclick="switchView('home', 'models')" class="nav-btn-cta btn-shine"
                         style="padding: 1rem 3rem; font-size: 1.2rem; cursor: pointer;">
                         查看優惠詳情 <i class="fa-solid fa-arrow-down"></i>
                     </a>
@@ -1906,7 +1960,7 @@
         <!-- Features Section -->
         <section class="container features-section">
             <div class="features-grid">
-                <div class="feature-card" data-aos="fade-up" data-aos-delay="100">
+                <!--div class="feature-card" data-aos="fade-up" data-aos-delay="100">
                     <div class="feature-icon"><i class="fa-solid fa-leaf"></i></div>
                     <h3>CSPF 一級能效</h3>
                     <p style="color:#666; margin-top:10px;">符合國家最高標準，省電節能，為您的荷包精打細算。</p>
@@ -1943,19 +1997,13 @@
         <section id="bonus" class="container section-py">
             <div class="section-header" data-aos="fade-up">
                 <!--<span class="section-tag">Lucky Draw</span>-->
-                <h2 class="section-title">填回函，送好禮</h2>
-                <p style="margin-top:1rem; color:#666;">只要完成回函登錄，即送全聯禮券 $1,000！</p>
-            </div>
+                <!--h2 class="section-title">填回函，送好禮</h2>
+                <!--p style="margin-top:1rem; color:#666;">只要完成回函登錄，即送全聯禮券 $1,000！</p>
+            </div>-->
 
             <div class="bonus-card-wrapper" data-aos="zoom-in">
                 <div class="bonus-top">
-                    <p style="font-size:1.2rem; font-weight:700; color:var(--text-main);">全聯禮券加碼送</p>
-                    <div class="bonus-amount">$1,000</div>
-                    <div style="width:50px; height:4px; background:var(--accent); margin:10px auto; border-radius:2px;">
-                    </div>
-                    <p style="color:var(--text-light);">活動期間：2025/01/01 ~ 2025/12/31</p>
-
-                    <div style="display:flex; justify-content:center; gap:4rem; margin-top:3rem; flex-wrap:wrap;">
+                    <div style="display:flex; justify-content:center; gap:4rem; margin-top:2rem; flex-wrap:wrap;">
                         <!-- Action 1 -->
                         <div
                             style="flex:1; min-width:280px; background:white; padding:2.5rem 2rem; border-radius:20px; box-shadow:0 10px 30px rgba(0,0,0,0.05); border:1px solid #eee; text-align:center;">
@@ -1963,178 +2011,27 @@
                                 <i class="fa-solid fa-clipboard-question"></i>
                             </div>
                             <h4 style="font-size:1.3rem; margin-bottom:0.5rem;">填寫回函</h4>
-                            <p style="color:#666; font-size:0.9rem; margin-bottom:1.5rem;">完成回函即送全聯禮券 $1,000！</p>
+                            <p style="color:#666; font-size:0.9rem; margin-bottom:1.5rem;">購買指定機型後完成回函即送全聯禮券！</p>
                             <a onclick="switchView('register')" class="nav-btn-cta btn-shine"
                                 style="background:var(--accent); justify-content:center;">
-                                立即前往 <i class="fa-solid fa-arrow-right"></i>
+                                立即前往回函登錄 <i class="fa-solid fa-arrow-right"></i>
                             </a>
                         </div>
                         <!-- Action 2 -->
                         <div
                             style="flex:1; min-width:280px; background:white; padding:2.5rem 2rem; border-radius:20px; box-shadow:0 10px 30px rgba(0,0,0,0.05); border:1px solid #eee; text-align:center;">
-                            <div style="font-size:2.5rem; color:var(--success); margin-bottom:1rem;">
-                                <i class="fa-brands fa-line"></i>
+                            <div style="font-size:2.5rem; color:var(--primary); margin-bottom:1rem;">
+                                <i class="fa-solid fa-clipboard-list"></i>
                             </div>
-                            <h4 style="font-size:1.3rem; margin-bottom:0.5rem;">加入官方 LINE</h4>
-                            <p style="color:#666; font-size:0.9rem; margin-bottom:1.5rem;">最新優惠資訊及活動公告</p>
-                            <a href="https://line.me/ti/p/~@447uompo" target="_blank" class="nav-btn-cta btn-shine"
-                                style="background:var(--success); justify-content:center;">
-                                加好友 <i class="fa-solid fa-user-plus"></i>
+                            <h4 style="font-size:1.3rem; margin-bottom:0.5rem;">購買意向調查問卷</h4>
+                            <p style="color:#666; font-size:0.9rem; margin-bottom:1.5rem;">填寫問卷後，我們將由專人致電為您提供更詳細的服務與諮詢</p>
+                            <a onclick="switchView('survey')" class="nav-btn-cta btn-shine"
+                                style="background:var(--primary); justify-content:center;">
+                                填寫問卷 <i class="fa-solid fa-arrow-right"></i>
                             </a>
                         </div>
                     </div>
                 </div>
-            </div>
-        </section>
-
-        <!-- 活动规则区块 -->
-        <section id="rules" class="rules-section">
-            <div class="container">
-                <div class="section-header" data-aos="fade-up">
-                    <span class="section-tag">Rules</span>
-                    <h2 class="section-title">活動規則說明</h2>
-                </div>
-
-                <div class="rules-meta" data-aos="fade-up">
-                    <div class="rules-meta-item">
-                        <div class="rules-meta-icon">
-                            <i class="fa-solid fa-calendar-days"></i>
-                        </div>
-                        <div class="rules-meta-text">
-                            <span class="rules-meta-title">購買期間</span>
-                            <span class="rules-meta-desc">2025/01/01 - 2025/12/31</span>
-                        </div>
-                    </div>
-                    <div class="rules-meta-item">
-                        <div class="rules-meta-icon">
-                            <i class="fa-solid fa-clipboard-check"></i>
-                        </div>
-                        <div class="rules-meta-text">
-                            <span class="rules-meta-title">登錄截止</span>
-                            <span class="rules-meta-desc">購買後 30 天內完成回函登錄</span>
-                        </div>
-                    </div>
-                    <div class="rules-meta-item">
-                        <div class="rules-meta-icon">
-                            <i class="fa-solid fa-file-circle-check"></i>
-                        </div>
-                        <div class="rules-meta-text">
-                            <span class="rules-meta-title">必備憑證</span>
-                            <span class="rules-meta-desc">發票/收據 + 保固卡清晰照片</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="rules-grid" data-aos="fade-up">
-                    <div class="rule-card">
-                        <div class="rule-title">
-                            <i class="fa-solid fa-gift"></i>
-                            <span>參加資格</span>
-                        </div>
-                        <ul class="rule-list">
-                            <li>購買指定空調機型</li>
-                            <li>於活動期間內完成產品登錄</li>
-                            <li>上傳完整發票及保固卡照片</li>
-                            <li>填寫完整安裝資料與聯絡資訊</li>
-                        </ul>
-                        <p style="color:var(--text-light); margin-top:1rem; font-size:0.95rem;">
-                            小提醒：購買後 30 天內完成登錄並上傳清晰憑證，避免因資訊不足影響審核。
-                        </p>
-                    </div>
-                    <!--<div class="rule-card">
-                        <div class="rule-title">
-                            <i class="fa-solid fa-trophy"></i>
-                            <span>抽獎辦法</span>
-                        </div>
-                        <ul class="rule-list">
-                            <li>每月定期抽出幸運得主</li>
-                            <li>中獎名單將於官方 LINE 公告</li>
-                            <li>獎品將以簡訊通知領取方式</li>
-                            <li>每人限參加一次，不得重複登錄</li>
-                        </ul>
-                    </div>-->
-                </div>
-            </div>
-        </section>
-
-        <!-- Process Steps (With Updated Phone Mockup) -->
-        <section class="process-bg section-py">
-            <div class="container">
-                <div class="section-header" data-aos="fade-up">
-                    <span class="section-tag">Process</span>
-                    <h2 class="section-title">簡單 4 步驟，輕鬆領獎</h2>
-                </div>
-
-                <div class="step-cards-row">
-                    <div class="step-card" data-aos="fade-up" data-aos-delay="100">
-                        <div class="step-num">1</div>
-                        <h4>購買指定機型</h4>
-                        <p style="font-size:0.9rem; color:#666; margin-top:5px;">確認購買發票與保固書</p>
-                    </div>
-                    <div class="step-card" data-aos="fade-up" data-aos-delay="200">
-                        <div class="step-num">2</div>
-                        <h4>填寫回函登錄卡</h4>
-                        <p style="font-size:0.9rem; color:#666; margin-top:5px;">填寫登錄卡相關資料</p>
-                    </div>
-                    <div class="step-card" data-aos="fade-up" data-aos-delay="300">
-                        <div class="step-num">3</div>
-                        <h4>上傳憑證照片</h4>
-                        <p style="font-size:0.9rem; color:#666; margin-top:5px;">上傳發票/收據及保卡</p>
-                    </div>
-                    <div class="step-card" data-aos="fade-up" data-aos-delay="400">
-                        <div class="step-num">4</div>
-                        <h4>審核通過</h4>
-                        <p style="font-size:0.9rem; color:#666; margin-top:5px;">等待簡訊通知審核結果</p>
-                    </div>
-                </div>
-
-                <!-- Detail with Phone -->
-                <div class="step-detail-row"
-                    style="display:flex; align-items:center; justify-content:center; gap:4rem; flex-wrap:wrap; padding-top:2rem;">
-                    <div style="max-width:400px;" data-aos="fade-right">
-                        <div
-                            style="border:6px solid #E11D48; color:#E11D48; padding:8px 24px; border-radius:50px; font-weight:800; display:inline-block; margin-bottom:1rem; letter-spacing:2px; background:linear-gradient(135deg, #fff1f2, #ffe4e6);">
-                            填寫說明</div>
-                        <h3 style="font-size:2rem; font-weight:900; margin:1rem 0;">填寫回函登錄卡<br></h3>
-                        <ul style="list-style:none; margin-top:1.5rem;">
-                            <li style="margin-bottom:1rem; display:flex; gap:10px; align-items:center;">
-                                <i class="fa-solid fa-check-circle" style="color:var(--success);"></i> 填寫機型資料與安裝資料
-                            </li>
-                            <li style="margin-bottom:1rem; display:flex; gap:10px; align-items:center;">
-                                <i class="fa-solid fa-check-circle" style="color:var(--success);"></i> 拍照上傳憑證
-                            </li>
-                            <!--<li style="margin-bottom:1rem; display:flex; gap:10px; align-items:center;">
-                                <i class="fa-solid fa-check-circle" style="color:var(--success);"></i> 即時查詢審核進度
-                            </li> -->
-                        </ul>
-                    </div>
-
-                    <!-- 3D Phone Mockup (Updated to RWD look) -->
-                    <div class="phone-mockup" data-aos="fade-left">
-                        <div class="phone-notch"></div>
-                        <div class="phone-inner">
-                            <div class="phone-screen-header">
-                                <span>Bd 冰點空調</span> <i class="fa-solid fa-bars"></i>
-                            </div>
-                            <div class="phone-body">
-                                <h3 class="mock-title">回函卡登錄</h3>
-
-                                <div class="mock-field">
-                                    <label class="mock-label">製造號碼:</label>
-                                    <div class="mock-input"></div>
-                                </div>
-
-                                <div class="mock-field">
-                                    <label class="mock-label">安裝日期:</label>
-                                    <div class="mock-input"></div>
-                                </div>
-
-                                <div class="mock-btn">確認送出資料</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
             </div>
         </section>
 
@@ -2202,6 +2099,8 @@
                                             <th>機型</th>
                                             <th>適用坪數</th>
                                             <th>Kw值</th>
+                                            <th>原價</th>
+                                            <th>現金回饋</th>
                                             <th style="color:var(--accent)">公益專案價</th>
                                         </tr>
                                     </thead>
@@ -2211,6 +2110,8 @@
                                             <td>FI-23HSG</td>
                                             <td>3-5 坪</td>
                                             <td>2.3 kW</td>
+                                            <td style="text-decoration: line-through; color:#999;">$25,000</td>
+                                            <td style="color:var(--success); font-weight:700;">$5,200</td>
                                             <td style="font-weight:700; color:var(--accent)">$19,800</td>
                                         </tr>
                                         <tr class="model-row" data-type="split" data-mode="warm" data-kw="2.9"
@@ -2218,6 +2119,8 @@
                                             <td>FI-29HSG</td>
                                             <td>4-6 坪</td>
                                             <td>2.9 kW</td>
+                                            <td style="text-decoration: line-through; color:#999;">$28,000</td>
+                                            <td style="color:var(--success); font-weight:700;">$5,500</td>
                                             <td style="font-weight:700; color:var(--accent)">$22,500</td>
                                         </tr>
                                         <tr class="model-row" data-type="split" data-mode="warm" data-kw="5.0"
@@ -2225,6 +2128,8 @@
                                             <td>FI-50HSG</td>
                                             <td>7-9 坪</td>
                                             <td>5.0 kW</td>
+                                            <td style="text-decoration: line-through; color:#999;">$42,000</td>
+                                            <td style="color:var(--success); font-weight:700;">$7,500</td>
                                             <td style="font-weight:700; color:var(--accent)">$34,500</td>
                                         </tr>
                                     </tbody>
@@ -2244,6 +2149,8 @@
                                             <th>機型</th>
                                             <th>適用坪數</th>
                                             <th>Kw值</th>
+                                            <th>原價</th>
+                                            <th>現金回饋</th>
                                             <th style="color:var(--accent)">公益專案價</th>
                                         </tr>
                                     </thead>
@@ -2253,6 +2160,8 @@
                                             <td>FI-23CSG</td>
                                             <td>3-5 坪</td>
                                             <td>2.3 kW</td>
+                                            <td style="text-decoration: line-through; color:#999;">$22,000</td>
+                                            <td style="color:var(--success); font-weight:700;">$4,500</td>
                                             <td style="font-weight:700; color:var(--accent)">$17,500</td>
                                         </tr>
                                         <tr class="model-row" data-type="split" data-mode="cold" data-kw="4.1"
@@ -2260,6 +2169,8 @@
                                             <td>FI-41CSG</td>
                                             <td>6-8 坪</td>
                                             <td>4.1 kW</td>
+                                            <td style="text-decoration: line-through; color:#999;">$35,000</td>
+                                            <td style="color:var(--success); font-weight:700;">$7,100</td>
                                             <td style="font-weight:700; color:var(--accent)">$27,900</td>
                                         </tr>
                                     </tbody>
@@ -2290,6 +2201,8 @@
                                             <th>機型</th>
                                             <th>適用坪數</th>
                                             <th>Kw值</th>
+                                            <th>原價</th>
+                                            <th>現金回饋</th>
                                             <th style="color:var(--accent)">公益專案價</th>
                                         </tr>
                                     </thead>
@@ -2299,6 +2212,8 @@
                                             <td>WC-23HSG</td>
                                             <td>3-5 坪</td>
                                             <td>2.3 kW</td>
+                                            <td style="text-decoration: line-through; color:#999;">$23,500</td>
+                                            <td style="color:var(--success); font-weight:700;">$5,000</td>
                                             <td style="font-weight:700; color:var(--accent)">$18,500</td>
                                         </tr>
                                         <tr class="model-row" data-type="window" data-mode="warm" data-kw="2.9"
@@ -2306,6 +2221,8 @@
                                             <td>WC-29HSG</td>
                                             <td>4-6 坪</td>
                                             <td>2.9 kW</td>
+                                            <td style="text-decoration: line-through; color:#999;">$26,500</td>
+                                            <td style="color:var(--success); font-weight:700;">$5,300</td>
                                             <td style="font-weight:700; color:var(--accent)">$21,200</td>
                                         </tr>
                                     </tbody>
@@ -2325,6 +2242,8 @@
                                             <th>機型</th>
                                             <th>適用坪數</th>
                                             <th>Kw值</th>
+                                            <th>原價</th>
+                                            <th>現金回饋</th>
                                             <th style="color:var(--accent)">公益專案價</th>
                                         </tr>
                                     </thead>
@@ -2334,6 +2253,8 @@
                                             <td>WC-23CSG</td>
                                             <td>3-5 坪</td>
                                             <td>2.3 kW</td>
+                                            <td style="text-decoration: line-through; color:#999;">$20,500</td>
+                                            <td style="color:var(--success); font-weight:700;">$4,300</td>
                                             <td style="font-weight:700; color:var(--accent)">$16,200</td>
                                         </tr>
                                         <tr class="model-row" data-type="window" data-mode="cold" data-kw="4.1"
@@ -2341,6 +2262,8 @@
                                             <td>WC-41CSG</td>
                                             <td>6-8 坪</td>
                                             <td>4.1 kW</td>
+                                            <td style="text-decoration: line-through; color:#999;">$33,000</td>
+                                            <td style="color:var(--success); font-weight:700;">$6,500</td>
                                             <td style="font-weight:700; color:var(--accent)">$26,500</td>
                                         </tr>
                                     </tbody>
@@ -2398,7 +2321,7 @@
                         </div>
                         <div class="faq-body">
                             <div class="faq-body-content">
-                                完成登錄後，系統會發送確認簡訊至您填寫的手機號碼。您也可以透過官方 LINE 帳號查詢登錄狀態。審核時間約為 3-5 個工作天。
+                                完成登錄後，系統會發送確認簡訊至您填寫的手機號碼。您也可以透過客服專線 0800-026-568 或官方 LINE 帳號查詢登錄狀態。審核時間約為 10 個工作天，如有審核疑慮會以電話通知。
                             </div>
                         </div>
                     </div>
@@ -2411,7 +2334,7 @@
                         </div>
                         <div class="faq-body">
                             <div class="faq-body-content">
-                                請上傳清晰的發票或收據照片，以及保固卡照片。照片需能清楚看到購買日期、機型、金額等資訊。檔案格式支援 JPG、PNG，檔案大小不超過 5MB。
+                                請上傳以下憑證照片：1. 發票或收據照片（需清楚顯示購買日期、機型、金額、店家資訊）2. 保固書填寫頁照片 3. 室外機流水號貼紙照片 4. 保固卡清晰照片。照片需能清楚辨識所有資訊，檔案格式支援 JPG、PNG，檔案大小不超過 5MB。
                             </div>
                         </div>
                     </div>
@@ -2419,12 +2342,12 @@
                     <div class="faq-item">
                         <div class="faq-header" onclick="toggleFaq(this)">
                             <span><i class="fa-solid fa-circle-question"
-                                    style="color:var(--primary); margin-right:10px;"></i> 抽獎活動多久舉辦一次？</span>
+                                    style="color:var(--primary); margin-right:10px;"></i> 全聯禮券的金額是多少？</span>
                             <i class="fa-solid fa-chevron-down"></i>
                         </div>
                         <div class="faq-body">
                             <div class="faq-body-content">
-                                每月定期舉辦抽獎活動，中獎名單將於每月 15 日於官方 LINE 帳號公告。活動期間為 2025/01/01 至 2025/12/31，共計 12 次抽獎機會。
+                                購買指定機型並完成回函登錄後，審核通過即可獲得全聯禮券。詳細禮券金額請參考活動頁面說明，或聯繫客服專線 0800-026-568 詢問。活動期間為 114/12/15 至 115/1/23。
                             </div>
                         </div>
                     </div>
@@ -2450,7 +2373,176 @@
                         </div>
                         <div class="faq-body">
                             <div class="faq-body-content">
-                                在送出表單前，請仔細檢查所有資料。若已送出但發現錯誤，請立即聯繫客服專線或透過官方 LINE 帳號告知，我們將協助您修正資料。
+                                在送出表單前，請仔細檢查所有資料。若已送出但發現錯誤，請立即聯繫客服專線 0800-026-568 或透過官方 LINE 帳號告知，我們將協助您修正資料。
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <div class="faq-header" onclick="toggleFaq(this)">
+                            <span><i class="fa-solid fa-circle-question"
+                                    style="color:var(--primary); margin-right:10px;"></i> 活動期間是什麼時候？超過活動期間購買還能參加嗎？</span>
+                            <i class="fa-solid fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-body">
+                            <div class="faq-body-content">
+                                活動購買期間為 114年12月15日至115年1月23日。必須在此期間內購買指定機型才能參加活動。若超過活動期間購買，將不符合參加資格，無法獲得全聯禮券。
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <div class="faq-header" onclick="toggleFaq(this)">
+                            <span><i class="fa-solid fa-circle-question"
+                                    style="color:var(--primary); margin-right:10px;"></i> 購買後多久內要完成登錄？超過期限還能登錄嗎？</span>
+                            <i class="fa-solid fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-body">
+                            <div class="faq-body-content">
+                                購買後必須在 30 天內完成回函登錄並上傳所有必備憑證。若超過 30 天期限，將視為不符合資格，無法獲得全聯禮券。建議您購買後盡快完成登錄，避免遺忘。
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <div class="faq-header" onclick="toggleFaq(this)">
+                            <span><i class="fa-solid fa-circle-question"
+                                    style="color:var(--primary); margin-right:10px;"></i> 需要上傳哪些憑證照片？照片有什麼要求？</span>
+                            <i class="fa-solid fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-body">
+                            <div class="faq-body-content">
+                                需要上傳以下憑證：1. 發票或收據照片（需清楚顯示購買日期、機型、金額、店家資訊）2. 保固書填寫頁照片 3. 室外機流水號貼紙照片 4. 保固卡清晰照片。照片格式支援 JPG、PNG，檔案大小不超過 5MB，且需清晰可辨識所有資訊。
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <div class="faq-header" onclick="toggleFaq(this)">
+                            <span><i class="fa-solid fa-circle-question"
+                                    style="color:var(--primary); margin-right:10px;"></i> 審核需要多久時間？如何知道審核結果？</span>
+                            <i class="fa-solid fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-body">
+                            <div class="faq-body-content">
+                                審核期間約 10 個工作天（不含例假日）。審核完成後，我們會以簡訊通知您審核結果。如有審核疑慮，我們會以電話聯繫您。您也可以透過客服專線 0800-026-568 或官方 LINE 帳號查詢審核進度。
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <div class="faq-header" onclick="toggleFaq(this)">
+                            <span><i class="fa-solid fa-circle-question"
+                                    style="color:var(--primary); margin-right:10px;"></i> 全聯禮券何時會寄送？如何寄送？</span>
+                            <i class="fa-solid fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-body">
+                            <div class="faq-body-content">
+                                審核通過後，全聯禮券將於 15 個工作天內以掛號郵件方式寄送至您填寫的「禮券寄送地址」。請確保地址填寫正確且完整，若因地址錯誤導致無法送達，需自行承擔責任。禮券寄送前我們會以簡訊通知您。
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <div class="faq-header" onclick="toggleFaq(this)">
+                            <span><i class="fa-solid fa-circle-question"
+                                    style="color:var(--primary); margin-right:10px;"></i> 「您是否為既有客戶」是什麼意思？填寫錯誤會影響資格嗎？</span>
+                            <i class="fa-solid fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-body">
+                            <div class="faq-body-content">
+                                「既有客戶」是指之前曾購買過冰點空調產品的客戶。此欄位用於統計與服務優化，無論選擇「是」或「否」都不影響參加活動的資格。請根據實際情況誠實填寫即可。
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <div class="faq-header" onclick="toggleFaq(this)">
+                            <span><i class="fa-solid fa-circle-question"
+                                    style="color:var(--primary); margin-right:10px;"></i> 哪些機型符合活動資格？在哪裡可以查看活動機型？</span>
+                            <i class="fa-solid fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-body">
+                            <div class="faq-body-content">
+                                活動指定機型包括分離式（冷暖/冷專）和窗型（冷暖/冷專）多種機型，詳細機型列表請至網站「活動機型」區塊查看，或點擊首頁「查看優惠詳情」按鈕。只有購買活動指定機型才能參加本活動。
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <div class="faq-header" onclick="toggleFaq(this)">
+                            <span><i class="fa-solid fa-circle-question"
+                                    style="color:var(--primary); margin-right:10px;"></i> 如果憑證照片不清楚或遺失，可以補件嗎？</span>
+                            <i class="fa-solid fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-body">
+                            <div class="faq-body-content">
+                                若審核過程中發現憑證照片不清楚或資訊不足，我們會以電話聯繫您補件。請在收到通知後 7 天內補齊資料，逾期未補件將視為不符合資格。建議上傳前先確認照片清晰度，避免後續補件流程。
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <div class="faq-header" onclick="toggleFaq(this)">
+                            <span><i class="fa-solid fa-circle-question"
+                                    style="color:var(--primary); margin-right:10px;"></i> 年終掃除應援保養服務是什麼？如何申請？</span>
+                            <i class="fa-solid fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-body">
+                            <div class="faq-body-content">
+                                年終掃除應援保養是我們提供的冷氣維護保養服務。您可至網站「年終掃除應援保養」頁面填寫表單（姓名、電話、縣市），我們將由專人致電為您安排冷氣維護保養服務。此服務與回函登錄活動為不同服務，可分別申請。
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <div class="faq-header" onclick="toggleFaq(this)">
+                            <span><i class="fa-solid fa-circle-question"
+                                    style="color:var(--primary); margin-right:10px;"></i> 如果審核不通過，可以重新申請嗎？</span>
+                            <i class="fa-solid fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-body">
+                            <div class="faq-body-content">
+                                若審核不通過，我們會以電話或簡訊告知原因。若因資料不完整或憑證不清楚導致不通過，可在收到通知後 7 天內補件重新審核。但若因不符合活動資格（如非活動期間購買、非指定機型等），則無法重新申請。
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <div class="faq-header" onclick="toggleFaq(this)">
+                            <span><i class="fa-solid fa-circle-question"
+                                    style="color:var(--primary); margin-right:10px;"></i> 購買日期要填寫什麼時候？可以填寫未來日期嗎？</span>
+                            <i class="fa-solid fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-body">
+                            <div class="faq-body-content">
+                                購買日期應填寫實際購買產品的日期，必須在活動期間（114/12/15 - 115/1/23）內，且不能是未來日期。請根據發票或收據上的購買日期填寫，若填寫錯誤可能導致審核不通過。
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <!--div class="faq-header" onclick="toggleFaq(this)">
+                            <span><i class="fa-solid fa-circle-question"
+                                    style="color:var(--primary); margin-right:10px;"></i> 一人可以參加多次活動嗎？有限制購買數量嗎？</span>
+                            <i class="fa-solid fa-chevron-down"></i>
+                        </div-->   
+                        <div class="faq-body">
+                            <div class="faq-body-content">
+                                同一人可購買多台指定機型並分別登錄，每台符合資格的機型都可獲得全聯禮券。但每台機型需分別填寫回函登錄表單，且每台機型的憑證需分別上傳。請確保每筆登錄資料正確且完整。
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <div class="faq-header" onclick="toggleFaq(this)">
+                            <span><i class="fa-solid fa-circle-question"
+                                    style="color:var(--primary); margin-right:10px;"></i> 如果提交的憑證內容不實會怎樣？</span>
+                            <i class="fa-solid fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-body">
+                            <div class="faq-body-content">
+                                若提交之憑證內容不實（如偽造發票、使用他人憑證等），主辦單位得依相關規範撤銷其參與資格，以維持審查之公正性。請務必誠實填寫並上傳真實憑證，避免觸及相關法律責任。
                             </div>
                         </div>
                     </div>
@@ -2760,7 +2852,7 @@
                         <div class="form-progress-fill" id="formProgressFill"></div>
                     </div>
 
-                    <h4 class="form-section-title">｜產品資訊</h4>
+                    <h4 class="form-section-title">｜購買資訊</h4>
 
                     <!-- Error Message -->
                     <div id="errorMsg" class="error-msg" style="margin-top:20px;">
@@ -2770,44 +2862,9 @@
 
                     <div class="form-row">
                         <div class="input-group">
-                            <label class="form-label">室外機製造號碼 (Serial No.) *</label>
-                            <input type="text" name="serialNo" class="input-field" placeholder="請輸入機身序號" required>
-                            <span class="error-text">請輸入有效的製造號碼</span>
-                        </div>
-                        <div class="input-group">
-                            <label class="form-label">購買機型 *</label>
-                            <div class="select-wrapper">
-                                <select name="model" class="input-field" required>
-                                    <option value="" disabled selected>請選擇機型</option>
-                                    <optgroup label="分離式 - 冷暖">
-                                        <option value="FI-23HSG">FI-23HSG</option>
-                                        <option value="FI-29HSG">FI-29HSG</option>
-                                        <option value="FI-50HSG">FI-50HSG</option>
-                                    </optgroup>
-                                    <optgroup label="分離式 - 冷專">
-                                        <option value="FI-23CSG">FI-23CSG</option>
-                                        <option value="FI-41CSG">FI-41CSG</option>
-                                    </optgroup>
-                                    <optgroup label="窗型 - 冷暖">
-                                        <option value="WC-23HSG">WC-23HSG</option>
-                                        <option value="WC-29HSG">WC-29HSG</option>
-                                    </optgroup>
-                                    <optgroup label="窗型 - 冷專">
-                                        <option value="WC-23CSG">WC-23CSG</option>
-                                        <option value="WC-41CSG">WC-41CSG</option>
-                                    </optgroup>
-                                </select>
-                                <i class="fa-solid fa-chevron-down select-arrow"></i>
-                            </div>
-                            <span class="error-text">請選擇機型</span>
-                        </div>
-                    </div>
-
-                    <div class="form-row">
-                        <div class="input-group">
-                            <label class="form-label">安裝日期 *</label>
-                            <input type="date" name="installDate" class="input-field" required max="">
-                            <span class="error-text">請選擇有效的安裝日期</span>
+                            <label class="form-label">購買日期 *</label>
+                            <input type="date" name="buyDate" class="input-field" required max="">
+                            <span class="error-text">請選擇有效的購買日期</span>
                         </div>
                         <div class="input-group">
                             <label class="form-label">購買通路/店家 *</label>
@@ -2816,12 +2873,27 @@
                         </div>
                     </div>
 
-                    <h4 class="form-section-title">｜安裝資料</h4>
+                    <div class="input-group">
+                        <label class="form-label">您是否為既有客戶 *</label>
+                        <div style="display: flex; gap: 2rem; margin-top: 0.5rem;">
+                            <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer; font-weight: normal;">
+                                <input type="radio" name="existingCustomer" value="yes" required style="width: 18px; height: 18px; cursor: pointer;">
+                                <span>是</span>
+                            </label>
+                            <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer; font-weight: normal;">
+                                <input type="radio" name="existingCustomer" value="no" required style="width: 18px; height: 18px; cursor: pointer;">
+                                <span>否</span>
+                            </label>
+                        </div>
+                        <span class="error-text">請選擇是否為既有客戶</span>
+                    </div>
+
+                    <h4 class="form-section-title">｜禮券寄送資料</h4>
 
                     <div class="input-group">
-                        <label class="form-label">安裝地址 *</label>
+                        <label class="form-label">禮券寄送地址 *</label>
                         <input type="text" name="address" class="input-field" placeholder="請輸入詳細地址" required>
-                        <span class="error-text">請輸入完整的安裝地址</span>
+                        <span class="error-text">請輸入完整的禮券寄送地址</span>
                     </div>
 
                     <div class="form-row">
@@ -2846,7 +2918,7 @@
                         <div class="upload-icon-wrap">
                             <i class="fa-solid fa-image"></i>
                         </div>
-                        <p style="font-weight:700; color:var(--text-main);">點擊上傳發票或保卡照片</p>
+                        <p style="font-weight:700; color:var(--text-main);">點擊上傳發票、保證書填寫頁照片、室外機流水號貼紙照片</p>
                         <p style="font-size:0.9rem; color:var(--text-light);">支援 JPG, PNG 格式 (Max 5MB)</p>
                         <div id="fileName" style="margin-top:10px; color:var(--primary); font-weight:700;"></div>
                     </label>
@@ -2857,7 +2929,7 @@
                     <!-- Success Message -->
                     <div id="successMsg" class="success-msg" style="margin-top:20px;">
                         <i class="fa-solid fa-circle-check"></i>
-                        <span>資料已成功送出！請留意手機簡訊通知。</span>
+                        <span>資料已成功送出！如有審核疑慮會以電話通知，審核期間約10個工作天。</span>
                     </div>
 
                     <button type="submit" id="submitBtn" class="nav-btn-cta btn-shine"
@@ -2866,6 +2938,346 @@
                     </button>
 
                     <!-- 返回活動首頁 (移至下方) -->
+                    <div style="text-align:center; margin-top:20px;">
+                        <a onclick="switchView('home')" class="back-link">
+                            <i class="fa-solid fa-arrow-left"></i> 返回活動首頁
+                        </a>
+                    </div>
+                </form>
+            </div>
+
+            <!-- 活动规则区块 -->
+            <section id="rules" class="rules-section" style="margin-top: 4rem; margin-bottom: 3rem; background: transparent; padding: 0; border: none;">
+                <div class="container" style="padding: 0;">
+                    <div class="section-header" data-aos="fade-up" style="margin-bottom: 2rem;">
+                        <span class="section-tag">Rules</span>
+                        <h2 class="section-title" style="font-size: 2rem;">活動規則說明</h2>
+                    </div>
+
+                    <div class="rules-meta" data-aos="fade-up">
+                        <div class="rules-meta-item">
+                            <div class="rules-meta-icon">
+                                <i class="fa-solid fa-calendar-days"></i>
+                            </div>
+                            <div class="rules-meta-text">
+                                <span class="rules-meta-title">購買期間</span>
+                                <span class="rules-meta-desc">114/12/15 - 115/1/23</span>
+                            </div>
+                        </div>
+                        <div class="rules-meta-item">
+                            <div class="rules-meta-icon">
+                                <i class="fa-solid fa-clipboard-check"></i>
+                            </div>
+                            <div class="rules-meta-text">
+                                <span class="rules-meta-title">登錄截止</span>
+                                <span class="rules-meta-desc">購買後 30 天內完成回函登錄</span>
+                            </div>
+                        </div>
+                        <div class="rules-meta-item">
+                            <div class="rules-meta-icon">
+                                <i class="fa-solid fa-file-circle-check"></i>
+                            </div>
+                            <div class="rules-meta-text">
+                                <span class="rules-meta-title">必備憑證</span>
+                                <span class="rules-meta-desc">發票、保固書填寫頁照片、室外機流水號貼紙照片 + 保固卡清晰照片</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="rules-grid" data-aos="fade-up">
+                        <div class="rule-card">
+                            <div class="rule-title">
+                                <i class="fa-solid fa-gift"></i>
+                                <span>參加資格</span>
+                            </div>
+                            <ul class="rule-list">
+                                <li>購買指定空調機型</li>
+                                <li>於活動期間內完成產品登錄</li>
+                                <li>上傳完整發票、保固書填寫頁照片、室外機流水號貼紙照片</li>
+                                <li>填寫完整安裝資料與聯絡資訊</li>
+                            </ul>
+                            <div style="text-align: center; margin-top:1rem;">
+                                <p style="color:var(--text-light); font-size:0.95rem; text-align: left; display: inline-block; max-width: 650px;">
+                                    小提醒：
+                                    <br>1. 購買後 30 天內完成登錄並上傳清晰憑證，避免因資訊不足影響審核。
+                                    <br>2. 審核期間約10個工作天
+                                    <br>3. 若提交之憑證內容不實，主辦單位得依相關規範撤銷其參與資格，以維持審查之公正性。
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Process Steps (With Updated Phone Mockup) -->
+            <section class="process-bg section-py" style="margin-bottom: 3rem; padding: 3rem 0; background: #f0f7ff;">
+                <div class="container">
+                    <div class="section-header" data-aos="fade-up" style="margin-bottom: 2rem;">
+                        <span class="section-tag">Process</span>
+                        <h2 class="section-title" style="font-size: 2rem;">簡單 4 步驟，輕鬆領獎</h2>
+                    </div>
+
+                    <div class="step-cards-row">
+                        <div class="step-card" data-aos="fade-up" data-aos-delay="100">
+                            <div class="step-num">1</div>
+                            <h4>購買指定機型</h4>
+                            <p style="font-size:0.9rem; color:#666; margin-top:5px;">確認購買發票與保固書</p>
+                        </div>
+                        <div class="step-card" data-aos="fade-up" data-aos-delay="200">
+                            <div class="step-num">2</div>
+                            <h4>填寫回函登錄卡</h4>
+                            <p style="font-size:0.9rem; color:#666; margin-top:5px;">填寫登錄卡相關資料</p>
+                        </div>
+                        <div class="step-card" data-aos="fade-up" data-aos-delay="300">
+                            <div class="step-num">3</div>
+                            <h4>上傳憑證照片</h4>
+                            <p style="font-size:0.9rem; color:#666; margin-top:5px;">上傳發票/收據及保卡</p>
+                        </div>
+                        <div class="step-card" data-aos="fade-up" data-aos-delay="400">
+                            <div class="step-num">4</div>
+                            <h4>審核通過</h4>
+                            <p style="font-size:0.9rem; color:#666; margin-top:5px;">等待簡訊通知審核結果</p>
+                        </div>
+                    </div>
+
+                    <!-- Detail with Phone -->
+                    <div class="step-detail-row"
+                        style="display:flex; align-items:center; justify-content:center; gap:4rem; flex-wrap:wrap; padding-top:2rem;">
+                        <div style="max-width:400px;" data-aos="fade-right">
+                            <div
+                                style="border:6px solid #E11D48; color:#E11D48; padding:8px 24px; border-radius:50px; font-weight:800; display:inline-block; margin-bottom:1rem; letter-spacing:2px; background:linear-gradient(135deg, #fff1f2, #ffe4e6);">
+                                填寫說明</div>
+                            <h3 style="font-size:2rem; font-weight:900; margin:1rem 0;">填寫回函登錄卡<br></h3>
+                            <ul style="list-style:none; margin-top:1.5rem;">
+                                <li style="margin-bottom:1rem; display:flex; gap:10px; align-items:center;">
+                                    <i class="fa-solid fa-check-circle" style="color:var(--success);"></i> 填寫機型資料與安裝資料
+                                </li>
+                                <li style="margin-bottom:1rem; display:flex; gap:10px; align-items:center;">
+                                    <i class="fa-solid fa-check-circle" style="color:var(--success);"></i> 拍照上傳憑證
+                                </li>
+                            </ul>
+                        </div>
+
+                        <!-- 3D Phone Mockup (Updated to RWD look) -->
+                        <div class="phone-mockup" data-aos="fade-left">
+                            <div class="phone-notch"></div>
+                            <div class="phone-inner">
+                                <div class="phone-screen-header">
+                                    <span>Bd 冰點空調</span> <i class="fa-solid fa-bars"></i>
+                                </div>
+                                <div class="phone-body">
+                                    <h3 class="mock-title">回函卡登錄</h3>
+
+                                    <div class="mock-field">
+                                        <label class="mock-label">製造號碼:</label>
+                                        <div class="mock-input"></div>
+                                    </div>
+
+                                    <div class="mock-field">
+                                        <label class="mock-label">購買日期:</label>
+                                        <div class="mock-input"></div>
+                                    </div>
+
+                                    <div class="mock-btn">確認送出資料</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </section>
+
+        </div>
+    </div>
+
+    <!-- Survey View (購買意向調查問卷) -->
+    <div id="survey-view" class="view-section" style="padding: 120px 0 50px;">
+        <div class="container">
+            <!-- 標題區塊 -->
+            <div class="register-header-wrap">
+                <h2 class="section-title">購買意向調查問卷</h2>
+                <p style="margin-top:1rem; color:#666;">填寫問卷後，我們將由專人致電為您提供更詳細的服務與諮詢</p>
+            </div>
+
+            <div class="form-card" style="max-width:800px; margin:0 auto;">
+                <form id="surveyForm" onsubmit="handleSurveySubmit(event)">
+
+                    <!-- Error Message -->
+                    <div id="surveyErrorMsg" class="error-msg" style="margin-top:20px;">
+                        <i class="fa-solid fa-circle-exclamation"></i>
+                        <span id="surveyErrorText">請檢查表單欄位是否正確填寫</span>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="input-group">
+                            <label class="form-label">姓名 *</label>
+                            <input type="text" name="name" class="input-field" placeholder="請輸入您的姓名" required>
+                            <span class="error-text">請輸入姓名</span>
+                        </div>
+                        <div class="input-group">
+                            <label class="form-label">電話 *</label>
+                            <input type="tel" name="phone" class="input-field" placeholder="0912345678 或 09xx-xxx-xxx"
+                                pattern="[0-9]{10}|[0-9]{4}-[0-9]{3}-[0-9]{3}" required>
+                            <span class="error-text">請輸入正確的手機號碼格式（10位數字或 09xx-xxx-xxx）</span>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="input-group">
+                            <label class="form-label">安裝地點(縣市) *</label>
+                            <div class="select-wrapper" style="position: relative;">
+                                <input type="text" id="citySearch" class="input-field" placeholder="輸入關鍵字搜尋縣市..." 
+                                    autocomplete="off" oninput="filterCityOptions()" onfocus="showCityDropdown()">
+                                <i class="fa-solid fa-chevron-down select-arrow" style="pointer-events: none;"></i>
+                                <div id="cityDropdown" class="city-dropdown" style="display: none;">
+                                    <div class="city-option" onclick="selectCity('台北市')">台北市</div>
+                                    <div class="city-option" onclick="selectCity('新北市')">新北市</div>
+                                    <div class="city-option" onclick="selectCity('桃園市')">桃園市</div>
+                                    <div class="city-option" onclick="selectCity('台中市')">台中市</div>
+                                    <div class="city-option" onclick="selectCity('台南市')">台南市</div>
+                                    <div class="city-option" onclick="selectCity('高雄市')">高雄市</div>
+                                    <div class="city-option" onclick="selectCity('基隆市')">基隆市</div>
+                                    <div class="city-option" onclick="selectCity('新竹市')">新竹市</div>
+                                    <div class="city-option" onclick="selectCity('嘉義市')">嘉義市</div>
+                                    <div class="city-option" onclick="selectCity('新竹縣')">新竹縣</div>
+                                    <div class="city-option" onclick="selectCity('苗栗縣')">苗栗縣</div>
+                                    <div class="city-option" onclick="selectCity('彰化縣')">彰化縣</div>
+                                    <div class="city-option" onclick="selectCity('南投縣')">南投縣</div>
+                                    <div class="city-option" onclick="selectCity('雲林縣')">雲林縣</div>
+                                    <div class="city-option" onclick="selectCity('嘉義縣')">嘉義縣</div>
+                                    <div class="city-option" onclick="selectCity('屏東縣')">屏東縣</div>
+                                    <div class="city-option" onclick="selectCity('宜蘭縣')">宜蘭縣</div>
+                                    <div class="city-option" onclick="selectCity('花蓮縣')">花蓮縣</div>
+                                    <div class="city-option" onclick="selectCity('台東縣')">台東縣</div>
+                                    <div class="city-option" onclick="selectCity('澎湖縣')">澎湖縣</div>
+                                    <div class="city-option" onclick="selectCity('金門縣')">金門縣</div>
+                                    <div class="city-option" onclick="selectCity('連江縣')">連江縣</div>
+                                </div>
+                                <input type="hidden" name="city" id="cityValue" required>
+                            </div>
+                            <span class="error-text">請選擇安裝地點(縣市)</span>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="input-group">
+                            <label class="form-label">想購買機型 *</label>
+                            <div style="position: relative;">
+                                <input type="text" name="model" class="input-field" placeholder="例如：FI-23HSG" required>
+                                <div style="margin-top: 8px;">
+                                    <a href="javascript:void(0)" onclick="openModelsInNewTab();" 
+                                        style="color: var(--primary); text-decoration: none; font-size: 0.9rem; display: inline-flex; align-items: center; gap: 5px; cursor: pointer;">
+                                        <i class="fa-solid fa-external-link"></i> 查看活動機型
+                                    </a>
+                                </div>
+                            </div>
+                            <span class="error-text">請輸入想購買的機型</span>
+                        </div>
+                    </div>
+
+                    <!-- Success Message -->
+                    <div id="surveySuccessMsg" class="success-msg" style="margin-top:20px;">
+                        <i class="fa-solid fa-circle-check"></i>
+                        <span>問卷已成功送出！我們將由專人致電為您提供更詳細的服務與諮詢，請留意來電。</span>
+                    </div>
+
+                    <button type="submit" id="surveySubmitBtn" class="nav-btn-cta btn-shine"
+                        style="width:100%; justify-content:center; padding:1.2rem; margin-top:2rem; font-size:1.2rem; border:none; cursor:pointer;">
+                        確認送出問卷
+                    </button>
+
+                    <!-- 返回活動首頁 -->
+                    <div style="text-align:center; margin-top:20px;">
+                        <a onclick="switchView('home')" class="back-link">
+                            <i class="fa-solid fa-arrow-left"></i> 返回活動首頁
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Maintenance View (年終掃除應援保養) -->
+    <div id="maintenance-view" class="view-section" style="padding: 120px 0 50px;">
+        <div class="container">
+            <!-- 標題區塊 -->
+            <div class="register-header-wrap">
+                <h2 class="section-title">年終掃除應援保養</h2>
+                <p style="margin-top:1rem; color:#666;">填寫表單後，我們將由專人致電為您安排冷氣維護保養服務</p>
+            </div>
+
+            <div class="form-card" style="max-width:800px; margin:0 auto; background: transparent; box-shadow: none; border: none; padding: 0;">
+                <form id="maintenanceForm" onsubmit="handleMaintenanceSubmit(event)">
+
+                    <!-- Error Message -->
+                    <div id="maintenanceErrorMsg" class="error-msg" style="margin-top:20px;">
+                        <i class="fa-solid fa-circle-exclamation"></i>
+                        <span id="maintenanceErrorText">請檢查表單欄位是否正確填寫</span>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="input-group">
+                            <label class="form-label">姓名 *</label>
+                            <input type="text" name="name" class="input-field" placeholder="請輸入您的姓名" required>
+                            <span class="error-text">請輸入姓名</span>
+                        </div>
+                        <div class="input-group">
+                            <label class="form-label">電話 *</label>
+                            <input type="tel" name="phone" class="input-field" placeholder="0912345678 或 09xx-xxx-xxx"
+                                pattern="[0-9]{10}|[0-9]{4}-[0-9]{3}-[0-9]{3}" required>
+                            <span class="error-text">請輸入正確的手機號碼格式（10位數字或 09xx-xxx-xxx）</span>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="input-group">
+                            <label class="form-label">縣市 *</label>
+                            <div class="select-wrapper" style="position: relative;">
+                                <input type="text" id="maintenanceCitySearch" class="input-field" placeholder="輸入關鍵字搜尋縣市..." 
+                                    autocomplete="off" oninput="filterMaintenanceCityOptions()" onfocus="showMaintenanceCityDropdown()">
+                                <i class="fa-solid fa-chevron-down select-arrow" style="pointer-events: none;"></i>
+                                <div id="maintenanceCityDropdown" class="city-dropdown" style="display: none;">
+                                    <div class="city-option" onclick="selectMaintenanceCity('台北市')">台北市</div>
+                                    <div class="city-option" onclick="selectMaintenanceCity('新北市')">新北市</div>
+                                    <div class="city-option" onclick="selectMaintenanceCity('桃園市')">桃園市</div>
+                                    <div class="city-option" onclick="selectMaintenanceCity('台中市')">台中市</div>
+                                    <div class="city-option" onclick="selectMaintenanceCity('台南市')">台南市</div>
+                                    <div class="city-option" onclick="selectMaintenanceCity('高雄市')">高雄市</div>
+                                    <div class="city-option" onclick="selectMaintenanceCity('基隆市')">基隆市</div>
+                                    <div class="city-option" onclick="selectMaintenanceCity('新竹市')">新竹市</div>
+                                    <div class="city-option" onclick="selectMaintenanceCity('嘉義市')">嘉義市</div>
+                                    <div class="city-option" onclick="selectMaintenanceCity('新竹縣')">新竹縣</div>
+                                    <div class="city-option" onclick="selectMaintenanceCity('苗栗縣')">苗栗縣</div>
+                                    <div class="city-option" onclick="selectMaintenanceCity('彰化縣')">彰化縣</div>
+                                    <div class="city-option" onclick="selectMaintenanceCity('南投縣')">南投縣</div>
+                                    <div class="city-option" onclick="selectMaintenanceCity('雲林縣')">雲林縣</div>
+                                    <div class="city-option" onclick="selectMaintenanceCity('嘉義縣')">嘉義縣</div>
+                                    <div class="city-option" onclick="selectMaintenanceCity('屏東縣')">屏東縣</div>
+                                    <div class="city-option" onclick="selectMaintenanceCity('宜蘭縣')">宜蘭縣</div>
+                                    <div class="city-option" onclick="selectMaintenanceCity('花蓮縣')">花蓮縣</div>
+                                    <div class="city-option" onclick="selectMaintenanceCity('台東縣')">台東縣</div>
+                                    <div class="city-option" onclick="selectMaintenanceCity('澎湖縣')">澎湖縣</div>
+                                    <div class="city-option" onclick="selectMaintenanceCity('金門縣')">金門縣</div>
+                                    <div class="city-option" onclick="selectMaintenanceCity('連江縣')">連江縣</div>
+                                </div>
+                                <input type="hidden" name="city" id="maintenanceCityValue" required>
+                            </div>
+                            <span class="error-text">請選擇縣市</span>
+                        </div>
+                    </div>
+
+                    <!-- Success Message -->
+                    <div id="maintenanceSuccessMsg" class="success-msg" style="margin-top:20px;">
+                        <i class="fa-solid fa-circle-check"></i>
+                        <span>表單已成功送出！我們將由專人致電為您安排冷氣維護保養服務，請留意來電。</span>
+                    </div>
+
+                    <button type="submit" id="maintenanceSubmitBtn" class="nav-btn-cta btn-shine"
+                        style="width:100%; justify-content:center; padding:1.2rem; margin-top:2rem; font-size:1.2rem; border:none; cursor:pointer;">
+                        確認送出表單
+                    </button>
+
+                    <!-- 返回活動首頁 -->
                     <div style="text-align:center; margin-top:20px;">
                         <a onclick="switchView('home')" class="back-link">
                             <i class="fa-solid fa-arrow-left"></i> 返回活動首頁
@@ -2904,31 +3316,142 @@
                 <h2 class="section-title">注意事項</h2>
             </div>
 
-            <div class="notice-grid" data-aos="fade-up">
-                <div class="notice-card">
-                    <div class="notice-title">
-                        <i class="fa-solid fa-circle-info"></i> 注意事項
+            <div class="notice-grid" data-aos="fade-up" style="grid-template-columns: 1fr 1fr; gap: 2rem; max-width: 1200px; margin: 0 auto;">
+                <!-- 左欄：活動相關資訊 -->
+                <div class="notice-card" style="text-align: left;">
+                    <div class="notice-title" style="justify-content: flex-start; margin-bottom: 1.5rem;">
+                        <i class="fa-solid fa-circle-info"></i> 活動注意事項
                     </div>
-                    <ul class="notice-list">
-                        <li>須於活動期間購買指定機型並完成回函登錄。</li>
-                        <li>需上傳符合規範的發票/收據與保固卡照片。</li>
-                        <li>若資料未填完整或資訊填錯，將視為不符合資格。</li>
-                        <li>活動須依公告辦理，主辦單位保有變動權限。</li>
-                        <li>發票/收據需能清楚辨識購買日期、機型與店家資訊。</li>
-                    </ul>
+                    <div style="line-height: 1.7; color: var(--text-main); font-size: 0.95rem;">
+                        <div style="margin-bottom: 1.25rem;">
+                            <p style="margin-bottom: 0.5rem; font-weight: 700; color: var(--primary); font-size: 1rem;">一、活動期間</p>
+                            <p style="margin-bottom: 0; padding-left: 0.5rem; font-size: 0.9rem;">114年12月15日至115年1月23日，須於此期間內購買指定機型並完成回函登錄。</p>
+                        </div>
+
+                        <div style="margin-bottom: 1.25rem;">
+                            <p style="margin-bottom: 0.5rem; font-weight: 700; color: var(--primary); font-size: 1rem;">二、參加資格</p>
+                            <ul class="notice-list" style="padding-left: 1rem; margin: 0; font-size: 0.9rem;">
+                                <li>購買活動指定機型產品</li>
+                                <li>於購買後 30 天內完成回函登錄</li>
+                                <li>上傳完整且清晰的憑證照片</li>
+                                <li>填寫完整且正確的登錄資料</li>
+                            </ul>
+                        </div>
+
+                        <div style="margin-bottom: 1.25rem;">
+                            <p style="margin-bottom: 0.5rem; font-weight: 700; color: var(--primary); font-size: 1rem;">三、登錄方式</p>
+                            <p style="margin-bottom: 0; padding-left: 0.5rem; font-size: 0.9rem;">請至活動網站填寫回函登錄表單，並上傳必備憑證照片。登錄截止日期為購買後 30 天內。</p>
+                        </div>
+
+                        <div style="margin-bottom: 1.25rem;">
+                            <p style="margin-bottom: 0.5rem; font-weight: 700; color: var(--primary); font-size: 1rem;">四、贈品發放</p>
+                            <p style="margin-bottom: 0; padding-left: 0.5rem; font-size: 0.9rem;">審核通過後，全聯禮券將於 15 個工作天內以掛號郵件方式寄送。審核期間約 10 個工作天。</p>
+                        </div>
+
+                        <div style="margin-bottom: 1.25rem;">
+                            <p style="margin-bottom: 0.5rem; font-weight: 700; color: var(--primary); font-size: 1rem;">五、注意事項</p>
+                            <ul class="notice-list" style="padding-left: 1rem; margin: 0; font-size: 0.9rem;">
+                                <li>發票/收據需能清楚辨識購買日期、機型、金額與店家資訊</li>
+                                <li>憑證照片需清晰可辨識，檔案格式支援 JPG、PNG，檔案大小不超過 5MB</li>
+                                <li>若資料未填完整或資訊填錯，將視為不符合資格</li>
+                                <li>若提交之憑證內容不實，主辦單位得依相關規範撤銷其參與資格</li>
+                                <li>禮券寄送地址請務必填寫正確</li>
+                            </ul>
+                        </div>
+
+                        <div style="margin-bottom: 1.25rem;">
+                            <p style="margin-bottom: 0.5rem; font-weight: 700; color: var(--accent); font-size: 1rem;">六、不符合資格之情況</p>
+                            <ul class="notice-list notice-bad-list" style="padding-left: 1rem; margin: 0; font-size: 0.9rem;">
+                                <li>非活動期間購買</li>
+                                <li>非活動指定機型或非指定通路購買</li>
+                                <li>未上傳發票/收據或影像不清、資訊不足</li>
+                                <li>回函資料未填寫完整或資料有誤</li>
+                                <li>超過購買後 30 天期限才完成登錄</li>
+                                <li>專案/特案優惠、公關品或贈品等非一般消費購買</li>
+                                <li>使用偽造或他人憑證</li>
+                            </ul>
+                        </div>
+
+                        <div style="margin-bottom: 0;">
+                            <p style="margin-bottom: 0.5rem; font-weight: 700; color: var(--primary); font-size: 1rem;">七、其他條款</p>
+                            <ul class="notice-list" style="padding-left: 1rem; margin: 0; font-size: 0.9rem;">
+                                <li>本活動僅限台灣地區（含離島）消費者參加</li>
+                                <li>同一人可購買多台指定機型並分別登錄</li>
+                                <li>冰點空調冷氣股份有限公司保有變更、修改或終止本活動之權利</li>
+                                <li>如有任何爭議，冰點空調冷氣股份有限公司保有最終解釋權</li>
+                                <li>參加本活動即視為同意遵守上述所有規定</li>
+                            </ul>
+                        </div>
+                    </div>
                 </div>
 
-                <div class="notice-card bad">
-                    <div class="notice-title">
-                        <i class="fa-solid fa-triangle-exclamation" style="color:var(--accent);"></i> 不符合資格參考
+                <!-- 右欄：個資處理 -->
+                <div class="notice-card" style="text-align: left;">
+                    <div class="notice-title" style="justify-content: flex-start; margin-bottom: 1.5rem;">
+                        <i class="fa-solid fa-shield-halved"></i> 個人資料處理
                     </div>
-                    <ul class="notice-list notice-bad-list">
-                        <li>非活動期間、非指定機型或非指定通路購買。</li>
-                        <li>未上傳發票/收據或影像不清、無店章等資訊不足。</li>
-                        <li>回函資料未填寫完整、未參加活動資料有誤。</li>
-                        <!--<li>回函姓名與收款帳戶戶名不符、使用估價單上傳等。</li>-->
-                        <li>專案/特案優惠、公關品或贈品等非一般消費購買。</li>
-                    </ul>
+                    <div style="line-height: 1.7; color: var(--text-main); font-size: 0.95rem;">
+                        <div style="margin-bottom: 1.25rem;">
+                            <p style="margin-bottom: 0.5rem; font-weight: 700; color: var(--primary); font-size: 1rem;">1. 收集目的</p>
+                            <p style="margin-bottom: 0; padding-left: 0.5rem; font-size: 0.9rem;">為辦理本活動、審核參加資格、寄送贈品、提供客戶服務及進行相關統計分析等目的，將收集、處理及利用您所提供之個人資料。</p>
+                        </div>
+
+                        <div style="margin-bottom: 1.25rem;">
+                            <p style="margin-bottom: 0.5rem; font-weight: 700; color: var(--primary); font-size: 1rem;">2. 資料類別</p>
+                            <p style="margin-bottom: 0; padding-left: 0.5rem; font-size: 0.9rem;">姓名、聯絡電話、電子郵件地址、通訊地址、購買日期、購買機型、購買通路/店家、是否為既有客戶等活動相關資料，以及您上傳之發票、保固書、室外機流水號貼紙、保固卡等憑證照片。</p>
+                        </div>
+
+                        <div style="margin-bottom: 1.25rem;">
+                            <p style="margin-bottom: 0.5rem; font-weight: 700; color: var(--primary); font-size: 1rem;">3. 使用範圍</p>
+                            <ul class="notice-list" style="padding-left: 1rem; margin: 0; font-size: 0.9rem;">
+                                <li><strong>使用期間：</strong>自提供日起至活動結束後法律保存期間屆滿或刪除請求日止</li>
+                                <li><strong>使用地區：</strong>台灣地區（含離島）</li>
+                                <li><strong>使用對象：</strong>冰點空調冷氣股份有限公司及委託第三方服務提供者</li>
+                                <li><strong>使用方式：</strong>以自動化或其他非自動化方式進行處理</li>
+                            </ul>
+                        </div>
+
+                        <div style="margin-bottom: 1.25rem;">
+                            <p style="margin-bottom: 0.5rem; font-weight: 700; color: var(--primary); font-size: 1rem;">4. 保護措施</p>
+                            <p style="margin-bottom: 0; padding-left: 0.5rem; font-size: 0.9rem;">本公司將採取適當之技術及組織安全措施，保護您的個人資料免於未經授權之存取、使用、揭露、變更或銷毀，包括資料加密、存取控制、定期備份等安全機制。</p>
+                        </div>
+
+                        <div style="margin-bottom: 1.25rem;">
+                            <p style="margin-bottom: 0.5rem; font-weight: 700; color: var(--primary); font-size: 1rem;">5. 權利行使</p>
+                            <p style="margin-bottom: 0; padding-left: 0.5rem; font-size: 0.9rem;">您得依個人資料保護法規定行使查詢、閱覽、複製、更正、停止、刪除等權利。如需行使上述權利，請聯絡本公司客服專線或客服信箱。</p>
+                        </div>
+
+                        <div style="margin-bottom: 1.25rem;">
+                            <p style="margin-bottom: 0.5rem; font-weight: 700; color: var(--primary); font-size: 1rem;">6. 提供義務</p>
+                            <p style="margin-bottom: 0; padding-left: 0.5rem; font-size: 0.9rem;">您提供個人資料係屬自願性質，惟若拒絕提供必要之個人資料，或提供之資料不完整、不正確，將可能導致無法參加本活動、無法審核通過、無法寄送贈品等後果。</p>
+                        </div>
+
+                        <div style="margin-bottom: 0;">
+                            <p style="margin-bottom: 0.5rem; font-weight: 700; color: var(--primary); font-size: 1rem;">7. 同意聲明</p>
+                            <p style="margin-bottom: 0; padding-left: 0.5rem; font-size: 0.9rem;">參加本活動並填寫回函登錄表單，即表示您已充分了解並同意冰點空調冷氣股份有限公司依上述目的、方式及範圍，收集、處理、利用及傳輸您的個人資料。如您不同意上述個人資料處理方式，請勿參加本活動。</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 聯絡資訊 -->
+            <div style="max-width: 1200px; margin: 2rem auto 0; text-align: center; padding: 1.5rem; background: white; border-radius: 16px; box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);" class="notice-contact-info">
+                <p style="color: var(--text-light); font-size: 0.9rem; margin-bottom: 0.5rem; font-weight: 600;">主辦單位：冰點空調冷氣股份有限公司</p>
+                <div style="display: flex; justify-content: center; gap: 2rem; flex-wrap: wrap; margin-top: 1rem;" class="notice-contact-links">
+                    <div style="font-size: 0.9rem; color: var(--text-main);">
+                        <i class="fa-solid fa-phone" style="color: var(--primary); margin-right: 0.5rem;"></i>
+                        <a href="tel:0800-026-568" style="color: var(--primary); text-decoration: none;">0800-026-568</a>
+                        <span style="color: var(--text-light); margin-left: 0.5rem;">（週一至週五 08:30-17:00）</span>
+                    </div>
+                    <div style="font-size: 0.9rem; color: var(--text-main);">
+                        <i class="fa-brands fa-line" style="color: var(--success); margin-right: 0.5rem;"></i>
+                        <span>LINE：</span>
+                        <a href="https://line.me/ti/p/~@447uompo" target="_blank" style="color: var(--primary); text-decoration: none;">@bingdian</a>
+                    </div>
+                    <div style="font-size: 0.9rem; color: var(--text-main);">
+                        <i class="fa-solid fa-envelope" style="color: var(--accent); margin-right: 0.5rem;"></i>
+                        <a href="mailto:bd_im@bingdian.com.tw" style="color: var(--primary); text-decoration: none;">bd_im@bingdian.com.tw</a>
+                    </div>
                 </div>
             </div>
 
@@ -3021,9 +3544,16 @@
                 document.getElementById('offices-view').classList.add('active');
                 window.scrollTo(0, 0);
                 setTimeout(() => AOS.refresh(), 200);
+            } else if (viewId === 'survey') {
+                document.getElementById('survey-view').classList.add('active');
+                window.scrollTo(0, 0);
+            } else if (viewId === 'maintenance') {
+                document.getElementById('maintenance-view').classList.add('active');
+                window.scrollTo(0, 0);
             } else {
                 document.getElementById('register-view').classList.add('active');
                 window.scrollTo(0, 0);
+                setTimeout(() => AOS.refresh(), 200);
             }
         }
 
@@ -3587,10 +4117,388 @@
                 });
                 applyModelFilter();
             }
+
+            // 城市下拉選單功能
+            window.filterCityOptions = function () {
+                const searchInput = document.getElementById('citySearch');
+                const dropdown = document.getElementById('cityDropdown');
+                const searchTerm = searchInput.value.toLowerCase();
+                const options = dropdown.querySelectorAll('.city-option');
+
+                options.forEach(option => {
+                    const cityName = option.textContent.toLowerCase();
+                    if (cityName.includes(searchTerm)) {
+                        option.classList.remove('hidden');
+                    } else {
+                        option.classList.add('hidden');
+                    }
+                });
+
+                if (searchTerm) {
+                    showCityDropdown();
+                }
+            }
+
+            window.showCityDropdown = function () {
+                const dropdown = document.getElementById('cityDropdown');
+                dropdown.style.display = 'block';
+            }
+
+            window.selectCity = function (cityName) {
+                const searchInput = document.getElementById('citySearch');
+                const cityValue = document.getElementById('cityValue');
+                const dropdown = document.getElementById('cityDropdown');
+                
+                searchInput.value = cityName;
+                cityValue.value = cityName;
+                dropdown.style.display = 'none';
+
+                // 清除錯誤狀態
+                const inputGroup = searchInput.closest('.input-group');
+                if (inputGroup) {
+                    inputGroup.classList.remove('error');
+                    searchInput.classList.remove('error');
+                    searchInput.classList.add('valid');
+                }
+            }
+
+            // 點擊外部關閉下拉選單
+            document.addEventListener('click', function(e) {
+                const citySearch = document.getElementById('citySearch');
+                const cityDropdown = document.getElementById('cityDropdown');
+                if (citySearch && cityDropdown && 
+                    !citySearch.contains(e.target) && 
+                    !cityDropdown.contains(e.target)) {
+                    cityDropdown.style.display = 'none';
+                }
+            });
+
+            // 問卷表單驗證
+            window.validateSurveyForm = function () {
+                const form = document.getElementById('surveyForm');
+                const name = form.querySelector('input[name="name"]');
+                const phone = form.querySelector('input[name="phone"]');
+                const city = document.getElementById('cityValue');
+                const model = form.querySelector('input[name="model"]');
+                let isValid = true;
+
+                // 清除之前的驗證狀態
+                [name, phone, model].forEach(input => {
+                    if (input) {
+                        input.classList.remove('error', 'valid');
+                        input.closest('.input-group')?.classList.remove('error');
+                    }
+                });
+
+                // 驗證姓名
+                if (!name.value.trim()) {
+                    name.classList.add('error');
+                    name.closest('.input-group').classList.add('error');
+                    isValid = false;
+                } else {
+                    name.classList.add('valid');
+                }
+
+                // 驗證電話
+                const phonePattern = /^[0-9]{10}$|^[0-9]{4}-[0-9]{3}-[0-9]{3}$/;
+                const phoneValue = phone.value.replace(/\s/g, '');
+                if (!phonePattern.test(phoneValue)) {
+                    phone.classList.add('error');
+                    phone.closest('.input-group').classList.add('error');
+                    isValid = false;
+                } else {
+                    phone.classList.add('valid');
+                }
+
+                // 驗證城市
+                if (!city.value) {
+                    const cityInput = document.getElementById('citySearch');
+                    cityInput.classList.add('error');
+                    cityInput.closest('.input-group').classList.add('error');
+                    isValid = false;
+                } else {
+                    const cityInput = document.getElementById('citySearch');
+                    cityInput.classList.add('valid');
+                }
+
+                // 驗證機型
+                if (!model.value.trim()) {
+                    model.classList.add('error');
+                    model.closest('.input-group').classList.add('error');
+                    isValid = false;
+                } else {
+                    model.classList.add('valid');
+                }
+
+                return isValid;
+            }
+
+            // 問卷表單提交
+            window.handleSurveySubmit = function (e) {
+                e.preventDefault();
+
+                // 隱藏之前的錯誤訊息
+                document.getElementById('surveyErrorMsg').style.display = 'none';
+
+                // 驗證表單
+                if (!validateSurveyForm()) {
+                    document.getElementById('surveyErrorMsg').style.display = 'flex';
+                    document.getElementById('surveyErrorText').textContent = '請檢查表單欄位是否正確填寫';
+                    // 滾動到第一個錯誤欄位
+                    const firstError = document.querySelector('#surveyForm .input-field.error');
+                    if (firstError) {
+                        firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        firstError.focus();
+                    }
+                    return;
+                }
+
+                const btn = document.getElementById('surveySubmitBtn');
+                const successMsg = document.getElementById('surveySuccessMsg');
+                const form = document.getElementById('surveyForm');
+
+                btn.classList.add('loading');
+                btn.innerHTML = '<i class="fa-solid fa-spinner"></i> 資料傳送中...';
+                btn.disabled = true;
+
+                // 這裡可以添加實際的表單提交邏輯（例如發送到後端API）
+                setTimeout(() => {
+                    btn.classList.remove('loading');
+                    btn.innerHTML = '確認送出問卷';
+                    btn.disabled = false;
+                    successMsg.style.display = 'flex';
+
+                    // 3秒後返回首頁
+                    setTimeout(() => {
+                        switchView('home');
+                        successMsg.style.display = 'none';
+                        form.reset();
+                        document.getElementById('cityValue').value = '';
+                        // 清除驗證狀態
+                        form.querySelectorAll('.input-field').forEach(input => {
+                            input.classList.remove('error', 'valid');
+                            input.closest('.input-group')?.classList.remove('error');
+                        });
+                    }, 3000);
+                }, 1500);
+            }
+
+            // 問卷表單電話號碼格式化
+            const surveyForm = document.getElementById('surveyForm');
+            if (surveyForm) {
+                const surveyPhoneInput = surveyForm.querySelector('input[name="phone"]');
+                if (surveyPhoneInput) {
+                    surveyPhoneInput.addEventListener('input', function (e) {
+                        let value = e.target.value.replace(/\D/g, '');
+                        if (value.length > 0) {
+                            if (value.length <= 4) {
+                                value = value;
+                            } else if (value.length <= 7) {
+                                value = value.slice(0, 4) + '-' + value.slice(4);
+                            } else {
+                                value = value.slice(0, 4) + '-' + value.slice(4, 7) + '-' + value.slice(7, 10);
+                            }
+                        }
+                        e.target.value = value;
+                    });
+                }
+            }
+
+            // 在新分頁打開活動機型
+            window.openModelsInNewTab = function () {
+                const url = window.location.href.split('#')[0];
+                const newWindow = window.open(url + '?view=models', '_blank');
+                // 使用localStorage傳遞信息
+                localStorage.setItem('openModelsSection', 'true');
+            }
+
+            // 檢查是否需要打開機型區塊
+            if (localStorage.getItem('openModelsSection') === 'true') {
+                localStorage.removeItem('openModelsSection');
+                setTimeout(() => {
+                    switchView('home', 'models');
+                }, 500);
+            }
+
+            // 保養表單城市下拉選單功能
+            window.filterMaintenanceCityOptions = function () {
+                const searchInput = document.getElementById('maintenanceCitySearch');
+                const dropdown = document.getElementById('maintenanceCityDropdown');
+                const searchTerm = searchInput.value.toLowerCase();
+                const options = dropdown.querySelectorAll('.city-option');
+
+                options.forEach(option => {
+                    const cityName = option.textContent.toLowerCase();
+                    if (cityName.includes(searchTerm)) {
+                        option.classList.remove('hidden');
+                    } else {
+                        option.classList.add('hidden');
+                    }
+                });
+
+                if (searchTerm) {
+                    showMaintenanceCityDropdown();
+                }
+            }
+
+            window.showMaintenanceCityDropdown = function () {
+                const dropdown = document.getElementById('maintenanceCityDropdown');
+                dropdown.style.display = 'block';
+            }
+
+            window.selectMaintenanceCity = function (cityName) {
+                const searchInput = document.getElementById('maintenanceCitySearch');
+                const cityValue = document.getElementById('maintenanceCityValue');
+                const dropdown = document.getElementById('maintenanceCityDropdown');
+                
+                searchInput.value = cityName;
+                cityValue.value = cityName;
+                dropdown.style.display = 'none';
+
+                // 清除錯誤狀態
+                const inputGroup = searchInput.closest('.input-group');
+                if (inputGroup) {
+                    inputGroup.classList.remove('error');
+                    searchInput.classList.remove('error');
+                    searchInput.classList.add('valid');
+                }
+            }
+
+            // 點擊外部關閉保養表單城市下拉選單
+            document.addEventListener('click', function(e) {
+                const citySearch = document.getElementById('maintenanceCitySearch');
+                const cityDropdown = document.getElementById('maintenanceCityDropdown');
+                if (citySearch && cityDropdown && 
+                    !citySearch.contains(e.target) && 
+                    !cityDropdown.contains(e.target)) {
+                    cityDropdown.style.display = 'none';
+                }
+            });
+
+            // 保養表單驗證
+            window.validateMaintenanceForm = function () {
+                const form = document.getElementById('maintenanceForm');
+                const name = form.querySelector('input[name="name"]');
+                const phone = form.querySelector('input[name="phone"]');
+                const city = document.getElementById('maintenanceCityValue');
+                let isValid = true;
+
+                // 清除之前的驗證狀態
+                [name, phone].forEach(input => {
+                    if (input) {
+                        input.classList.remove('error', 'valid');
+                        input.closest('.input-group')?.classList.remove('error');
+                    }
+                });
+
+                // 驗證姓名
+                if (!name.value.trim()) {
+                    name.classList.add('error');
+                    name.closest('.input-group').classList.add('error');
+                    isValid = false;
+                } else {
+                    name.classList.add('valid');
+                }
+
+                // 驗證電話
+                const phonePattern = /^[0-9]{10}$|^[0-9]{4}-[0-9]{3}-[0-9]{3}$/;
+                const phoneValue = phone.value.replace(/\s/g, '');
+                if (!phonePattern.test(phoneValue)) {
+                    phone.classList.add('error');
+                    phone.closest('.input-group').classList.add('error');
+                    isValid = false;
+                } else {
+                    phone.classList.add('valid');
+                }
+
+                // 驗證城市
+                if (!city.value) {
+                    const cityInput = document.getElementById('maintenanceCitySearch');
+                    cityInput.classList.add('error');
+                    cityInput.closest('.input-group').classList.add('error');
+                    isValid = false;
+                } else {
+                    const cityInput = document.getElementById('maintenanceCitySearch');
+                    cityInput.classList.add('valid');
+                }
+
+                return isValid;
+            }
+
+            // 保養表單提交
+            window.handleMaintenanceSubmit = function (e) {
+                e.preventDefault();
+
+                // 隱藏之前的錯誤訊息
+                document.getElementById('maintenanceErrorMsg').style.display = 'none';
+
+                // 驗證表單
+                if (!validateMaintenanceForm()) {
+                    document.getElementById('maintenanceErrorMsg').style.display = 'flex';
+                    document.getElementById('maintenanceErrorText').textContent = '請檢查表單欄位是否正確填寫';
+                    // 滾動到第一個錯誤欄位
+                    const firstError = document.querySelector('#maintenanceForm .input-field.error');
+                    if (firstError) {
+                        firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        firstError.focus();
+                    }
+                    return;
+                }
+
+                const btn = document.getElementById('maintenanceSubmitBtn');
+                const successMsg = document.getElementById('maintenanceSuccessMsg');
+                const form = document.getElementById('maintenanceForm');
+
+                btn.classList.add('loading');
+                btn.innerHTML = '<i class="fa-solid fa-spinner"></i> 資料傳送中...';
+                btn.disabled = true;
+
+                // 這裡可以添加實際的表單提交邏輯（例如發送到後端API）
+                setTimeout(() => {
+                    btn.classList.remove('loading');
+                    btn.innerHTML = '確認送出表單';
+                    btn.disabled = false;
+                    successMsg.style.display = 'flex';
+
+                    // 3秒後返回首頁
+                    setTimeout(() => {
+                        switchView('home');
+                        successMsg.style.display = 'none';
+                        form.reset();
+                        document.getElementById('maintenanceCityValue').value = '';
+                        // 清除驗證狀態
+                        form.querySelectorAll('.input-field').forEach(input => {
+                            input.classList.remove('error', 'valid');
+                            input.closest('.input-group')?.classList.remove('error');
+                        });
+                    }, 3000);
+                }, 1500);
+            }
+
+            // 保養表單電話號碼格式化
+            const maintenanceForm = document.getElementById('maintenanceForm');
+            if (maintenanceForm) {
+                const maintenancePhoneInput = maintenanceForm.querySelector('input[name="phone"]');
+                if (maintenancePhoneInput) {
+                    maintenancePhoneInput.addEventListener('input', function (e) {
+                        let value = e.target.value.replace(/\D/g, '');
+                        if (value.length > 0) {
+                            if (value.length <= 4) {
+                                value = value;
+                            } else if (value.length <= 7) {
+                                value = value.slice(0, 4) + '-' + value.slice(4);
+                            } else {
+                                value = value.slice(0, 4) + '-' + value.slice(4, 7) + '-' + value.slice(7, 10);
+                            }
+                        }
+                        e.target.value = value;
+                    });
+                }
+            }
         });
 
         // 10. 倒數計時器（包含秒數）
-        const countDownDate = new Date("Dec 31, 2025 23:59:59").getTime();
+        const countDownDate = new Date("Jan 23, 2026 23:59:59").getTime();
         const timer = setInterval(function () {
             const now = new Date().getTime();
             const distance = countDownDate - now;
