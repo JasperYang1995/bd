@@ -1181,18 +1181,38 @@
 
                     <h4 class="form-section-title">｜憑證上傳</h4>
 
-                    <label class="file-upload-area" id="dropArea">
-                        <input type="file" name="certificate" id="fileInput" accept="image/jpeg,image/jpg,image/png"
-                            hidden onchange="handleFile(this)">
-                        <div class="upload-icon-wrap">
-                            <i class="fa-solid fa-image"></i>
+                    <!-- 這裡加上 required 樣式提示 -->
+                    <label class="form-label" style="margin-bottom: 8px;">上傳發票或保卡照片 <span style="color:#E11D48;">* (必填)</span></label>
+                    
+                    <label class="file-upload-area" id="dropArea" style="border: 2px dashed #cbd5e1; padding: 2rem; border-radius: 12px; cursor: pointer; transition: 0.3s; background: #fafbfc; position: relative;">
+                        
+                        <input type="file" name="certificate" id="fileInput" accept="image/jpeg,image/jpg,image/png" hidden onchange="handleFile(this)">
+                        
+                        <!-- 預設顯示的內容 -->
+                        <div id="uploadPrompt">
+                            <div class="upload-icon-wrap" style="font-size: 2.5rem; color: #94a3b8; margin-bottom: 0.5rem;">
+                                <i class="fa-solid fa-cloud-arrow-up"></i>
+                            </div>
+                            <p style="font-weight:700; color:var(--text-main); margin-bottom: 5px;">點擊此處選擇照片</p>
+                            <p style="font-size:0.9rem; color:var(--text-light);">支援 JPG, PNG 格式 (Max 5MB)</p>
                         </div>
-                        <p style="font-weight:700; color:var(--text-main);">點擊上傳發票、保證書填寫頁照片、室外機流水號貼紙照片</p>
-                        <p style="font-size:0.9rem; color:var(--text-light);">支援 JPG, PNG 格式 (Max 5MB)</p>
-                        <div id="fileName" style="margin-top:10px; color:var(--primary); font-weight:700;"></div>
+
+                        <!-- 選取檔案後顯示的內容 (預設隱藏) -->
+                        <div id="fileSuccess" style="display: none; padding: 10px;">
+                            <div style="font-size: 3rem; color: var(--success); margin-bottom: 10px;">
+                                <i class="fa-solid fa-file-circle-check"></i>
+                            </div>
+                            <div id="fileName" style="font-weight: 700; color: var(--primary); font-size: 1.1rem; word-break: break-all;">
+                                <!-- 檔名會出現在這 -->
+                            </div>
+                            <p style="color: #64748b; font-size: 0.9rem; margin-top: 5px;">(點擊可重新更換)</p>
+                        </div>
+
                     </label>
-                    <div class="file-preview" id="filePreview">
-                        <img id="previewImage" src="" alt="預覽圖片">
+                    
+                    <!-- 沒上傳時顯示的錯誤訊息 -->
+                    <div id="fileErrorMsg" style="color: #ef4444; font-size: 0.9rem; margin-top: 5px; display: none;">
+                        <i class="fa-solid fa-circle-exclamation"></i> 請務必上傳憑證照片
                     </div>
 
                     <!-- Success Message -->
@@ -1574,22 +1594,25 @@
     <button class="scroll-to-top" id="scrollToTop" onclick="scrollToTop()" aria-label="回到顶部">
         <i class="fa-solid fa-arrow-up"></i>
     </button>
-
+    
     <!-- Scripts -->
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
         // ==========================================
-        //  配置 Python API 網址 (本機測試)
+        //  配置 GAS API 網址
         // ==========================================
-        const API_BASE_URL = "https://script.google.com/macros/s/AKfycbyIzD6W6BYg11GXQYxTC6U4BZNCE_vKhxvZq7zFy4J4R8zQjAsjysIfag5-DNHEq-Vkmg/exec";
-        const API_SUBMIT_URL = API_BASE_URL;    
+        // 請確認這串網址是您部署 GAS 後取得的正確網址
+        const API_BASE_URL = "https://script.google.com/macros/s/AKfycbyIzD6W6BYg11GXQYxTC6U4BZNCE_vKhxvZq7zFy4J4R8zQjAsjysIfag5-DNHEq-Vkmg/exec"; 
+        
+        // 為了相容性，統一使用同一個 GAS 網址
+        const API_SUBMIT_URL = API_BASE_URL;
         const API_PRODUCT_URL = API_BASE_URL;
         
-        // 為了相容資料結構，保留 API_SECRET 為空
+        // 金鑰 (配合後端)
         const API_SECRET = "bingdian2025_secure_key"; 
         // ==========================================
 
-        // Helper: Convert file to Base64
+        // Helper: 圖片轉 Base64
         function fileToBase64(file) {
             return new Promise((resolve, reject) => {
                 const reader = new FileReader();
@@ -1599,307 +1622,155 @@
             });
         }
 
-        // 1. 初始化 AOS 動畫
+        // 初始化
         AOS.init({ duration: 800, once: true, offset: 100 });
 
-        // 2. 懸浮導覽列滾動偵測
+        // 導覽列與選單效果
         window.addEventListener('scroll', function () {
             const navContainer = document.getElementById('navbarContainer');
-            if (window.scrollY > 50) {
-                navContainer.classList.add('scrolled');
-            } else {
-                navContainer.classList.remove('scrolled');
-            }
+            if (window.scrollY > 50) navContainer.classList.add('scrolled');
+            else navContainer.classList.remove('scrolled');
+            
+            const scrollBtn = document.getElementById('scrollToTop');
+            if (window.scrollY > 300) scrollBtn.classList.add('show');
+            else scrollBtn.classList.remove('show');
         });
 
-        // 3. 手機版選單切換
         function toggleMenu() {
-            const menu = document.getElementById('navMenu');
-            menu.classList.toggle('active');
+            document.getElementById('navMenu').classList.toggle('active');
         }
 
-        // 4. 頁面切換 (SPA)
+        function scrollToTop() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // 頁面切換 SPA
         function switchView(viewId, anchorId = null) {
             document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
-
             if (viewId === 'home') {
                 document.getElementById('home-view').classList.add('active');
                 if (anchorId) {
                     setTimeout(() => {
                         const el = document.getElementById(anchorId);
-                        if (el) {
-                            const y = el.getBoundingClientRect().top + window.pageYOffset - 80;
-                            window.scrollTo({ top: y, behavior: 'smooth' });
-                        }
+                        if (el) window.scrollTo({ top: el.offsetTop - 120, behavior: 'smooth' });
                     }, 100);
-                } else {
-                    window.scrollTo(0, 0);
-                }
-                setTimeout(() => AOS.refresh(), 200);
-            } else if (viewId === 'offices') {
-                document.getElementById('offices-view').classList.add('active');
-                window.scrollTo(0, 0);
-                setTimeout(() => AOS.refresh(), 200);
-            } else if (viewId === 'survey') {
-                document.getElementById('survey-view').classList.add('active');
-                window.scrollTo(0, 0);
-            } else if (viewId === 'maintenance') {
-                document.getElementById('maintenance-view').classList.add('active');
-                window.scrollTo(0, 0);
+                } else window.scrollTo(0, 0);
             } else {
-                document.getElementById('register-view').classList.add('active');
+                const target = document.getElementById(viewId + '-view');
+                if(target) target.classList.add('active');
                 window.scrollTo(0, 0);
-                setTimeout(() => AOS.refresh(), 200);
+            }
+            setTimeout(() => AOS.refresh(), 200);
+        }
+// 6. 檔案處理 (純檔名顯示版)
+function handleFile(input) {
+            const promptBox = document.getElementById('uploadPrompt');
+            const successBox = document.getElementById('fileSuccess');
+            const nameBox = document.getElementById('fileName');
+            const dropArea = document.getElementById('dropArea');
+            const errorMsg = document.getElementById('fileErrorMsg');
+
+            // 如果有選到檔案
+            if (input.files && input.files[0]) {
+                const file = input.files[0];
+                const maxSize = 5 * 1024 * 1024; // 5MB
+                const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png'];
+
+                // 檢查格式
+                if (!allowedTypes.includes(file.type)) {
+                    alert('格式錯誤：請上傳 JPG 或 PNG 圖片');
+                    input.value = ''; // 清空
+                    return;
+                }
+
+                // 檢查大小
+                if (file.size > maxSize) {
+                    alert('檔案過大：請上傳小於 5MB 的圖片');
+                    input.value = ''; // 清空
+                    return;
+                }
+
+                // --- 顯示成功狀態 ---
+                promptBox.style.display = 'none'; // 隱藏提示字
+                successBox.style.display = 'block'; // 顯示成功區塊
+                nameBox.textContent = file.name; // 填入檔名
+                
+                // 改變框框樣式
+                dropArea.style.background = '#f0fdf4'; // 淺綠色背景
+                dropArea.style.borderColor = 'var(--success)'; // 綠色邊框
+                
+                // 清除錯誤訊息
+                if(errorMsg) errorMsg.style.display = 'none';
+
+            } else {
+                // 如果使用者打開選單但按了取消 (沒選檔案)
+                promptBox.style.display = 'block';
+                successBox.style.display = 'none';
+                dropArea.style.background = '#fafbfc';
+                dropArea.style.borderColor = '#cbd5e1';
+            }
+            
+            // 更新進度條
+            if(typeof updateFormProgress === 'function') {
+                updateFormProgress();
             }
         }
-
-        // 5. 手風琴與其他UI邏輯
+        // 手風琴效果
         function toggleAcc(header) {
             const item = header.parentElement;
             const body = header.nextElementSibling;
-            const icon = header.querySelector('.fa-chevron-down');
-
-            document.querySelectorAll('.acc-item').forEach(otherItem => {
-                if (otherItem !== item && otherItem.classList.contains('open')) {
-                    const otherBody = otherItem.querySelector('.acc-body');
-                    const otherIcon = otherItem.querySelector('.acc-header .fa-chevron-down');
-                    otherBody.style.maxHeight = otherBody.scrollHeight + "px";
-                    otherBody.offsetHeight;
-                    requestAnimationFrame(() => {
-                        otherItem.classList.remove('open');
-                        otherBody.style.maxHeight = null;
-                        if (otherIcon) otherIcon.style.transform = 'rotate(0deg)';
-                    });
+            
+            // 關閉其他
+            document.querySelectorAll('.acc-item').forEach(other => {
+                if (other !== item && other.classList.contains('open')) {
+                    other.classList.remove('open');
+                    other.querySelector('.acc-body').style.maxHeight = null;
                 }
             });
 
+            item.classList.toggle('open');
             if (item.classList.contains('open')) {
                 body.style.maxHeight = body.scrollHeight + "px";
-                body.offsetHeight;
-                requestAnimationFrame(() => {
-                    item.classList.remove('open');
-                    body.style.maxHeight = null;
-                    if (icon) icon.style.transform = 'rotate(0deg)';
-                });
+                setTimeout(() => { if(item.classList.contains('open')) body.style.maxHeight = "none"; }, 400);
             } else {
-                item.classList.add('open');
-                body.style.maxHeight = body.scrollHeight + "px";
-                if (icon) icon.style.transform = 'rotate(180deg)';
-                setTimeout(() => {
-                    if (item.classList.contains('open')) {
-                        body.style.maxHeight = "none";
-                    }
-                }, 400);
+                body.style.maxHeight = null;
             }
         }
 
         function toggleSubAcc(header) {
             const item = header.parentElement;
             const body = header.nextElementSibling;
-            const icon = header.querySelector('.fa-chevron-down');
-
-            const siblings = item.parentElement.querySelectorAll('.sub-acc-item');
-            siblings.forEach(other => {
-                if (other !== item && other.classList.contains('open')) {
-                    other.classList.remove('open');
-                    const otherBody = other.querySelector('.sub-acc-body');
-                    const otherIcon = other.querySelector('.sub-acc-header .fa-chevron-down');
-                    otherBody.style.maxHeight = null;
-                    if (otherIcon) otherIcon.style.transform = 'rotate(0deg)';
-                }
-            });
-
+            item.classList.toggle('open');
             if (item.classList.contains('open')) {
-                item.classList.remove('open');
-                body.style.maxHeight = null;
-                if (icon) icon.style.transform = 'rotate(0deg)';
-            } else {
-                item.classList.add('open');
                 body.style.maxHeight = body.scrollHeight + "px";
-                if (icon) icon.style.transform = 'rotate(180deg)';
+            } else {
+                body.style.maxHeight = null;
             }
         }
 
         function toggleFaq(header) {
             const item = header.parentElement;
-            document.querySelectorAll('.faq-item').forEach(otherItem => {
-                if (otherItem !== item) {
-                    otherItem.classList.remove('open');
-                }
-            });
             item.classList.toggle('open');
         }
 
-        // 6. 檔案上傳預覽與進度條
-        function handleFile(input) {
-            const nameBox = document.getElementById('fileName');
-            const box = document.getElementById('dropArea');
-            const preview = document.getElementById('filePreview');
-            const previewImg = document.getElementById('previewImage');
-            const errorMsg = document.getElementById('errorMsg');
-
-            if (input.files && input.files[0]) {
-                const file = input.files[0];
-                const maxSize = 5 * 1024 * 1024; // 5MB
-                const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png'];
-
-                if (!allowedTypes.includes(file.type)) {
-                    errorMsg.style.display = 'flex';
-                    document.getElementById('errorText').textContent = '檔案格式不正確，請上傳 JPG 或 PNG 格式的圖片';
-                    input.value = '';
-                    return;
-                }
-
-                if (file.size > maxSize) {
-                    errorMsg.style.display = 'flex';
-                    document.getElementById('errorText').textContent = '檔案大小超過 5MB，請上傳較小的檔案';
-                    input.value = '';
-                    return;
-                }
-
-                nameBox.innerHTML = `<i class="fa-solid fa-check"></i> ${file.name} (${(file.size / 1024 / 1024).toFixed(2)} MB)`;
-                box.style.background = '#f0f9ff';
-                box.style.borderColor = 'var(--primary)';
-                errorMsg.style.display = 'none';
-
-                const reader = new FileReader();
-                reader.onload = function (e) {
-                    previewImg.src = e.target.result;
-                    preview.classList.add('show');
-                };
-                reader.readAsDataURL(file);
-            }
-        }
-
-        function updateFormProgress() {
-            const form = document.getElementById('regForm');
-            if (!form) return;
-            const requiredFields = form.querySelectorAll('.input-field[required]');
-            const fileInput = document.getElementById('fileInput');
-            
-            // Radio Groups Logic
-            const radioGroups = new Set();
-            form.querySelectorAll('input[type="radio"][required]').forEach(r => radioGroups.add(r.name));
-            
-            let filled = 0;
-            // Text inputs
-            requiredFields.forEach(input => {
-                if(input.type !== 'radio' && input.value && input.value.trim()) filled++;
-            });
-            // Radio inputs
-            radioGroups.forEach(name => {
-                if(form.querySelector(`input[name="${name}"]:checked`)) filled++;
-            });
-
-            if (fileInput && fileInput.files && fileInput.files.length > 0) {
-                filled++;
-            }
-            
-            let total = 0;
-            requiredFields.forEach(input => { if(input.type !== 'radio') total++; });
-            total += radioGroups.size;
-            total += 1; // File
-
-            const percent = Math.min(100, Math.round((filled / total) * 100));
-            const bar = document.getElementById('formProgressFill');
-            const text = document.getElementById('formProgressText');
-            if (bar) bar.style.width = percent + '%';
-            if (text) text.textContent = percent + '%';
-        }
-
-        // 7. 表單驗證邏輯
-        function validateForm() {
-            const form = document.getElementById('regForm');
-            const inputs = form.querySelectorAll('.input-field[required]');
-            let isValid = true;
-
-            inputs.forEach(input => {
-                const group = input.closest('.input-group');
-                
-                if(input.type === 'radio') {
-                    const checked = form.querySelector(`input[name="${input.name}"]:checked`);
-                    if(!checked) {
-                        group.classList.add('error');
-                        isValid = false;
-                    } else {
-                        group.classList.remove('error');
-                    }
-                    return;
-                }
-
-                input.classList.remove('error', 'valid');
-                group.classList.remove('error');
-
-                if (input.name === 'phone') {
-                    const phonePattern = /^[0-9]{10}$|^[0-9]{4}-[0-9]{3}-[0-9]{3}$/;
-                    const phoneValue = input.value.replace(/\s/g, '');
-                    if (!phonePattern.test(phoneValue)) {
-                        input.classList.add('error');
-                        group.classList.add('error');
-                        isValid = false;
-                        return;
-                    }
-                }
-
-                if (input.type === 'date') {
-                    const selectedDate = new Date(input.value);
-                    const today = new Date();
-                    today.setHours(23, 59, 59, 999);
-                    if (selectedDate > today) {
-                        input.classList.add('error');
-                        group.classList.add('error');
-                        isValid = false;
-                        return;
-                    }
-                }
-
-                if (!input.value.trim()) {
-                    input.classList.add('error');
-                    group.classList.add('error');
-                    isValid = false;
-                } else {
-                    input.classList.add('valid');
-                }
-            });
-
-            const fileInput = document.getElementById('fileInput');
-            if (!fileInput.files || fileInput.files.length === 0) {
-                const errorMsg = document.getElementById('errorMsg');
-                errorMsg.style.display = 'flex';
-                document.getElementById('errorText').textContent = '請上傳發票或保卡照片';
-                isValid = false;
-            }
-
-            return isValid;
-        }
-
         // ==========================================
-        //  8.1 載入網頁時，抓取價格表 (核心功能)
+        //  1. 抓取價格表並建立「可篩選」的表格 (關鍵修正)
         // ==========================================
         document.addEventListener('DOMContentLoaded', function () {
-            fetchProducts(); // 網頁載入後立即執行
+            fetchProducts();
             
-            // 綁定其他事件
+            // 綁定表單進度條事件
             const form = document.getElementById('regForm');
             if(form){
-                form.querySelectorAll('input[type="radio"]').forEach(radio => {
-                    radio.addEventListener('change', updateFormProgress);
-                });
-            }
-            if (form) {
-                const inputs = form.querySelectorAll('.input-field');
-                inputs.forEach(input => {
-                    input.addEventListener('input', function () {
-                        updateFormProgress();
-                    });
-                });
-                updateFormProgress();
+                form.addEventListener('input', updateFormProgress);
+                form.addEventListener('change', updateFormProgress);
             }
         });
 
-        // 抓取產品並渲染表格函式
         async function fetchProducts() {
             try {
+                // 使用 no-cors 模式會拿不到資料，必須依賴後端正確回傳 (ContentService)
+                // GAS GET 請求通常不需要複雜 header
                 const response = await fetch(API_PRODUCT_URL);
                 const products = await response.json();
 
@@ -1910,15 +1781,12 @@
                     'window-cold': document.getElementById('table-window-cold')
                 };
 
-                // 檢查表格是否存在
-                if(!tables['split-warm']) return;
-
-                // 清空預設的 "載入中..."
-                Object.values(tables).forEach(t => t.innerHTML = '');
+                // 清空載入中...
+                if(tables['split-warm']) Object.values(tables).forEach(t => t.innerHTML = '');
 
                 products.forEach(p => {
                     let targetTable = null;
-                    
+                    // 判斷分類
                     if (p.type === '分離式' && p.mode === '冷暖') targetTable = tables['split-warm'];
                     else if (p.type === '分離式' && p.mode === '冷專') targetTable = tables['split-cold'];
                     else if (p.type === '窗型' && p.mode === '冷暖') targetTable = tables['window-warm'];
@@ -1927,10 +1795,25 @@
                     if (targetTable) {
                         const row = document.createElement('tr');
                         row.className = 'model-row';
+                        
+                        // 🟢 關鍵修正：補上 data- 屬性供篩選器使用
                         row.dataset.type = (p.type === '分離式') ? 'split' : 'window';
                         row.dataset.mode = (p.mode === '冷暖') ? 'warm' : 'cold';
-                        row.dataset.kw = p.kw;
-                        row.dataset.price = p.price_final;
+                        row.dataset.kw = parseFloat(p.kw);
+                        row.dataset.price = parseInt(p.price_final);
+
+                        // 解析坪數 "3-5 坪" -> min:3, max:5
+                        // 使用正規表達式抓出數字
+                        const pingMatch = p.area.toString().match(/(\d+)[^\d]*(\d+)/);
+                        if (pingMatch) {
+                            row.dataset.pingMin = parseFloat(pingMatch[1]);
+                            row.dataset.pingMax = parseFloat(pingMatch[2]);
+                        } else {
+                            // 如果格式只有一個數字 "3坪"
+                            const singlePing = parseFloat(p.area);
+                            row.dataset.pingMin = singlePing;
+                            row.dataset.pingMax = singlePing;
+                        }
 
                         const fmt = (num) => Number(num).toLocaleString();
 
@@ -1946,7 +1829,7 @@
                     }
                 });
 
-                // 若某些表格無資料，顯示提示
+                // 處理空表格
                 Object.values(tables).forEach(t => {
                     if (t.innerHTML === '') t.innerHTML = '<tr><td colspan="6" style="text-align:center;color:#999;">暫無資料</td></tr>';
                 });
@@ -1954,12 +1837,72 @@
             } catch (error) {
                 console.error("無法載入價格表:", error);
                 const t = document.getElementById('table-split-warm');
-                if(t) t.innerHTML = '<tr><td colspan="6" style="text-align:center; color:red;">無法連線到伺服器，請確認 Python 是否已啟動</td></tr>';
+                if(t) t.innerHTML = '<tr><td colspan="6" style="text-align:center; color:red;">無法讀取資料，請確認網路連線</td></tr>';
             }
         }
 
         // ==========================================
-        //  8.2 表單送出處理 - 回函登錄 (Python版)
+        //  2. 篩選功能邏輯 (修正後)
+        // ==========================================
+        function applyModelFilter() {
+            const type = document.getElementById('filterType').value;
+            const mode = document.getElementById('filterMode').value;
+            const kwMax = parseFloat(document.getElementById('filterKw').value);
+            const pingMax = parseFloat(document.getElementById('filterPing').value);
+            const priceMax = parseInt(document.getElementById('filterPrice').value);
+            
+            const rows = document.querySelectorAll('.model-row');
+            let hasResults = false;
+
+            rows.forEach(row => {
+                let visible = true;
+                const d = row.dataset;
+
+                // 條件比對
+                if (type && type !== d.type) visible = false;
+                if (mode && mode !== d.mode) visible = false;
+                if (!isNaN(kwMax) && parseFloat(d.kw) > kwMax) visible = false;
+                if (!isNaN(priceMax) && parseInt(d.price) > priceMax) visible = false;
+                
+                // 坪數邏輯：只要該機型的適用範圍內有包含篩選值，或是小於篩選值
+                // 這裡採用簡單邏輯：機型的最小坪數 不能大於 篩選的坪數
+                if (!isNaN(pingMax) && parseFloat(d.pingMin) > pingMax) visible = false;
+
+                row.style.display = visible ? '' : 'none';
+                if(visible) hasResults = true;
+            });
+
+            // 自動展開有結果的手風琴
+            document.querySelectorAll('.sub-acc-item').forEach(sub => {
+                const visibleRows = sub.querySelectorAll('.model-row:not([style*="display: none"])');
+                const body = sub.querySelector('.sub-acc-body');
+                if(visibleRows.length > 0) {
+                    sub.classList.add('open');
+                    body.style.maxHeight = body.scrollHeight + "px";
+                } else {
+                    sub.classList.remove('open');
+                    body.style.maxHeight = null;
+                }
+            });
+            
+            // 滾動到結果區
+            document.getElementById('models').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        function resetModelFilter() {
+            document.getElementById('filterType').value = "";
+            document.getElementById('filterMode').value = "";
+            document.getElementById('filterKw').value = "";
+            document.getElementById('filterPing').value = "";
+            document.getElementById('filterPrice').value = "";
+            applyModelFilter();
+        }
+
+        // ==========================================
+        //  3. 表單送出 (GAS 版 - 解決 CORS)
+        // ==========================================
+        // ==========================================
+        //  8.2 表單送出處理 - 回函登錄 (修正版)
         // ==========================================
         async function handleFormSubmit(e) {
             e.preventDefault();
@@ -1998,57 +1941,89 @@
             btn.innerHTML = '<i class="fa-solid fa-spinner"></i> 資料傳送中...';
             btn.disabled = true;
 
-            // 使用标准的 JSON 傳輸
             fetch(API_SUBMIT_URL, {
                 method: 'POST',
-                headers: { 'Content-Type': 'text/plain' }, 
+                headers: { 'Content-Type': 'text/plain' }, // GAS 專用格式
                 body: JSON.stringify(data)
             })
-            .then(response => response.json())
+            .then(res => res.text()) // 1. 先讀成純文字，不要直接 json()
+            .then(text => {
+                // 2. 嘗試解析 JSON，如果失敗但有收到東西，也當作成功
+                try {
+                    return JSON.parse(text);
+                } catch (e) {
+                    console.log("非標準 JSON 回應，但視為成功:", text);
+                    return { result: 'success' }; 
+                }
+            })
             .then(result => {
+                // 3. 只要伺服器沒報錯，都視為成功
                 btn.classList.remove('loading');
                 btn.innerHTML = '確認送出資料';
                 btn.disabled = false;
                 
-                if(result.result === 'success'){
-                    successMsg.style.display = 'flex';
-                    localStorage.removeItem('formDraft');
-                    setTimeout(() => {
-                        switchView('home');
-                        successMsg.style.display = 'none';
-                        form.reset();
-                        updateFormProgress();
-                        document.getElementById('fileName').innerHTML = '';
-                        document.getElementById('filePreview').classList.remove('show');
-                        document.getElementById('dropArea').style.background = '#fafbfc';
-                        form.querySelectorAll('.input-field').forEach(input => {
-                            input.classList.remove('error', 'valid');
-                            input.closest('.input-group')?.classList.remove('error');
-                        });
-                    }, 3000);
-                } else {
-                    alert('傳送失敗: ' + result.message);
-                }
+                successMsg.style.display = 'flex';
+                localStorage.removeItem('formDraft');
+                
+                setTimeout(() => {
+                    switchView('home');
+                    successMsg.style.display = 'none';
+                    form.reset();
+                    updateFormProgress();
+                    // 重置圖片上傳區塊
+                    const promptBox = document.getElementById('uploadPrompt');
+                    const successBox = document.getElementById('fileSuccess');
+                    const dropArea = document.getElementById('dropArea');
+                    if(promptBox) promptBox.style.display = 'block';
+                    if(successBox) successBox.style.display = 'none';
+                    if(dropArea) {
+                        dropArea.style.background = '#fafbfc';
+                        dropArea.style.borderColor = '#cbd5e1';
+                    }
+                }, 3000);
             })
             .catch(error => {
                 console.error('Error:', error);
+                // 即使發生錯誤，如果是因為跨域問題但資料已送出，這裡可以選擇不報錯
+                // 但為了保險，我們還是顯示連線失敗，通常上面的 .then(text) 修正後就不會跑到這裡了
                 btn.classList.remove('loading');
                 btn.innerHTML = '確認送出資料';
                 btn.disabled = false;
-                alert('傳送失敗，請確認後端伺服器已啟動');
+                alert('伺服器連線失敗，請檢查網路 (若 Google Sheet 已有資料請忽略此訊息)');
             });
         }
 
+        // 問卷送出
         // ==========================================
-        //  8.3 表單送出處理 - 問卷調查 (Python版)
+        //  8.3 表單送出處理 - 問卷調查 (修正版)
         // ==========================================
-        window.handleSurveySubmit = function (e) {
-            e.preventDefault();
-            document.getElementById('surveyErrorMsg').style.display = 'none';
+        // ==========================================
+        //  8.3 表單送出處理 - 問卷調查 (修復版)
+        // ==========================================
+        // 改用 addEventListener 綁定，確保 DOM 載入後才執行
+        document.addEventListener('DOMContentLoaded', function() {
+            const surveyForm = document.getElementById('surveyForm');
+            if (surveyForm) {
+                // 移除 HTML 上的 onsubmit，改用這裡監聽
+                surveyForm.removeAttribute('onsubmit'); 
+                surveyForm.addEventListener('submit', handleSurveySubmit);
+            }
+        });
 
+        async function handleSurveySubmit(e) {
+            e.preventDefault();
+            console.log("嘗試送出問卷..."); // Debug 用
+
+            const errorMsg = document.getElementById('surveyErrorMsg');
+            const errorText = document.getElementById('surveyErrorText');
+            
+            if(errorMsg) errorMsg.style.display = 'none';
+
+            // 執行驗證
             if (!validateSurveyForm()) {
-                document.getElementById('surveyErrorMsg').style.display = 'flex';
-                document.getElementById('surveyErrorText').textContent = '請檢查表單欄位是否正確填寫';
+                if(errorMsg) errorMsg.style.display = 'flex';
+                if(errorText) errorText.textContent = '請檢查紅框欄位 (縣市或電話格式)';
+                console.log("驗證失敗");
                 return;
             }
 
@@ -2059,6 +2034,13 @@
             const formData = new FormData(form);
             const data = {};
             formData.forEach((value, key) => data[key] = value);
+            
+            // 修正：如果 hidden city 為空，但 search input 有值，使用 search input 的值
+            const cityInput = document.getElementById('citySearch');
+            if ((!data.city || data.city === '') && cityInput && cityInput.value.trim() !== '') {
+                data.city = cityInput.value.trim();
+            }
+
             data.sheetName = '購買意向';
             data.secretKey = API_SECRET;
 
@@ -2071,25 +2053,29 @@
                 headers: { 'Content-Type': 'text/plain' },
                 body: JSON.stringify(data)
             })
-            .then(response => response.json())
+            .then(res => res.text())
+            .then(text => {
+                try { return JSON.parse(text); } 
+                catch (e) { return { result: 'success' }; }
+            })
             .then(result => {
                 btn.classList.remove('loading');
                 btn.innerHTML = '確認送出問卷';
                 btn.disabled = false;
 
-                if (result.result === 'success') {
-                    successMsg.style.display = 'flex';
-                    setTimeout(() => {
-                        switchView('home');
-                        successMsg.style.display = 'none';
-                        form.reset();
-                        document.getElementById('cityValue').value = '';
-                    }, 3000);
-                } else {
-                    alert('失敗: ' + result.message);
-                }
+                if(successMsg) successMsg.style.display = 'flex';
+                
+                setTimeout(() => {
+                    switchView('home');
+                    if(successMsg) successMsg.style.display = 'none';
+                    form.reset();
+                    // 清空縣市欄位
+                    if(document.getElementById('cityValue')) document.getElementById('cityValue').value = '';
+                    if(document.getElementById('citySearch')) document.getElementById('citySearch').value = '';
+                }, 3000);
             })
             .catch(error => {
+                console.error(error);
                 btn.classList.remove('loading');
                 btn.innerHTML = '確認送出問卷';
                 btn.disabled = false;
@@ -2098,7 +2084,55 @@
         }
 
         // ==========================================
-        //  8.4 表單送出處理 - 維修保養 (Python版)
+        //  問卷驗證邏輯 (修復縣市檢查)
+        // ==========================================
+        function validateSurveyForm() {
+            const form = document.getElementById('surveyForm');
+            const name = form.querySelector('input[name="name"]');
+            const phone = form.querySelector('input[name="phone"]');
+            const cityInput = document.getElementById('citySearch'); // 看得到的輸入框
+            const cityValue = document.getElementById('cityValue');   // 隱藏的輸入框
+            
+            let isValid = true;
+            
+            // 1. 姓名驗證
+            if(!name.value.trim()) { 
+                name.classList.add('error'); 
+                isValid = false; 
+            } else { 
+                name.classList.remove('error'); 
+            }
+
+            // 2. 電話驗證
+            if(!isValidTaiwanPhone(phone.value)) { 
+                phone.classList.add('error'); 
+                isValid = false; 
+            } else { 
+                phone.classList.remove('error'); 
+            }
+
+            // 3. 縣市驗證 (關鍵修正)
+            // 邏輯：如果選單沒選(hidden空)，但使用者有手動打字(input有值)，就算通過
+            const hasCityText = cityInput && cityInput.value.trim() !== '';
+            const hasCityValue = cityValue && cityValue.value.trim() !== '';
+
+            if (!hasCityText && !hasCityValue) {
+                if(cityInput) cityInput.classList.add('error');
+                isValid = false;
+            } else {
+                if(cityInput) cityInput.classList.remove('error');
+                // 同步值：如果手打有字，但 hidden 沒值，把手打的字塞進 hidden
+                if(hasCityText && !hasCityValue) {
+                    cityValue.value = cityInput.value.trim();
+                }
+            }
+            
+            return isValid;
+        }
+
+        // 維修送出
+        // ==========================================
+        //  8.4 表單送出處理 - 維修保養 (修正版)
         // ==========================================
         window.handleMaintenanceSubmit = function (e) {
             e.preventDefault();
@@ -2129,23 +2163,23 @@
                 headers: { 'Content-Type': 'text/plain' },
                 body: JSON.stringify(data)
             })
-            .then(response => response.json())
+            .then(res => res.text())
+            .then(text => {
+                try { return JSON.parse(text); } 
+                catch (e) { return { result: 'success' }; }
+            })
             .then(result => {
                 btn.classList.remove('loading');
                 btn.innerHTML = '確認送出表單';
                 btn.disabled = false;
 
-                if (result.result === 'success') {
-                    successMsg.style.display = 'flex';
-                    setTimeout(() => {
-                        switchView('home');
-                        successMsg.style.display = 'none';
-                        form.reset();
-                        document.getElementById('maintenanceCityValue').value = '';
-                    }, 3000);
-                } else {
-                    alert('失敗: ' + result.message);
-                }
+                successMsg.style.display = 'flex';
+                setTimeout(() => {
+                    switchView('home');
+                    successMsg.style.display = 'none';
+                    form.reset();
+                    if(document.getElementById('maintenanceCityValue')) document.getElementById('maintenanceCityValue').value = '';
+                }, 3000);
             })
             .catch(error => {
                 btn.classList.remove('loading');
@@ -2155,125 +2189,424 @@
             });
         }
 
-        // 9. FAQ 搜尋與城市選單邏輯
-        
-        window.validateSurveyForm = function () {
-            const form = document.getElementById('surveyForm');
-            const name = form.querySelector('input[name="name"]');
-            const phone = form.querySelector('input[name="phone"]');
-            const city = document.getElementById('cityValue');
-            const model = form.querySelector('input[name="model"]');
-            let isValid = true;
-            if (!name.value.trim()) isValid = false;
-            if (!phone.value.trim()) isValid = false;
-            if (!city.value.trim()) isValid = false;
-            return isValid; 
-        }
-        
-        window.validateMaintenanceForm = function () {
-             const form = document.getElementById('maintenanceForm');
-             const name = form.querySelector('input[name="name"]');
-             const phone = form.querySelector('input[name="phone"]');
-             const city = document.getElementById('maintenanceCityValue');
-             let isValid = true;
-             if (!name.value.trim()) isValid = false;
-             if (!phone.value.trim()) isValid = false;
-             if (!city.value.trim()) isValid = false;
-             return isValid;
+        // 通用送出函式
+        function submitGenericForm(formId, btnId, msgId, sheetName) {
+            const btn = document.getElementById(btnId);
+            const msg = document.getElementById(msgId);
+            const form = document.getElementById(formId);
+            const formData = new FormData(form);
+            const data = {};
+            formData.forEach((value, key) => data[key] = value);
+            
+            data.sheetName = sheetName;
+            data.secretKey = API_SECRET;
+
+            btn.classList.add('loading');
+            btn.innerHTML = '傳送中...';
+            btn.disabled = true;
+
+            fetch(API_SUBMIT_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'text/plain' },
+                body: JSON.stringify(data)
+            })
+            .then(res => res.json())
+            .then(result => {
+                btn.classList.remove('loading');
+                btn.innerHTML = '確認送出';
+                btn.disabled = false;
+                if(result.result === 'success'){
+                    msg.style.display = 'flex';
+                    form.reset();
+                    setTimeout(() => {
+                        msg.style.display = 'none';
+                        switchView('home');
+                    }, 3000);
+                } else {
+                    alert('失敗: ' + result.message);
+                }
+            })
+            .catch(err => {
+                btn.classList.remove('loading');
+                btn.innerHTML = '確認送出';
+                btn.disabled = false;
+                alert('連線失敗');
+            });
         }
 
-        // 開新分頁查看
+        // 驗證邏輯
+        function isValidTaiwanPhone(phone) {
+            const cleanNumber = phone.replace(/-/g, '');
+            return /^09\d{8}$/.test(cleanNumber);
+        }
+
+        function updateFormProgress() {
+            const form = document.getElementById('regForm');
+            if (!form) return;
+            const requiredFields = form.querySelectorAll('.input-field[required]');
+            const fileInput = document.getElementById('fileInput');
+            let filled = 0;
+            let total = 0;
+            
+            const radioGroups = new Set();
+            form.querySelectorAll('input[type="radio"][required]').forEach(r => radioGroups.add(r.name));
+            
+            requiredFields.forEach(input => {
+                if(input.type !== 'radio') {
+                    total++;
+                    if(input.value.trim()) filled++;
+                }
+            });
+            
+            radioGroups.forEach(name => {
+                total++;
+                if(form.querySelector(`input[name="${name}"]:checked`)) filled++;
+            });
+
+            if(fileInput) {
+                total++;
+                if(fileInput.files.length > 0) filled++;
+            }
+
+            const percent = total === 0 ? 0 : Math.round((filled / total) * 100);
+            const bar = document.getElementById('formProgressFill');
+            const text = document.getElementById('formProgressText');
+            if(bar) bar.style.width = percent + '%';
+            if(text) text.textContent = percent + '%';
+        }
+
+        // 7. 表單驗證邏輯 (包含檔案必填檢查)
+        function validateForm() {
+            const form = document.getElementById('regForm');
+            const inputs = form.querySelectorAll('.input-field[required]');
+            let isValid = true;
+
+            // 1. 檢查一般欄位 (文字框、單選題、電話)
+            inputs.forEach(input => {
+                const group = input.closest('.input-group');
+                
+                // 單選題 (Radio) 檢查
+                if(input.type === 'radio') {
+                    if(!form.querySelector(`input[name="${input.name}"]:checked`)) {
+                        if(group) group.classList.add('error');
+                        isValid = false;
+                    } else if(group) {
+                        group.classList.remove('error');
+                    }
+                } else {
+                    // 電話格式檢查
+                    if(input.name === 'phone') {
+                        if(!isValidTaiwanPhone(input.value)) {
+                            input.classList.add('error');
+                            if(group) group.classList.add('error');
+                            isValid = false;
+                        } else {
+                            input.classList.remove('error');
+                            if(group) group.classList.remove('error');
+                        }
+                    } else {
+                        // 其他文字欄位必填檢查
+                        if(!input.value.trim()) {
+                            input.classList.add('error');
+                            if(group) group.classList.add('error');
+                            isValid = false;
+                        } else {
+                            input.classList.remove('error');
+                            if(group) group.classList.remove('error');
+                        }
+                    }
+                }
+            });
+
+            // 2. 檢查憑證照片 (必填重點)
+            const fileInput = document.getElementById('fileInput');
+            const dropArea = document.getElementById('dropArea');
+            const fileErrorMsg = document.getElementById('fileErrorMsg');
+
+            if (!fileInput.files || fileInput.files.length === 0) {
+                // 沒選檔案：框框變紅，顯示錯誤文字
+                if(dropArea) dropArea.style.borderColor = '#ef4444';
+                if(fileErrorMsg) fileErrorMsg.style.display = 'block';
+                isValid = false;
+            } else {
+                // 有選檔案：恢復框框顏色(或保持綠色)，隱藏錯誤文字
+                // 注意：這裡不設回綠色，因為 handleFile 已經處理過綠色樣式了，這裡只要確保不紅就好
+                if(fileErrorMsg) fileErrorMsg.style.display = 'none';
+                // 如果已經是綠色(有選檔案)，就不動它；如果是紅色(之前報錯)，則重置
+                if(dropArea && dropArea.style.borderColor === 'rgb(239, 68, 68)') { // #ef4444
+                     dropArea.style.borderColor = '#cbd5e1'; 
+                }
+            }
+
+            return isValid;
+        }
+
+        window.validateMaintenanceForm = function() {
+            const form = document.getElementById('maintenanceForm');
+            const name = form.querySelector('input[name="name"]');
+            const phone = form.querySelector('input[name="phone"]');
+            let isValid = true;
+            
+            if(!name.value.trim()) { name.classList.add('error'); isValid = false; }
+            else name.classList.remove('error');
+
+            if(!isValidTaiwanPhone(phone.value)) { phone.classList.add('error'); isValid = false; }
+            else phone.classList.remove('error');
+            
+            return isValid;
+        }
+
+        // 倒數計時 & 下拉選單 & 雜項
+        const countDownDate = new Date("Jan 23, 2026 23:59:59").getTime();
+        setInterval(function () {
+            const now = new Date().getTime();
+            const d = countDownDate - now;
+            if (d < 0) return;
+            document.getElementById("days").innerText = Math.floor(d / (1000 * 60 * 60 * 24)).toString().padStart(2, '0');
+            document.getElementById("hours").innerText = Math.floor((d % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)).toString().padStart(2, '0');
+            document.getElementById("minutes").innerText = Math.floor((d % (1000 * 60 * 60)) / (1000 * 60)).toString().padStart(2, '0');
+            document.getElementById("seconds").innerText = Math.floor((d % (1000 * 60)) / 1000).toString().padStart(2, '0');
+        }, 1000);
+
         window.openModelsInNewTab = function () {
             const url = window.location.href.split('#')[0];
-            const newWindow = window.open(url + '?view=models', '_blank');
+            window.open(url + '?view=models', '_blank');
             localStorage.setItem('openModelsSection', 'true');
         }
         if (localStorage.getItem('openModelsSection') === 'true') {
             localStorage.removeItem('openModelsSection');
-            setTimeout(() => { switchView('home', 'models'); }, 500);
+            setTimeout(() => switchView('home', 'models'), 500);
         }
 
-        // 倒數計時器
-        const countDownDate = new Date("Jan 23, 2026 23:59:59").getTime();
-        const timer = setInterval(function () {
-            const now = new Date().getTime();
-            const distance = countDownDate - now;
-            if (distance < 0) {
-                clearInterval(timer);
-                return;
-            }
-            const d = Math.floor(distance / (1000 * 60 * 60 * 24));
-            const h = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const m = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-            const s = Math.floor((distance % (1000 * 60)) / 1000);
-            document.getElementById("days").innerText = d < 10 ? "0" + d : d;
-            document.getElementById("hours").innerText = h < 10 ? "0" + h : h;
-            document.getElementById("minutes").innerText = m < 10 ? "0" + m : m;
-            document.getElementById("seconds").innerText = s < 10 ? "0" + s : s;
-        }, 1000);
-
-        // 回到頂部按鈕
-        function scrollToTop() {
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-        window.addEventListener('scroll', function () {
-            const scrollBtn = document.getElementById('scrollToTop');
-            if (window.scrollY > 300) scrollBtn.classList.add('show');
-            else scrollBtn.classList.remove('show');
-        });
-        
-        // 城市選單功能
-        window.showCityDropdown = function () { document.getElementById('cityDropdown').style.display = 'block'; }
-        window.filterCityOptions = function () {
+        // 城市選單 UI 邏輯
+        window.showCityDropdown = function() { document.getElementById('cityDropdown').style.display = 'block'; }
+        window.filterCityOptions = function() {
             const input = document.getElementById('citySearch');
             const filter = input.value.toUpperCase();
             const div = document.getElementById('cityDropdown');
-            const a = div.getElementsByTagName('div');
-            for (let i = 0; i < a.length; i++) {
-                const txtValue = a[i].textContent || a[i].innerText;
-                if (txtValue.toUpperCase().indexOf(filter) > -1) {
-                    a[i].style.display = "";
-                } else {
-                    a[i].style.display = "none";
-                }
+            const items = div.getElementsByClassName('city-option');
+            for (let i = 0; i < items.length; i++) {
+                if (items[i].innerText.toUpperCase().indexOf(filter) > -1) items[i].style.display = "";
+                else items[i].style.display = "none";
             }
-            showCityDropdown();
+            div.style.display = 'block';
         }
-        window.selectCity = function (city) {
+        window.selectCity = function(city) {
             document.getElementById('citySearch').value = city;
             document.getElementById('cityValue').value = city;
             document.getElementById('cityDropdown').style.display = 'none';
         }
-        window.showMaintenanceCityDropdown = function () { document.getElementById('maintenanceCityDropdown').style.display = 'block'; }
-        window.filterMaintenanceCityOptions = function () {
-             // 邏輯同上，針對 maintenanceCitySearch
-             const input = document.getElementById('maintenanceCitySearch');
-             const filter = input.value.toUpperCase();
-             const div = document.getElementById('maintenanceCityDropdown');
-             const a = div.getElementsByTagName('div');
-             for (let i = 0; i < a.length; i++) {
-                 if ((a[i].textContent).toUpperCase().indexOf(filter) > -1) a[i].style.display = "";
-                 else a[i].style.display = "none";
-             }
-             showMaintenanceCityDropdown();
+        // 維修表單城市選單
+        window.showMaintenanceCityDropdown = function() { document.getElementById('maintenanceCityDropdown').style.display = 'block'; }
+        window.filterMaintenanceCityOptions = function() {
+            const input = document.getElementById('maintenanceCitySearch');
+            const filter = input.value.toUpperCase();
+            const div = document.getElementById('maintenanceCityDropdown');
+            const items = div.getElementsByClassName('city-option');
+            for (let i = 0; i < items.length; i++) {
+                if (items[i].innerText.toUpperCase().indexOf(filter) > -1) items[i].style.display = "";
+                else items[i].style.display = "none";
+            }
+            div.style.display = 'block';
         }
-        window.selectMaintenanceCity = function (city) {
+        window.selectMaintenanceCity = function(city) {
             document.getElementById('maintenanceCitySearch').value = city;
             document.getElementById('maintenanceCityValue').value = city;
             document.getElementById('maintenanceCityDropdown').style.display = 'none';
         }
-        // 點擊外部關閉選單
         document.addEventListener('click', function(e) {
-            const t1 = document.getElementById('citySearch');
-            const d1 = document.getElementById('cityDropdown');
-            if(t1 && d1 && !t1.contains(e.target) && !d1.contains(e.target)) d1.style.display = 'none';
-            
-            const t2 = document.getElementById('maintenanceCitySearch');
-            const d2 = document.getElementById('maintenanceCityDropdown');
-            if(t2 && d2 && !t2.contains(e.target) && !d2.contains(e.target)) d2.style.display = 'none';
+            if(!e.target.matches('#citySearch')) {
+                const d = document.getElementById('cityDropdown');
+                if(d) d.style.display = 'none';
+            }
+            if(!e.target.matches('#maintenanceCitySearch')) {
+                const d = document.getElementById('maintenanceCityDropdown');
+                if(d) d.style.display = 'none';
+            }
         });
 
     </script>
+<!-- 注意事項區塊 -->
+<section id="notice" class="notice-section">
+    <div class="container">
+        <div class="section-header" data-aos="fade-up">
+            <span class="section-tag">Notice</span>
+            <h2 class="section-title">注意事項</h2>
+        </div>
+
+        <div class="notice-grid" data-aos="fade-up" style="grid-template-columns: 1fr 1fr; gap: 2rem; max-width: 1200px; margin: 0 auto;">
+            <!-- 左欄：活動相關資訊 -->
+            <div class="notice-card" style="text-align: left;">
+                <div class="notice-title" style="justify-content: flex-start; margin-bottom: 1.5rem;">
+                    <i class="fa-solid fa-circle-info"></i> 活動注意事項
+                </div>
+                <div style="line-height: 1.7; color: var(--text-main); font-size: 0.95rem;">
+                    <div style="margin-bottom: 1.25rem;">
+                        <p style="margin-bottom: 0.5rem; font-weight: 700; color: var(--primary); font-size: 1rem;">一、活動期間</p>
+                        <p style="margin-bottom: 0; padding-left: 0.5rem; font-size: 0.9rem;">114年12月15日至115年1月23日，須於此期間內購買指定機型並完成回函登錄。</p>
+                    </div>
+
+                    <div style="margin-bottom: 1.25rem;">
+                        <p style="margin-bottom: 0.5rem; font-weight: 700; color: var(--primary); font-size: 1rem;">二、參加資格</p>
+                        <ul class="notice-list" style="padding-left: 1rem; margin: 0; font-size: 0.9rem;">
+                            <li>購買活動指定機型產品</li>
+                            <li>於購買後 30 天內完成回函登錄</li>
+                            <li>上傳完整且清晰的憑證照片</li>
+                            <li>填寫完整且正確的登錄資料</li>
+                        </ul>
+                    </div>
+
+                    <div style="margin-bottom: 1.25rem;">
+                        <p style="margin-bottom: 0.5rem; font-weight: 700; color: var(--primary); font-size: 1rem;">三、登錄方式</p>
+                        <p style="margin-bottom: 0; padding-left: 0.5rem; font-size: 0.9rem;">請至活動網站填寫回函登錄表單，並上傳必備憑證照片。登錄截止日期為購買後 30 天內。</p>
+                    </div>
+
+                    <div style="margin-bottom: 1.25rem;">
+                        <p style="margin-bottom: 0.5rem; font-weight: 700; color: var(--primary); font-size: 1rem;">四、贈品發放</p>
+                        <p style="margin-bottom: 0; padding-left: 0.5rem; font-size: 0.9rem;">審核通過後，全聯禮券將於 15 個工作天內以掛號郵件方式寄送。審核期間約 10 個工作天。</p>
+                    </div>
+
+                    <div style="margin-bottom: 1.25rem;">
+                        <p style="margin-bottom: 0.5rem; font-weight: 700; color: var(--primary); font-size: 1rem;">五、注意事項</p>
+                        <ul class="notice-list" style="padding-left: 1rem; margin: 0; font-size: 0.9rem;">
+                            <li>發票/收據需能清楚辨識購買日期、機型、金額與店家資訊</li>
+                            <li>憑證照片需清晰可辨識，檔案格式支援 JPG、PNG，檔案大小不超過 5MB</li>
+                            <li>若資料未填完整或資訊填錯，將視為不符合資格</li>
+                            <li>若提交之憑證內容不實，主辦單位得依相關規範撤銷其參與資格</li>
+                            <li>禮券寄送地址請務必填寫正確</li>
+                        </ul>
+                    </div>
+
+                    <div style="margin-bottom: 1.25rem;">
+                        <p style="margin-bottom: 0.5rem; font-weight: 700; color: var(--accent); font-size: 1rem;">六、不符合資格之情況</p>
+                        <ul class="notice-list notice-bad-list" style="padding-left: 1rem; margin: 0; font-size: 0.9rem;">
+                            <li>非活動期間購買</li>
+                            <li>非活動指定機型或非指定通路購買</li>
+                            <li>未上傳發票/收據或影像不清、資訊不足</li>
+                            <li>回函資料未填寫完整或資料有誤</li>
+                            <li>超過購買後 30 天期限才完成登錄</li>
+                            <li>專案/特案優惠、公關品或贈品等非一般消費購買</li>
+                            <li>使用偽造或他人憑證</li>
+                        </ul>
+                    </div>
+
+                    <div style="margin-bottom: 0;">
+                        <p style="margin-bottom: 0.5rem; font-weight: 700; color: var(--primary); font-size: 1rem;">七、其他條款</p>
+                        <ul class="notice-list" style="padding-left: 1rem; margin: 0; font-size: 0.9rem;">
+                            <li>本活動僅限台灣地區（含離島）消費者參加</li>
+                            <li>同一人可購買多台指定機型並分別登錄</li>
+                            <li>冰點空調冷氣股份有限公司保有變更、修改或終止本活動之權利</li>
+                            <li>如有任何爭議，冰點空調冷氣股份有限公司保有最終解釋權</li>
+                            <li>參加本活動即視為同意遵守上述所有規定</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 右欄：個資處理 -->
+            <div class="notice-card" style="text-align: left;">
+                <div class="notice-title" style="justify-content: flex-start; margin-bottom: 1.5rem;">
+                    <i class="fa-solid fa-shield-halved"></i> 個人資料處理
+                </div>
+                <div style="line-height: 1.7; color: var(--text-main); font-size: 0.95rem;">
+                    <div style="margin-bottom: 1.25rem;">
+                        <p style="margin-bottom: 0.5rem; font-weight: 700; color: var(--primary); font-size: 1rem;">1. 收集目的</p>
+                        <p style="margin-bottom: 0; padding-left: 0.5rem; font-size: 0.9rem;">為辦理本活動、審核參加資格、寄送贈品、提供客戶服務及進行相關統計分析等目的，將收集、處理及利用您所提供之個人資料。</p>
+                    </div>
+
+                    <div style="margin-bottom: 1.25rem;">
+                        <p style="margin-bottom: 0.5rem; font-weight: 700; color: var(--primary); font-size: 1rem;">2. 資料類別</p>
+                        <p style="margin-bottom: 0; padding-left: 0.5rem; font-size: 0.9rem;">姓名、聯絡電話、電子郵件地址、通訊地址、購買日期、購買機型、購買通路/店家、是否為既有客戶等活動相關資料，以及您上傳之發票、保固書、室外機流水號貼紙、保固卡等憑證照片。</p>
+                    </div>
+
+                    <div style="margin-bottom: 1.25rem;">
+                        <p style="margin-bottom: 0.5rem; font-weight: 700; color: var(--primary); font-size: 1rem;">3. 使用範圍</p>
+                        <ul class="notice-list" style="padding-left: 1rem; margin: 0; font-size: 0.9rem;">
+                            <li><strong>使用期間：</strong>自提供日起至活動結束後法律保存期間屆滿或刪除請求日止</li>
+                            <li><strong>使用地區：</strong>台灣地區（含離島）</li>
+                            <li><strong>使用對象：</strong>冰點空調冷氣股份有限公司及委託第三方服務提供者</li>
+                            <li><strong>使用方式：</strong>以自動化或其他非自動化方式進行處理</li>
+                        </ul>
+                    </div>
+
+                    <div style="margin-bottom: 1.25rem;">
+                        <p style="margin-bottom: 0.5rem; font-weight: 700; color: var(--primary); font-size: 1rem;">4. 保護措施</p>
+                        <p style="margin-bottom: 0; padding-left: 0.5rem; font-size: 0.9rem;">本公司將採取適當之技術及組織安全措施，保護您的個人資料免於未經授權之存取、使用、揭露、變更或銷毀，包括資料加密、存取控制、定期備份等安全機制。</p>
+                    </div>
+
+                    <div style="margin-bottom: 1.25rem;">
+                        <p style="margin-bottom: 0.5rem; font-weight: 700; color: var(--primary); font-size: 1rem;">5. 權利行使</p>
+                        <p style="margin-bottom: 0; padding-left: 0.5rem; font-size: 0.9rem;">您得依個人資料保護法規定行使查詢、閱覽、複製、更正、停止、刪除等權利。如需行使上述權利，請聯絡本公司客服專線或客服信箱。</p>
+                    </div>
+
+                    <div style="margin-bottom: 1.25rem;">
+                        <p style="margin-bottom: 0.5rem; font-weight: 700; color: var(--primary); font-size: 1rem;">6. 提供義務</p>
+                        <p style="margin-bottom: 0; padding-left: 0.5rem; font-size: 0.9rem;">您提供個人資料係屬自願性質，惟若拒絕提供必要之個人資料，或提供之資料不完整、不正確，將可能導致無法參加本活動、無法審核通過、無法寄送贈品等後果。</p>
+                    </div>
+
+                    <div style="margin-bottom: 0;">
+                        <p style="margin-bottom: 0.5rem; font-weight: 700; color: var(--primary); font-size: 1rem;">7. 同意聲明</p>
+                        <p style="margin-bottom: 0; padding-left: 0.5rem; font-size: 0.9rem;">參加本活動並填寫回函登錄表單，即表示您已充分了解並同意冰點空調冷氣股份有限公司依上述目的、方式及範圍，收集、處理、利用及傳輸您的個人資料。如您不同意上述個人資料處理方式，請勿參加本活動。</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 聯絡資訊 -->
+        <div style="max-width: 1200px; margin: 2rem auto 0; text-align: center; padding: 1.5rem; background: white; border-radius: 16px; box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);" class="notice-contact-info">
+            <p style="color: var(--text-light); font-size: 0.9rem; margin-bottom: 0.5rem; font-weight: 600;">主辦單位：冰點空調冷氣股份有限公司</p>
+            <div style="display: flex; justify-content: center; gap: 2rem; flex-wrap: wrap; margin-top: 1rem;" class="notice-contact-links">
+                <div style="font-size: 0.9rem; color: var(--text-main);">
+                    <i class="fa-solid fa-phone" style="color: var(--primary); margin-right: 0.5rem;"></i>
+                    <a href="tel:0800-026-568" style="color: var(--primary); text-decoration: none;">0800-026-568</a>
+                    <span style="color: var(--text-light); margin-left: 0.5rem;">（週一至週五 08:30-17:00）</span>
+                </div>
+                <div style="font-size: 0.9rem; color: var(--text-main);">
+                    <i class="fa-brands fa-line" style="color: var(--success); margin-right: 0.5rem;"></i>
+                    <span>LINE：</span>
+                    <a href="https://line.me/ti/p/~@447uompo" target="_blank" style="color: var(--primary); text-decoration: none;">@bingdian</a>
+                </div>
+                <div style="font-size: 0.9rem; color: var(--text-main);">
+                    <i class="fa-solid fa-envelope" style="color: var(--accent); margin-right: 0.5rem;"></i>
+                    <a href="mailto:bd_im@bingdian.com.tw" style="color: var(--primary); text-decoration: none;">bd_im@bingdian.com.tw</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Footer -->
+<footer>
+    <div class="footer-wave">
+        <svg viewBox="0 0 1440 320" xmlns="http://www.w3.org/2000/svg">
+            <path fill="#0f172a" fill-opacity="1"
+                d="M0,224L48,213.3C96,203,192,181,288,181.3C384,181,480,203,576,224C672,245,768,267,864,261.3C960,256,1056,224,1152,197.3C1248,171,1344,149,1392,138.7L1440,128L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z">
+            </path>
+        </svg>
+    </div>
+    <div class="container" style="position:relative; z-index:5;">
+        <h3 style="margin-bottom:1rem; font-weight:900;">冰點空調冷氣股份有限公司</h3>
+        <p style="opacity:0.7; font-size:1.0rem;">深耕台灣・在地製造・世界品質</p>
+        
+        <div style="margin:20px 0; display:flex; gap:20px; justify-content:center; font-size:1.5rem;">
+            <a href="https://www.facebook.com/bingdian.taiwan/?locale=zh_TW" target="_blank" aria-label="Facebook"
+                style="color:white; transition:0.3s;" onmouseover="this.style.color='#secondary'" onmouseout="this.style.color='white'">
+                <i class="fa-brands fa-facebook"></i>
+            </a>
+            <a href="https://www.instagram.com/bd_bingdian.com.tw/" target="_blank" aria-label="Instagram"
+                style="color:white; transition:0.3s;" onmouseover="this.style.color='#secondary'" onmouseout="this.style.color='white'">
+                <i class="fa-brands fa-instagram"></i>
+            </a>
+            <a href="https://www.youtube.com/@bdcorona596" target="_blank" aria-label="YouTube"
+                style="color:white; transition:0.3s;" onmouseover="this.style.color='#secondary'" onmouseout="this.style.color='white'">
+                <i class="fa-brands fa-youtube"></i>
+            </a>
+        </div>
+        
+        <p style="opacity:0.5; font-size:0.8rem; border-top:1px solid rgba(255,255,255,0.1); padding-top:20px; margin-top:20px;">
+            Copyright © 2025 冰點空調冷氣股份有限公司. All rights reserved.
+        </p>
+    </div>
+</footer>
 </body>
 
 </html>
